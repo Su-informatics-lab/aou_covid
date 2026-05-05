@@ -1,117 +1,112 @@
-# Social Determinants of COVID-19 Severity in the All of Us Research Program
+# COVID-19 Severity × Social Determinants of Health
 
-A case-control study examining health disparities in COVID-19 hospitalization risk across social determinants of health (SDoH), using electronic health records and participant surveys from the NIH All of Us Research Program.
+Propensity-matched case-control study of SDoH disparities in COVID-19
+hospitalization using the NIH All of Us Research Program, with external
+validation in MarketScan Commercial Claims.
+
+**Manuscript**: Targeting JAMIA (Journal of the American Medical Informatics
+Association), Research and Applications.
 
 ## Study Design
 
-- **Outcome**: Severe COVID-19 (hospitalization within 30 days of positive test or diagnosis)
-- **Design**: Retrospective case-control with 1:4 propensity score matching
-- **Matching**: Nearest neighbor on enrollment date, diagnosis count, and EHR length; caliper = 0.2 × SD(logit propensity score); with replacement
-- **Base model**: Conditional logistic regression adjusting for sex, race, ethnicity, age, vaccination status, and 19 Charlson comorbidities (Glasheen 2019)
-- **SDoH models**: Each adds one SDoH domain to the base model (insurance, disability, employment, income, education, housing, housing stability)
+- **Primary**: AoU Controlled Tier v7 (CDR C2022Q4R13, cutoff Jul 2022)
+- **Sensitivity**: AoU Controlled Tier v8 (CDR C2023Q3R4, cutoff Oct 2023)
+- **External validation**: MarketScan Commercial Claims (2020–2023)
+- **Design**: 1:4 propensity-score matched case-control
+- **Outcome**: COVID-19 hospitalization within 30 days of index
+- **Analysis**: Conditional logistic regression (survival::clogit)
 
 ## Repository Structure
 
 ```
 aou_covid/
 ├── README.md
-├── 01_etl.py          # Data extraction, Charlson flags, SDoH, propensity matching
-├── 02_models.R        # Base model + 13 SDoH conditional logistic regression models
-├── pilot_audit.py     # Data availability checks (run before 01_etl.py)
-└── results/           # Generated outputs (not tracked in git)
-    ├── *_01_covid_cohort.csv
-    ├── *_02_demographics.csv
-    ├── *_03_charlson.csv
-    ├── *_04_sdoh.csv
-    ├── *_05_vaccination.csv
-    ├── *_06_matched_cohort.csv
-    ├── *_07_regression_base.csv
-    ├── all_model_coefficients.csv
-    └── *_clogit.RData
+├── 01_ms_etl.py            # MarketScan ETL (Quartz HPC, DuckDB)
+├── 01_aou_etl.py           # AoU ETL (Workbench, BigQuery)
+│                           #   Usage: python 01_aou_etl.py v7
+│                           #          python 01_aou_etl.py v8
+├── 02_models.R             # Shared models (AoU + MarketScan)
+│                           #   Usage: Rscript 02_models.R aou_v7
+│                           #          Rscript 02_models.R aou_v8
+│                           #          Rscript 02_models.R ms
+├── pilot_audit.py          # Diagnostic audit blocks
+├── .gitignore
+└── results/
+    ├── aou_v7/             # AoU v7 outputs
+    │   ├── 01_covid_cohort.csv
+    │   ├── 02_demographics.csv
+    │   ├── 03_charlson.csv
+    │   ├── 04_sdoh.csv
+    │   ├── 05_vaccination.csv
+    │   ├── 06_matched_cohort.csv
+    │   ├── 07_regression_base.csv
+    │   ├── base_model_coefficients.csv
+    │   ├── all_model_coefficients.csv
+    │   └── *_clogit.RData
+    ├── aou_v8/             # AoU v8 outputs (same structure)
+    └── ms/                 # MarketScan outputs
+        ├── 01_covid_cohort.csv
+        ├── 02_demographics.csv    # includes plan_type, region_name
+        ├── 03_charlson.csv
+        ├── 04_sdoh.csv            # placeholder (empty)
+        ├── 05_vaccination.csv
+        ├── 06_matched_cohort.csv
+        ├── 07_regression_base.csv
+        ├── base_model_coefficients.csv
+        └── all_model_coefficients.csv
 ```
+
+## Execution
+
+### AoU (on Researcher Workbench)
+
+```bash
+python 01_aou_etl.py v7          # ETL → results/aou_v7/
+Rscript 02_models.R aou_v7       # Models → results/aou_v7/
+
+python 01_aou_etl.py v8          # ETL → results/aou_v8/
+Rscript 02_models.R aou_v8       # Models → results/aou_v8/
+```
+
+### MarketScan (on Quartz HPC)
+
+```bash
+python 01_ms_etl.py              # ETL → results/ms/
+Rscript 02_models.R ms           # Models → results/ms/
+```
+
+## Key Design Decisions
+
+| Feature | AoU | MarketScan |
+|---------|-----|-----------|
+| Race/ethnicity | In base model | Not available |
+| SDoH surveys | 13 models | Not available |
+| Plan type | Not in base model | In base model (PPO ref) |
+| Region | Not in base model | In base model (South ref) |
+| Vaccination | OMOP drug_concept_id | NDC prefix matching |
+| Charlson | OMOP concept table + ICD vocab filter | Direct ICD code matching |
+
+## Code Sets
+
+- **Charlson**: Glasheen et al., Am Health Drug Benefits 2019;12(4):188–197
+- **SDoH surveys**: Gatz, Su et al., JAMIA 2024;31(12):2932–2939, eTable 5
+- **COVID identification**: U07.1 (concept 37311061) + 62 lab concepts
 
 ## Requirements
 
-### Platform
-
-This analysis runs on the [All of Us Researcher Workbench](https://www.researchallofus.org/) (Controlled Tier). Access requires registration and a data use agreement with the All of Us Research Program.
-
-### Python dependencies
-
-```
-python==3.10.16
-pandas==2.3.3
-numpy==1.26.4
-scikit-learn==1.4.2
-```
-
-### R dependencies
-
-```
-survival==3.8.3
-dplyr==1.1.4
-readr==2.1.5
-ggplot2==3.5.2
-```
-
-## Reproduction
-
-### 1. Create a workspace
-
-Create a new workspace on the All of Us Researcher Workbench with Controlled Tier access (v7 or v8). Clone this repository into the workspace.
-
-### 2. Run the data pipeline
-
-```bash
-python 01_etl.py
-```
-
-Outputs seven CSV files to `results/` and mirrors them to the workspace bucket. Runtime: approximately 30 minutes.
-
-### 3. Run the regression models
-
-```bash
-Rscript 02_models.R
-```
-
-Reads the CSV files from step 2, runs 14 conditional logistic regression models (1 base + 13 SDoH), and saves coefficient tables to `results/`. Runtime: approximately 10 minutes.
-
-### 4. Outputs
-
-All outputs are written to `results/`:
-
-| File | Description |
-|------|-------------|
-| `*_01_covid_cohort.csv` | COVID-positive cohort with severity indicator |
-| `*_02_demographics.csv` | Sex, race, ethnicity, age |
-| `*_03_charlson.csv` | 19 Charlson comorbidity flags |
-| `*_04_sdoh.csv` | Disability, insurance, employment, income, education, housing |
-| `*_05_vaccination.csv` | Pre-COVID vaccination status |
-| `*_06_matched_cohort.csv` | Propensity-matched cohort with stratum IDs |
-| `*_07_regression_base.csv` | Merged regression-ready dataframe |
-| `all_model_coefficients.csv` | Combined AOR, 95% CI, and p-values for all models |
-| `*_clogit.RData` | Saved R model objects |
-
-## Data Sources
-
-- **Electronic health records**: OMOP CDM v5.3 (condition, drug exposure, visit, measurement)
-- **Surveys**: All of Us Basics Survey (demographics, SDoH, disability)
-- **COVID identification**: ICD-10 U07.1 (condition_concept_id 37311061) and SARS-CoV-2 lab results
-- **Comorbidities**: Charlson Comorbidity Index per Glasheen et al. (2019), ICD-9/10 code sets
-- **SDoH concept IDs**: All of Us observation table (insurance 43528428; disability 903573–903578; employment 1585952; income 1585375; education 1585940; housing 1585370; housing stability 1585886)
-
-## Key References
-
-- Glasheen WP et al. Charlson Comorbidity Index: ICD-9 Update and ICD-10 Translation. *Am Health Drug Benefits*. 2019;12(4):188-197.
-- Austin PC. An Introduction to Propensity Score Methods for Reducing the Effects of Confounding in Observational Studies. *Multivariate Behav Res*. 2011;46(3):399-424.
-- All of Us Research Program Investigators. The "All of Us" Research Program. *N Engl J Med*. 2019;381:668-676.
+- AoU Researcher Workbench (Controlled Tier access)
+- Quartz HPC (for MarketScan)
+- Python 3.10+, pandas, scikit-learn, numpy
+- R 4.x, survival, dplyr, readr
+- DuckDB (MarketScan only)
 
 ## License
 
-Code: [MIT License](https://opensource.org/licenses/MIT)
+MIT
 
-Data access requires separate approval through the [All of Us Research Program](https://www.researchallofus.org/).
+## References
 
-## Citation
-
-If you use this code, please cite the associated publication and acknowledge the All of Us Research Program.
+- Gatz, Su et al. Health Disparities in the Risk of Severe Acidosis.
+  *JAMIA* 2024;31(12):2932–2939. doi:10.1093/jamia/ocae256
+- Glasheen et al. Charlson Comorbidity Index: ICD-9 Update and ICD-10
+  Translation. *Am Health Drug Benefits* 2019;12(4):188–197.
