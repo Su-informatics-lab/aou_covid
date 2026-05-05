@@ -602,16 +602,19 @@ CHARLSON = {
         ],
     },
     "HIV": {"9": ["042"], "10": ["B20"]},
+    # AIDS: narrowed to true AIDS-defining conditions per CDC.
+    # Removed non-AIDS-specific codes that inflate prevalence:
+    #   ICD-9 112 / ICD-10 B37 (candidiasis — includes vaginal yeast)
+    #   ICD-9 054 / ICD-10 B00 (herpes simplex — includes cold sores)
+    #   ICD-9 7994 / ICD-10 R64 (cachexia NOS — nonspecific wasting)
     "AIDS": {
         "9": [
-            "112",
             "180",
             "114",
             "1175",
             "0074",
             "0785",
             "3483",
-            "054",
             "115",
             "0072",
             "176",
@@ -640,17 +643,14 @@ CHARLSON = {
             "0463",
             "0031",
             "130",
-            "7994",
         ],
         "10": [
-            "B37",
             "C53",
             "B38",
             "B45",
             "A072",
             "B25",
             "G934",
-            "B00",
             "B39",
             "A073",
             "C46",
@@ -681,7 +681,6 @@ CHARLSON = {
             "A812",
             "A021",
             "B58",
-            "R64",
         ],
     },
     "Metastatic_Solid_Tumor": {
