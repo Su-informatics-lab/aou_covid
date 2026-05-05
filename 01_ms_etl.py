@@ -787,6 +787,9 @@ charlson = covid_cohort[["person_id"]].merge(charlson, on="person_id", how="left
 for col in CHARLSON:
     charlson[col] = charlson[col].fillna(0).astype(int)
 
+# AIDS requires co-occurring HIV diagnosis
+charlson.loc[charlson["HIV"] == 0, "AIDS"] = 0
+
 # Trump rules
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
