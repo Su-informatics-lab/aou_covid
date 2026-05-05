@@ -602,87 +602,6 @@ CHARLSON = {
         ],
     },
     "HIV": {"9": ["042"], "10": ["B20"]},
-    # AIDS: narrowed to true AIDS-defining conditions per CDC.
-    # Removed non-AIDS-specific codes that inflate prevalence:
-    #   ICD-9 112 / ICD-10 B37 (candidiasis — includes vaginal yeast)
-    #   ICD-9 054 / ICD-10 B00 (herpes simplex — includes cold sores)
-    #   ICD-9 7994 / ICD-10 R64 (cachexia NOS — nonspecific wasting)
-    "AIDS": {
-        "9": [
-            "180",
-            "114",
-            "1175",
-            "0074",
-            "0785",
-            "3483",
-            "115",
-            "0072",
-            "176",
-            "200",
-            "201",
-            "202",
-            "203",
-            "204",
-            "205",
-            "206",
-            "207",
-            "208",
-            "209",
-            "031",
-            "010",
-            "011",
-            "012",
-            "013",
-            "014",
-            "015",
-            "016",
-            "017",
-            "018",
-            "1363",
-            "V1261",
-            "0463",
-            "0031",
-            "130",
-        ],
-        "10": [
-            "C53",
-            "B38",
-            "B45",
-            "A072",
-            "B25",
-            "G934",
-            "B39",
-            "A073",
-            "C46",
-            "C81",
-            "C82",
-            "C83",
-            "C84",
-            "C85",
-            "C86",
-            "C87",
-            "C88",
-            "C9",
-            "C90",
-            "C91",
-            "C92",
-            "C93",
-            "C94",
-            "C95",
-            "C96",
-            "A31",
-            "A15",
-            "A16",
-            "A17",
-            "A18",
-            "A19",
-            "B59",
-            "Z8701",
-            "A812",
-            "A021",
-            "B58",
-        ],
-    },
     "Metastatic_Solid_Tumor": {
         "9": ["196", "197", "198", "1990"],
         "10": ["C77", "C78", "C79", "C800", "C802"],
@@ -770,8 +689,91 @@ TRUMP_RULES = [
     ("Diabetes_with_Chronic_Complications", "Diabetes_without_Chronic_Complications"),
     ("Renal_Disease_Severe", "Renal_Disease_Mild_Moderate"),
     ("Metastatic_Solid_Tumor", "Malignancy"),
-    ("AIDS", "HIV"),
 ]
+
+# AIDS OI codes — NOT in CHARLSON. AIDS = HIV AND OI (two-step, per DualR).
+AIDS_OI = {
+    "9": [
+        "112",
+        "180",
+        "114",
+        "1175",
+        "0074",
+        "0785",
+        "3483",
+        "054",
+        "115",
+        "0072",
+        "176",
+        "200",
+        "201",
+        "202",
+        "203",
+        "204",
+        "205",
+        "206",
+        "207",
+        "208",
+        "209",
+        "031",
+        "010",
+        "011",
+        "012",
+        "013",
+        "014",
+        "015",
+        "016",
+        "017",
+        "018",
+        "1363",
+        "V1261",
+        "0463",
+        "0031",
+        "130",
+        "7994",
+    ],
+    "10": [
+        "B37",
+        "C53",
+        "B38",
+        "B45",
+        "A072",
+        "B25",
+        "G934",
+        "B00",
+        "B39",
+        "A073",
+        "C46",
+        "C81",
+        "C82",
+        "C83",
+        "C84",
+        "C85",
+        "C86",
+        "C87",
+        "C88",
+        "C9",
+        "C90",
+        "C91",
+        "C92",
+        "C93",
+        "C94",
+        "C95",
+        "C96",
+        "A31",
+        "A15",
+        "A16",
+        "A17",
+        "A18",
+        "A19",
+        "B59",
+        "Z8701",
+        "A812",
+        "A021",
+        "B58",
+        "R64",
+    ],
+}
 
 
 def como_where(codes):
@@ -789,6 +791,10 @@ flags = [
     f"MAX(CASE WHEN ({como_where(c)}) THEN 1 ELSE 0 END) AS {n}"
     for n, c in CHARLSON.items()
 ]
+# OI intermediate flag for AIDS computation (per DualR pattern)
+oi_where = como_where(AIDS_OI)
+flags.append(f"MAX(CASE WHEN ({oi_where}) THEN 1 ELSE 0 END) AS has_oi")
+
 charlson_all = query(
     f"""
 SELECT co.person_id, {','.join(flags)}
@@ -802,14 +808,25 @@ GROUP BY co.person_id
 
 charlson = charlson_all[charlson_all.person_id.isin(covid_cohort.person_id)].copy()
 
-# AIDS requires co-occurring HIV diagnosis (Glasheen AIDS codes include
-# candidiasis/herpes/TB/lymphomas that are common without HIV)
-charlson.loc[charlson["HIV"] == 0, "AIDS"] = 0
+# AIDS = HIV AND OI (two-step co-occurrence, consistent with DualR INPC/MS)
+charlson["AIDS"] = ((charlson["HIV"] == 1) & (charlson["has_oi"] == 1)).astype(int)
+charlson["HIV"] = ((charlson["HIV"] == 1) & (charlson["AIDS"] == 0)).astype(int)
+charlson.drop(columns=["has_oi"], inplace=True)
+
+# Assert AIDS prevalence is within expected range
+aids_prev = charlson["AIDS"].sum() / len(charlson) * 100
+assert (
+    aids_prev < 2.0
+), f"AIDS prevalence {aids_prev:.2f}% > 2% — co-occurrence logic broken"
+print(
+    f"  AIDS fix verified: HIV={charlson['HIV'].sum():,}  AIDS={charlson['AIDS'].sum():,} ({aids_prev:.3f}%)"
+)
 
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
 
-for col in CHARLSON:
+all_como_cols = list(CHARLSON.keys()) + ["AIDS"]
+for col in all_como_cols:
     n = charlson[col].sum()
     print(f"  {col:45s} {n:>6,} ({n/len(charlson)*100:5.1f}%)")
 save(charlson, "03_charlson.csv")
@@ -1080,7 +1097,7 @@ print("=" * 70)
 
 reg = matched.merge(demo_out, on="person_id", how="left")
 reg = reg.merge(charlson, on="person_id", how="left")
-como_cols = list(CHARLSON.keys())
+como_cols = list(CHARLSON.keys()) + ["AIDS"]
 reg[como_cols] = reg[como_cols].fillna(0).astype(int)
 reg = reg.merge(vacc_status[["person_id", "vaccination"]], on="person_id", how="left")
 reg["vaccination"] = reg["vaccination"].fillna("Unknown")
