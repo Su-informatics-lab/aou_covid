@@ -1,0 +1,4 @@
+Variable,"Cases (N=149,773)","Controls (N=599,084)",SMD
+Enrollment date (ordinal),"737,425 (737,425 – 737,456)","737,425 (737,425 – 737,425)",0.024
+Number of diagnoses,51 (33 – 78),51 (32 – 79),-0.013
+Coverage span (days),"1,095 (668 – 1,460)","1,095 (698 – 1,460)",-0.029
