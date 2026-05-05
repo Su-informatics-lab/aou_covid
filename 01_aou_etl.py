@@ -802,6 +802,11 @@ GROUP BY co.person_id
 )
 
 charlson = charlson_all[charlson_all.person_id.isin(covid_cohort.person_id)].copy()
+
+# AIDS requires co-occurring HIV diagnosis (Glasheen AIDS codes include
+# candidiasis/herpes/TB/lymphomas that are common without HIV)
+charlson.loc[charlson["HIV"] == 0, "AIDS"] = 0
+
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
 

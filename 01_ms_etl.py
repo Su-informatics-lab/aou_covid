@@ -787,6 +787,9 @@ charlson = covid_cohort[["person_id"]].merge(charlson, on="person_id", how="left
 for col in CHARLSON:
     charlson[col] = charlson[col].fillna(0).astype(int)
 
+# AIDS requires co-occurring HIV diagnosis
+charlson.loc[charlson["HIV"] == 0, "AIDS"] = 0
+
 # Trump rules
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
@@ -851,21 +854,54 @@ print("\n" + "=" * 70)
 print("STEP 5: Propensity Score Matching")
 print("=" * 70)
 
-# Matching variables: age, num_diagnoses, total_claims
-match_df = covid_cohort[["person_id", "severity"]].merge(
-    demo[["person_id", "age_at_covid"]], on="person_id"
-)
+# Matching variables: first_enrollment_date, num_diagnoses, coverage_span
+# (Analogous to AoU: survey_ord, num_diagnosis, ehr_length_days)
+# NOTE: age is NOT a matching variable — it stays free as a clogit covariate
+match_df = covid_cohort[["person_id", "severity"]].copy()
 
-# Count distinct diagnoses per patient
+# Distinct diagnosis count (already in DuckDB)
 dx_counts = con.sql("""
 SELECT person_id, COUNT(DISTINCT dx_code) AS num_diagnosis
 FROM dx_long GROUP BY person_id
 """).df()
 match_df = match_df.merge(dx_counts, on="person_id", how="left")
 match_df["num_diagnosis"] = match_df["num_diagnosis"].fillna(0)
-match_df = match_df.dropna(subset=["age_at_covid"])
 
-X = StandardScaler().fit_transform(match_df[["age_at_covid", "num_diagnosis"]].values)
+# First enrollment date + coverage span from enrollment files
+print("  Computing enrollment dates for matching...")
+enroll_date_unions = []
+for y in YEARS:
+    f = f"{MS_DIR}/mscan_{y}_t.parquet"
+    if os.path.exists(f):
+        enroll_date_unions.append(
+            f"SELECT ENROLID AS person_id, DTSTART, DTEND FROM read_parquet('{f}')"
+        )
+
+enroll_dates = con.sql(f"""
+SELECT e.person_id,
+       MIN(e.DTSTART) AS first_enrollment,
+       DATEDIFF('day', MIN(e.DTSTART), MAX(e.DTEND)) AS coverage_span_days
+FROM ({' UNION ALL '.join(enroll_date_unions)}) e
+WHERE e.person_id IN (SELECT person_id FROM covid_pids)
+GROUP BY e.person_id
+""").df()
+enroll_dates["enroll_ord"] = pd.to_datetime(enroll_dates["first_enrollment"]).apply(
+    lambda x: x.toordinal() if pd.notna(x) else np.nan
+)
+
+match_df = match_df.merge(
+    enroll_dates[["person_id", "enroll_ord", "coverage_span_days"]],
+    on="person_id",
+    how="left",
+)
+match_df = match_df.dropna(subset=["enroll_ord", "num_diagnosis", "coverage_span_days"])
+print(
+    f"  Matching on: enroll_ord, num_diagnosis, coverage_span_days (N={len(match_df):,})"
+)
+
+X = StandardScaler().fit_transform(
+    match_df[["enroll_ord", "num_diagnosis", "coverage_span_days"]].values
+)
 lr = LogisticRegression(max_iter=1000, random_state=42).fit(
     X, match_df["severity"].values
 )
