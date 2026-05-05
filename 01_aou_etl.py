@@ -25,7 +25,7 @@ from sklearn.preprocessing import StandardScaler
 
 # ─── Parse version argument ──────────────────────────────────────────
 if len(sys.argv) < 2 or sys.argv[1] not in ("v7", "v8"):
-    print("Usage: python 02_aou_etl.py [v7|v8]")
+    print("Usage: python 01_aou_etl.py [v7|v8]")
     sys.exit(1)
 VERSION = sys.argv[1]
 
