@@ -1,112 +1,65 @@
 # COVID-19 Severity × Social Determinants of Health
 
-Propensity-matched case-control study of SDoH disparities in COVID-19
-hospitalization using the NIH All of Us Research Program, with external
-validation in MarketScan Commercial Claims.
+Propensity-matched case-control analysis of survey-derived SDoH and
+COVID-19 hospitalization in the NIH *All of Us* Research Program,
+with external validation in Merative MarketScan Commercial Claims.
 
-**Manuscript**: Targeting JAMIA (Journal of the American Medical Informatics
-Association), Research and Applications.
+Targets *JAMIA* (Research and Applications). Extends the PSM + conditional
+logistic framework of [Gatz, Su et al. *JAMIA* 2024;31(12):2932–2939](https://doi.org/10.1093/jamia/ocae256).
 
-## Study Design
-
-- **Primary**: AoU Controlled Tier v7 (CDR C2022Q4R13, cutoff Jul 2022)
-- **Sensitivity**: AoU Controlled Tier v8 (CDR C2023Q3R4, cutoff Oct 2023)
-- **External validation**: MarketScan Commercial Claims (2020–2023)
-- **Design**: 1:4 propensity-score matched case-control
-- **Outcome**: COVID-19 hospitalization within 30 days of index
-- **Analysis**: Conditional logistic regression (survival::clogit)
-
-## Repository Structure
+## Repository
 
 ```
-aou_covid/
-├── README.md
-├── 01_ms_etl.py            # MarketScan ETL (Quartz HPC, DuckDB)
-├── 01_aou_etl.py           # AoU ETL (Workbench, BigQuery)
-│                           #   Usage: python 01_aou_etl.py v7
-│                           #          python 01_aou_etl.py v8
-├── 02_models.R             # Shared models (AoU + MarketScan)
-│                           #   Usage: Rscript 02_models.R aou_v7
-│                           #          Rscript 02_models.R aou_v8
-│                           #          Rscript 02_models.R ms
-├── pilot_audit.py          # Diagnostic audit blocks
-├── .gitignore
-└── results/
-    ├── aou_v7/             # AoU v7 outputs
-    │   ├── 01_covid_cohort.csv
-    │   ├── 02_demographics.csv
-    │   ├── 03_charlson.csv
-    │   ├── 04_sdoh.csv
-    │   ├── 05_vaccination.csv
-    │   ├── 06_matched_cohort.csv
-    │   ├── 07_regression_base.csv
-    │   ├── base_model_coefficients.csv
-    │   ├── all_model_coefficients.csv
-    │   └── *_clogit.RData
-    ├── aou_v8/             # AoU v8 outputs (same structure)
-    └── ms/                 # MarketScan outputs
-        ├── 01_covid_cohort.csv
-        ├── 02_demographics.csv    # includes plan_type, region_name
-        ├── 03_charlson.csv
-        ├── 04_sdoh.csv            # placeholder (empty)
-        ├── 05_vaccination.csv
-        ├── 06_matched_cohort.csv
-        ├── 07_regression_base.csv
-        ├── base_model_coefficients.csv
-        └── all_model_coefficients.csv
+01_aou_etl.py           AoU ETL (BigQuery, arg: v7 | v8)
+01_ms_etl.py            MarketScan ETL (DuckDB on Quartz HPC)
+02_models.R             Conditional logistic regression (arg: aou_v7 | aou_v8 | ms)
+03_tables_onplatform.py Table 1/2 from person-level data (runs on-platform)
+04_figures.py           Figures 1–3, Table 3, eTables (runs anywhere, no PII)
+05_smd_onplatform.py    Pre/post matching SMD + Love plot (runs on-platform)
+results/                Aggregate outputs only (no person-level data)
 ```
 
-## Execution
-
-### AoU (on Researcher Workbench)
+## Reproduction
 
 ```bash
-python 01_aou_etl.py v7          # ETL → results/aou_v7/
-Rscript 02_models.R aou_v7       # Models → results/aou_v7/
+# ── AoU (on Researcher Workbench) ──────────────────────────
+python 01_aou_etl.py v7            # 1. ETL → results/aou_v7/
+Rscript 02_models.R aou_v7         # 2. 14 clogit models
+python 03_tables_onplatform.py v7  # 3. Table 1 (demographics), Table 2 (SDoH)
+python 05_smd_onplatform.py aou_v7 # 4. SMD balance + Love plot
 
-python 01_aou_etl.py v8          # ETL → results/aou_v8/
-Rscript 02_models.R aou_v8       # Models → results/aou_v8/
+# ── MarketScan (on Quartz HPC) ─────────────────────────────
+python 01_ms_etl.py                # 1. ETL → results/ms/
+Rscript 02_models.R ms             # 2. Base model only (no SDoH surveys)
+python 03_tables_onplatform.py ms  # 3. Table 1
+python 05_smd_onplatform.py ms     # 4. SMD balance + Love plot
+
+# ── Figures & tables (anywhere, from coefficient CSVs) ─────
+python 04_figures.py               # Figs 2–3, Table 3, cross-site eTable
 ```
 
-### MarketScan (on Quartz HPC)
+## Design
 
-```bash
-python 01_ms_etl.py              # ETL → results/ms/
-Rscript 02_models.R ms           # Models → results/ms/
-```
-
-## Key Design Decisions
-
-| Feature | AoU | MarketScan |
-|---------|-----|-----------|
-| Race/ethnicity | In base model | Not available |
-| SDoH surveys | 13 models | Not available |
-| Plan type | Not in base model | In base model (PPO ref) |
-| Region | Not in base model | In base model (South ref) |
-| Vaccination | OMOP drug_concept_id | NDC prefix matching |
-| Charlson | OMOP concept table + ICD vocab filter | Direct ICD code matching |
-
-## Code Sets
-
-- **Charlson**: Glasheen et al., Am Health Drug Benefits 2019;12(4):188–197
-- **SDoH surveys**: Gatz, Su et al., JAMIA 2024;31(12):2932–2939, eTable 5
-- **COVID identification**: U07.1 (concept 37311061) + 62 lab concepts
+| | AoU | MarketScan |
+|---|---|---|
+| **Source** | Controlled Tier v7 C2022Q4R13 | Commercial Claims 2020–2023 |
+| **Outcome** | COVID-19 hospitalization ≤30 days | Same |
+| **Matching** | 1:4 PSM (enrollment date, Dx count, EHR length) | 1:4 PSM (enrollment date, Dx count, coverage span) |
+| **Analysis** | Conditional logistic (survival::clogit) | Same |
+| **Race/ethnicity** | In base model | Not available |
+| **SDoH** | 6 domains, 13 models (survey-derived) | Plan type + region only |
+| **Charlson** | Glasheen 2019, 19 conditions, ICD via OMOP | Same codes, direct ICD |
+| **Vaccination** | OMOP drug_concept_id | NDC prefix |
 
 ## Requirements
 
-- AoU Researcher Workbench (Controlled Tier access)
-- Quartz HPC (for MarketScan)
-- Python 3.10+, pandas, scikit-learn, numpy
-- R 4.x, survival, dplyr, readr
-- DuckDB (MarketScan only)
+```
+Python  ≥3.10    pandas ≥1.5  scikit-learn ≥1.2  numpy ≥1.24  duckdb ≥0.9 (MS only)
+R       ≥4.5     survival ≥3.5  dplyr ≥1.1  readr ≥2.1
+```
+
+AoU Researcher Workbench (Controlled Tier). Quartz HPC with MarketScan parquet access.
 
 ## License
 
 MIT
-
-## References
-
-- Gatz, Su et al. Health Disparities in the Risk of Severe Acidosis.
-  *JAMIA* 2024;31(12):2932–2939. doi:10.1093/jamia/ocae256
-- Glasheen et al. Charlson Comorbidity Index: ICD-9 Update and ICD-10
-  Translation. *Am Health Drug Benefits* 2019;12(4):188–197.
