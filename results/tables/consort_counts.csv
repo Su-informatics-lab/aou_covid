@@ -1,0 +1,16 @@
+Site,Metric,Value
+AoU,total_participants,413457.0
+AoU,eligible_ehr_survey,252047.0
+AoU,covid_positive,25160.0
+AoU,hospitalized_30d,6531.0
+AoU,outpatient_only,18629.0
+AoU,matched_total,32606.0
+AoU,strata,6531.0
+AoU,dropped,0.0
+AoU,caliper,0.1118
+MS,covid_positive,4423200.0
+MS,hospitalized,149796.0
+MS,outpatient,4273404.0
+MS,matched_total,748857.0
+MS,strata,149773.0
+MS,dropped,4.0
