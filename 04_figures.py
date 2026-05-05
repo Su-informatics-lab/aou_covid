@@ -18,7 +18,7 @@ Outputs: results/figures/fig1_consort.pdf
 Figure specs: JAMIA (OUP) + Nature Portfolio style
   - Arial/Helvetica, 7 pt body, 6 pt ticks
   - Panel labels: bold lowercase (a, b)
-  - 300 DPI, PDF + PNG export
+  - 600 DPI, PDF + PNG export
   - Wong/Okabe-Ito colorblind-safe palette
   - No gridlines, minimal spines
 """
@@ -58,7 +58,7 @@ mpl.rcParams["axes.spines.top"] = False
 mpl.rcParams["axes.spines.right"] = False
 mpl.rcParams["figure.facecolor"] = "white"
 mpl.rcParams["savefig.facecolor"] = "white"
-mpl.rcParams["savefig.dpi"] = 300
+mpl.rcParams["savefig.dpi"] = 600
 mpl.rcParams["savefig.bbox"] = "tight"
 mpl.rcParams["savefig.pad_inches"] = 0.05
 
