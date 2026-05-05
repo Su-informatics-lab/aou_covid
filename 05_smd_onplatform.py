@@ -27,6 +27,7 @@ if len(sys.argv) < 2 or sys.argv[1] not in ("aou_v7", "aou_v8", "ms"):
 COHORT = sys.argv[1]
 IS_AOU = COHORT.startswith("aou")
 RESULTS = f"results/{COHORT}"
+RECOMPUTE = "--recompute" in sys.argv
 
 print("=" * 70)
 print(f"PRE/POST MATCHING BALANCE (SMD)  [{COHORT.upper()}]")
@@ -38,11 +39,28 @@ matched = pd.read_csv(f"{RESULTS}/06_matched_cohort.csv")
 
 print(f"  Cohort: {len(cohort):,}  |  Matched: {len(matched):,}")
 
-# ── Reconstruct matching variables ────────────────────────────────────
-# These were computed in the ETL but not saved separately.
-# We re-query them here.
+# ── Reconstruct matching variables (with cache) ──────────────────────
+CACHE_PATH = f"{RESULTS}/cache_match_vars.csv"
 
-if IS_AOU:
+if os.path.exists(CACHE_PATH) and not RECOMPUTE:
+    print(f"  Loading cached match vars from {CACHE_PATH}")
+    match_vars = pd.read_csv(CACHE_PATH)
+    if IS_AOU:
+        MATCH_COLS = ["enrollment_ord", "num_diagnosis", "ehr_length_days"]
+        VAR_LABELS = {
+            "enrollment_ord": "Enrollment date (ordinal)",
+            "num_diagnosis": "Number of diagnoses",
+            "ehr_length_days": "Length of EHR history (days)",
+        }
+    else:
+        MATCH_COLS = ["enrollment_ord", "num_diagnosis", "coverage_span_days"]
+        VAR_LABELS = {
+            "enrollment_ord": "Enrollment date (ordinal)",
+            "num_diagnosis": "Number of diagnoses",
+            "coverage_span_days": "Coverage span (days)",
+        }
+
+elif IS_AOU:
     CDR = os.environ.get("WORKSPACE_CDR", "")
     print(f"  CDR: {CDR}")
 
@@ -153,6 +171,10 @@ mv = match_vars.merge(cohort[["person_id", "severity"]], on="person_id")
 mv = mv.dropna(subset=MATCH_COLS)
 print(f"  Match variables available: {len(mv):,}")
 
+# Save cache
+match_vars.to_csv(CACHE_PATH, index=False)
+print(f"  Cached: {CACHE_PATH} (use --recompute to refresh)")
+
 
 # ── SMD function ──────────────────────────────────────────────────────
 def compute_smd(cases, controls, col):
@@ -245,3 +267,81 @@ for col in MATCH_COLS:
 print(f"\nSaved: {RESULTS}/etable_smd_pre_matching.csv")
 print(f"Saved: {RESULTS}/etable_smd_post_matching.csv")
 print("\nThese CSVs contain ONLY aggregate statistics (no PII). Safe to export.")
+
+# ── eFigure: LOVE PLOT (SMD before/after matching) ────────────────────
+print(f"\n{'='*60}")
+print("eFigure: Love Plot (SMD Balance)")
+print("=" * 60)
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+mpl.rcParams["pdf.fonttype"] = 42
+mpl.rcParams["ps.fonttype"] = 42
+mpl.rcParams["font.family"] = "sans-serif"
+mpl.rcParams["font.sans-serif"] = ["Arial", "Helvetica", "DejaVu Sans"]
+mpl.rcParams["font.size"] = 7
+mpl.rcParams["axes.linewidth"] = 0.5
+mpl.rcParams["figure.facecolor"] = "white"
+mpl.rcParams["savefig.dpi"] = 300
+
+labels, pre_smds, post_smds = [], [], []
+for col in MATCH_COLS:
+    labels.append(VAR_LABELS[col])
+    pre_smds.append(abs(compute_smd(pre_cases, pre_controls, col)))
+    post_smds.append(abs(compute_smd(post_cases, post_controls, col)))
+
+fig, ax = plt.subplots(figsize=(4.724, 2.5))  # 1.5-column width
+y = np.arange(len(labels))[::-1]
+
+ax.scatter(
+    pre_smds,
+    y,
+    marker="o",
+    facecolors="none",
+    edgecolors="#D55E00",
+    s=40,
+    linewidths=1.0,
+    zorder=3,
+    label="Before matching",
+)
+ax.scatter(
+    post_smds,
+    y,
+    marker="o",
+    facecolors="#0072B2",
+    edgecolors="#0072B2",
+    s=40,
+    linewidths=1.0,
+    zorder=4,
+    label="After matching",
+)
+
+# Connect pre→post with arrows
+for i in range(len(labels)):
+    ax.annotate(
+        "",
+        xy=(post_smds[i], y[i]),
+        xytext=(pre_smds[i], y[i]),
+        arrowprops=dict(arrowstyle="->", color="#999999", lw=0.6),
+    )
+
+# Reference line at |SMD| = 0.1
+ax.axvline(0.1, color="black", linewidth=0.5, linestyle="--", zorder=1)
+ax.text(0.105, y.max() + 0.3, "|SMD| = 0.1", fontsize=6, va="bottom")
+
+ax.set_yticks(y)
+ax.set_yticklabels(labels, fontsize=7)
+ax.set_xlabel("|Standardized Mean Difference|", fontsize=7)
+ax.set_xlim(-0.02, max(max(pre_smds), 0.15) * 1.15)
+ax.legend(fontsize=6, loc="upper right")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+
+FIG_DIR = os.path.join(os.path.dirname(RESULTS), "figures")
+os.makedirs(FIG_DIR, exist_ok=True)
+love_path = os.path.join(FIG_DIR, f"efig_love_plot_{COHORT}")
+fig.savefig(f"{love_path}.pdf", bbox_inches="tight")
+fig.savefig(f"{love_path}.png", bbox_inches="tight")
+print(f"  Saved: {love_path}.pdf/.png")
+plt.close(fig)
