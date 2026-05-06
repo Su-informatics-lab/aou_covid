@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 """
-COVID-19 Severity × SDoH — MarketScan ETL (External Validation)
+COVID-19 Severity × SDoH — MarketScan ETL (Clinical Transportability)
 Runs on Quartz HPC with DuckDB. Reads from /N/project/Marketscan1/parquet/.
+
+Consistent with AoU implementation:
+  - 14-day hospitalization window (primary), visit-linked (inpatient file)
+  - Charlson: Shihui/Chenxi 2021 (NCI update of Glasheen 2019)
+  - AIDS: two-step (HIV AND OI), AIDS→HIV trump rule
+  - Pandemic wave variable
+  - Control reuse statistics
 
 Usage: python 01_ms_etl.py
 Output: results/ms/*.csv
 """
 
 import os
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 import duckdb
 import numpy as np
@@ -26,7 +36,7 @@ con.execute("PRAGMA threads=7")
 con.execute("SET memory_limit='65GB'")
 
 print("=" * 70)
-print("COVID-19 SEVERITY — MarketScan EXTERNAL VALIDATION")
+print("COVID-19 SEVERITY — MarketScan CLINICAL TRANSPORTABILITY")
 print("=" * 70)
 print(f"  Source: {MS_DIR}")
 print(f"  Years:  {YEARS}")
@@ -34,23 +44,21 @@ print(f"  Output: {RESULTS}/")
 print("=" * 70)
 
 # =====================================================================
-# STEP 1: COVID COHORT
+# STEP 1: COVID COHORT (14-day hospitalization window)
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 1: COVID Cohort (U07.1 in inpatient + outpatient)")
+print("STEP 1: COVID Cohort (U07.1, 14-day hospitalization window)")
 print("=" * 70)
 
-# Build union of all inpatient dx columns across years
 ip_unions = []
 for y in YEARS:
     f = f"{MS_DIR}/mscan_{y}_i.parquet"
     if not os.path.exists(f):
         continue
-    # Union PDX + DX1-DX15 into long format
     dx_cols = ["PDX"] + [f"DX{i}" for i in range(1, 16)]
     for col in dx_cols:
         ip_unions.append(f"""
-        SELECT ENROLID, ADMDATE AS event_date, {col} AS dx, 'inpatient' AS src, CASEID
+        SELECT ENROLID, ADMDATE AS event_date, {col} AS dx, 'inpatient' AS src
         FROM read_parquet('{f}')
         WHERE {col} IS NOT NULL AND REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') LIKE 'U071%'
         """)
@@ -62,42 +70,68 @@ for y in YEARS:
         continue
     for col in ["DX1", "DX2", "DX3", "DX4"]:
         op_unions.append(f"""
-        SELECT ENROLID, SVCDATE AS event_date, {col} AS dx, 'outpatient' AS src, NULL AS CASEID
+        SELECT ENROLID, SVCDATE AS event_date, {col} AS dx, 'outpatient' AS src
         FROM read_parquet('{f}')
         WHERE {col} IS NOT NULL AND REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') LIKE 'U071%'
         """)
 
 print(
-    f"  Building COVID union from {len(ip_unions)} inpatient + {len(op_unions)} outpatient queries..."
+    f"  Building COVID union from {len(ip_unions)} inpatient"
+    f" + {len(op_unions)} outpatient queries..."
 )
 
+# 14-day window: hospitalization = inpatient COVID claim within 14 days of index
 covid_sql = f"""
 WITH covid_all AS (
     {' UNION ALL '.join(ip_unions + op_unions)}
 ),
 covid_index AS (
     SELECT ENROLID AS person_id,
-           MIN(event_date) AS covid_index_date,
-           MAX(CASE WHEN src = 'inpatient' THEN 1 ELSE 0 END) AS has_inpatient
+           MIN(event_date) AS covid_index_date
     FROM covid_all
     GROUP BY ENROLID
+),
+covid_severity AS (
+    SELECT ci.person_id, ci.covid_index_date,
+           MAX(CASE WHEN ca.src = 'inpatient'
+                     AND ca.event_date BETWEEN ci.covid_index_date
+                         AND ci.covid_index_date + INTERVAL 14 DAY
+                    THEN 1 ELSE 0 END) AS severity,
+           MAX(CASE WHEN ca.src = 'inpatient'
+                    THEN 1 ELSE 0 END) AS severity_broad
+    FROM covid_index ci
+    LEFT JOIN covid_all ca ON ci.person_id = ca.ENROLID
+    GROUP BY ci.person_id, ci.covid_index_date
 )
-SELECT * FROM covid_index
+SELECT * FROM covid_severity
 """
 
 covid_cohort = con.sql(covid_sql).df()
 print(f"  Total COVID+: {len(covid_cohort):,}")
 
-# Severity = had inpatient admission with COVID
-covid_cohort["severity"] = covid_cohort["has_inpatient"].astype(int)
-n_cases = covid_cohort.severity.sum()
-n_controls = (covid_cohort.severity == 0).sum()
-print(f"  Hospitalized (cases):  {n_cases:,}")
-print(f"  Outpatient (controls): {n_controls:,}")
-
-covid_cohort[["person_id", "covid_index_date", "severity"]].to_csv(
-    f"{RESULTS}/01_covid_cohort.csv", index=False
+n_strict = covid_cohort.severity.sum()
+n_broad = covid_cohort.severity_broad.sum()
+print(
+    f"  Hospitalized (14-day strict): {n_strict:,} ({n_strict/len(covid_cohort)*100:.1f}%)"
 )
+print(
+    f"  Hospitalized (any-time broad): {n_broad:,} ({n_broad/len(covid_cohort)*100:.1f}%)"
+)
+
+# Pandemic wave
+covid_cohort["covid_index_date"] = pd.to_datetime(covid_cohort["covid_index_date"])
+covid_cohort["pandemic_wave"] = "pre_delta"
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-06-15", "pandemic_wave"] = (
+    "delta"
+)
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-12-15", "pandemic_wave"] = (
+    "omicron"
+)
+print(f"  Wave: {covid_cohort.pandemic_wave.value_counts().to_dict()}")
+
+covid_cohort[
+    ["person_id", "covid_index_date", "severity", "severity_broad", "pandemic_wave"]
+].to_csv(f"{RESULTS}/01_covid_cohort.csv", index=False)
 print(f"  Saved: {RESULTS}/01_covid_cohort.csv")
 
 
@@ -108,7 +142,6 @@ print("\n" + "=" * 70)
 print("STEP 2: Demographics + Plan Type")
 print("=" * 70)
 
-# Use earliest enrollment record for each COVID patient
 enroll_unions = []
 for y in YEARS:
     f = f"{MS_DIR}/mscan_{y}_t.parquet"
@@ -136,7 +169,6 @@ GROUP BY e.ENROLID
 demo = con.sql(demo_sql).df()
 print(f"  Matched demographics: {len(demo):,}")
 
-# Recode
 demo["sex_at_birth"] = demo["sex_raw"].apply(
     lambda x: (
         "Male"
@@ -145,7 +177,6 @@ demo["sex_at_birth"] = demo["sex_raw"].apply(
     )
 )
 
-# Age group (same bins as AoU)
 demo["age_at_covid"] = demo["age"].fillna(0).astype(int)
 demo["age_group"] = pd.cut(
     demo["age_at_covid"],
@@ -154,7 +185,6 @@ demo["age_group"] = pd.cut(
     right=False,
 )
 
-# Plan type recode
 PLAN_MAP = {
     1: "Basic",
     2: "Comprehensive",
@@ -168,7 +198,6 @@ PLAN_MAP = {
 }
 demo["plan_type"] = demo["plantyp"].map(PLAN_MAP).fillna("Unknown")
 
-# Region recode
 REGION_MAP = {
     "1": "Northeast",
     "2": "NorthCentral",
@@ -178,7 +207,6 @@ REGION_MAP = {
 }
 demo["region_name"] = demo["region"].astype(str).map(REGION_MAP).fillna("Unknown")
 
-# No race/ethnicity in MarketScan
 demo["race"] = "Unknown"
 demo["ethnicity"] = "Unknown"
 
@@ -198,22 +226,19 @@ demo_out = demo[
 
 print(f"  Sex: {demo_out.sex_at_birth.value_counts().to_dict()}")
 print(f"  Age: {demo_out.age_group.value_counts().to_dict()}")
-print(f"  Plan: {demo_out.plan_type.value_counts().to_dict()}")
-print(f"  Region: {demo_out.region_name.value_counts().to_dict()}")
-
 demo_out.to_csv(f"{RESULTS}/02_demographics.csv", index=False)
 
 
 # =====================================================================
 # STEP 3: CHARLSON COMORBIDITIES
+# Shihui/Chenxi 2021 (NCI update of Glasheen 2019)
+# Flat lists (ICD-9 + ICD-10 mixed) for MarketScan prefix matching
 # =====================================================================
 print("\n" + "=" * 70)
 print("STEP 3: Charlson Comorbidities")
 print("=" * 70)
 
-# Build long-format dx table from all inpatient + outpatient across all years
-print("  Building long-format diagnosis table (this may take a few minutes)...")
-
+print("  Building long-format diagnosis table...")
 dx_unions = []
 for y in YEARS:
     ip_f = f"{MS_DIR}/mscan_{y}_i.parquet"
@@ -229,7 +254,6 @@ for y in YEARS:
             SELECT ENROLID AS person_id, REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') AS dx_code
             FROM read_parquet('{op_f}') WHERE {col} IS NOT NULL""")
 
-# Register COVID person IDs for filtering
 con.sql(f"""
 CREATE OR REPLACE TABLE dx_long AS
 SELECT DISTINCT person_id, dx_code
@@ -239,7 +263,7 @@ WHERE person_id IN (SELECT person_id FROM covid_pids)
 dx_count = con.sql("SELECT COUNT(*) FROM dx_long").fetchone()[0]
 print(f"  Diagnosis rows (COVID patients): {dx_count:,}")
 
-# Charlson code sets (same as AoU — Glasheen 2019, dot-stripped, prefix match)
+# Charlson code sets — consistent with AoU (Shihui/Chenxi 2021)
 CHARLSON = {
     "Myocardial_Infarction": ["410", "412", "I21", "I22", "I252"],
     "Congestive_Heart_Failure": [
@@ -288,6 +312,7 @@ CHARLSON = {
         "4437",
         "4438",
         "4439",
+        "4471",
         "5571",
         "5579",
         "V434",
@@ -319,16 +344,7 @@ CHARLSON = {
         "G45",
         "G46",
         "H340",
-        "I60",
-        "I61",
-        "I62",
-        "I63",
-        "I64",
-        "I65",
-        "I66",
-        "I67",
-        "I68",
-        "I69",
+        "I6",
     ],
     "Dementia": [
         "290",
@@ -685,6 +701,7 @@ CHARLSON = {
 }
 
 TRUMP_RULES = [
+    ("AIDS", "HIV"),
     ("Hemiplegia_Paraplegia", "Cerebrovascular_Disease"),
     ("Liver_Disease_Moderate_Severe", "Liver_Disease_Mild"),
     ("Diabetes_with_Chronic_Complications", "Diabetes_without_Chronic_Complications"),
@@ -693,6 +710,7 @@ TRUMP_RULES = [
 ]
 
 # AIDS OI codes — NOT in CHARLSON. AIDS = HIV AND OI (two-step, per DualR).
+# NO HIV codes (042/B20) in this list.
 AIDS_OI = [
     "112",
     "180",
@@ -750,7 +768,7 @@ AIDS_OI = [
     "C86",
     "C87",
     "C88",
-    "C9",
+    "C89",
     "C90",
     "C91",
     "C92",
@@ -776,7 +794,7 @@ flag_exprs = []
 for name, codes in CHARLSON.items():
     likes = " OR ".join([f"dx_code LIKE '{c}%'" for c in codes])
     flag_exprs.append(f"MAX(CASE WHEN ({likes}) THEN 1 ELSE 0 END) AS {name}")
-# OI intermediate flag for AIDS computation (per DualR pattern)
+# OI intermediate flag
 oi_likes = " OR ".join([f"dx_code LIKE '{c}%'" for c in AIDS_OI])
 flag_exprs.append(f"MAX(CASE WHEN ({oi_likes}) THEN 1 ELSE 0 END) AS has_oi")
 
@@ -786,35 +804,30 @@ FROM dx_long
 GROUP BY person_id
 """).df()
 
-# Fill missing COVID patients with 0
 charlson = covid_cohort[["person_id"]].merge(charlson, on="person_id", how="left")
 for col in list(CHARLSON.keys()) + ["has_oi"]:
     charlson[col] = charlson[col].fillna(0).astype(int)
 
-# AIDS = HIV AND OI (two-step co-occurrence, consistent with DualR INPC/MS)
+# AIDS = HIV AND OI (two-step)
 charlson["AIDS"] = ((charlson["HIV"] == 1) & (charlson["has_oi"] == 1)).astype(int)
 charlson["HIV"] = ((charlson["HIV"] == 1) & (charlson["AIDS"] == 0)).astype(int)
 charlson.drop(columns=["has_oi"], inplace=True)
 
-# Assert AIDS prevalence is within expected range
 aids_prev = charlson["AIDS"].sum() / len(charlson) * 100
-assert (
-    aids_prev < 2.0
-), f"AIDS prevalence {aids_prev:.2f}% > 2% — co-occurrence logic broken"
 print(
-    f"  AIDS fix verified: HIV={charlson['HIV'].sum():,}  AIDS={charlson['AIDS'].sum():,} ({aids_prev:.3f}%)"
+    f"  AIDS verified: HIV={charlson['HIV'].sum():,}  AIDS={charlson['AIDS'].sum():,}"
+    f" ({aids_prev:.3f}%)"
 )
+assert aids_prev < 2.0, f"AIDS prevalence {aids_prev:.2f}% > 2%"
 
-# Trump rules (AIDS/HIV already handled above)
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
 
-print(f"  Charlson computed for {len(charlson):,} patients")
 all_como_cols = list(CHARLSON.keys()) + ["AIDS"]
+print(f"\n  Charlson computed for {len(charlson):,} patients")
 for col in all_como_cols:
     n = charlson[col].sum()
-    print(f"  {col:45s} {n:>8,} ({n/len(charlson)*100:5.1f}%)")
-
+    print(f"    {col:45s} {n:>8,} ({n/len(charlson)*100:5.1f}%)")
 charlson.to_csv(f"{RESULTS}/03_charlson.csv", index=False)
 
 
@@ -867,15 +880,11 @@ vacc_status[["person_id", "vaccination"]].to_csv(
 # STEP 5: PROPENSITY SCORE MATCHING (1:4, with replacement)
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 5: Propensity Score Matching")
+print("STEP 5: Propensity Score Matching (strict 14-day phenotype)")
 print("=" * 70)
 
-# Matching variables: first_enrollment_date, num_diagnoses, coverage_span
-# (Analogous to AoU: survey_ord, num_diagnosis, ehr_length_days)
-# NOTE: age is NOT a matching variable — it stays free as a clogit covariate
 match_df = covid_cohort[["person_id", "severity"]].copy()
 
-# Distinct diagnosis count (already in DuckDB)
 dx_counts = con.sql("""
 SELECT person_id, COUNT(DISTINCT dx_code) AS num_diagnosis
 FROM dx_long GROUP BY person_id
@@ -883,7 +892,6 @@ FROM dx_long GROUP BY person_id
 match_df = match_df.merge(dx_counts, on="person_id", how="left")
 match_df["num_diagnosis"] = match_df["num_diagnosis"].fillna(0)
 
-# First enrollment date + coverage span from enrollment files
 print("  Computing enrollment dates for matching...")
 enroll_date_unions = []
 for y in YEARS:
@@ -968,11 +976,42 @@ nr = (matched.Treatment == 0).sum()
 print(
     f"  Cases: {nc:,}  |  Control rows: {nr:,}  |  Ratio: 1:{nr/nc:.1f}  |  Dropped: {dropped}"
 )
+
+# Control reuse statistics
+ctrl_rows = matched[matched.Treatment == 0]
+ctrl_reuse = ctrl_rows.groupby("person_id").size()
+print(
+    f"  Control reuse: {len(ctrl_reuse):,} unique, median {ctrl_reuse.median():.0f}"
+    f" (IQR {ctrl_reuse.quantile(0.25):.0f}–{ctrl_reuse.quantile(0.75):.0f}),"
+    f" max {ctrl_reuse.max()}"
+)
+
+pd.DataFrame(
+    {
+        "metric": [
+            "n_unique_controls",
+            "median_reuse",
+            "iqr_lower",
+            "iqr_upper",
+            "max_reuse",
+            "n_control_rows",
+        ],
+        "value": [
+            len(ctrl_reuse),
+            ctrl_reuse.median(),
+            ctrl_reuse.quantile(0.25),
+            ctrl_reuse.quantile(0.75),
+            ctrl_reuse.max(),
+            len(ctrl_rows),
+        ],
+    }
+).to_csv(f"{RESULTS}/06b_control_reuse.csv", index=False)
+
 matched.to_csv(f"{RESULTS}/06_matched_cohort.csv", index=False)
 
 
 # =====================================================================
-# STEP 6: MERGE REGRESSION DATAFRAME
+# STEP 6: FINAL REGRESSION DATAFRAME
 # =====================================================================
 print("\n" + "=" * 70)
 print("STEP 6: Final Regression DataFrame")
@@ -984,6 +1023,14 @@ como_cols = list(CHARLSON.keys()) + ["AIDS"]
 reg[como_cols] = reg[como_cols].fillna(0).astype(int)
 reg = reg.merge(vacc_status[["person_id", "vaccination"]], on="person_id", how="left")
 reg["vaccination"] = reg["vaccination"].fillna("Unknown")
+
+# Add pandemic wave and broad severity
+reg = reg.merge(
+    covid_cohort[["person_id", "pandemic_wave", "severity_broad"]],
+    on="person_id",
+    how="left",
+)
+reg["pandemic_wave"] = reg["pandemic_wave"].fillna("unknown")
 
 print(f"  Shape: {reg.shape}")
 reg.to_csv(f"{RESULTS}/07_regression_base.csv", index=False)
