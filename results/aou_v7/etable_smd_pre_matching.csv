@@ -1,4 +1,4 @@
-Variable,"Cases (N=6,531)","Controls (N=18,629)",SMD
-Enrollment date (ordinal),"737,258 (737,035 – 737,453)","737,250 (737,004 – 737,514)",-0.037
-Number of diagnoses,108 (59 – 180),65 (32 – 116),0.544
-Length of EHR history (days),"4,092 (2,526 – 6,535)","3,222 (2,085 – 5,941)",0.129
+Variable,"Cases (N=4,064)","Controls (N=21,096)",SMD
+Enrollment date (ordinal),"737,236 (737,018–737,434)","737,256 (737,011–737,494)",-0.087
+Number of diagnoses,114 (63–191),69 (33–121),0.554
+Length of EHR history (days),"3,854 (2,417–6,323)","3,425 (2,137–6,097)",0.040
