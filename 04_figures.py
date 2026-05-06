@@ -8,12 +8,13 @@ Usage: python 04_figures.py                 # default results/ directory
 
 Inputs:  results/aou_v7/all_model_coefficients.csv
          results/ms/all_model_coefficients.csv  (optional)
-Outputs: results/figures/fig1_consort.pdf
-         results/figures/fig2_base_forest.pdf
+Outputs: results/figures/fig2_base_forest.pdf
          results/figures/fig3_sdoh_forest.pdf
          results/tables/table3_sdoh_summary.csv
          results/tables/etable_ms_comparison.csv
          results/tables/consort_counts.csv
+
+Figure 1 (CONSORT): use fig1_consort.drawio (draw.io), NOT this script.
 
 Figure specs: JAMIA (OUP) + Nature Portfolio style
   - Arial/Helvetica, 7 pt body, 6 pt ticks
@@ -65,8 +66,6 @@ mpl.rcParams["savefig.pad_inches"] = 0.05
 C_RISK = "#D55E00"  # vermillion — significant risk
 C_PROTECT = "#0072B2"  # blue — significant protective
 C_NS = "#999999"  # grey — non-significant
-C_BOX = "#4477AA"  # box fill for CONSORT
-C_BOX_EX = "#CC6677"  # exclusion boxes
 
 # ── Widths (Nature standard) ──────────────────────────────────────────
 W_SINGLE = 3.504  # 89 mm
@@ -102,152 +101,13 @@ def save_fig(fig, name):
 
 
 # ══════════════════════════════════════════════════════════════════════
-# FIGURE 1: CONSORT — Use fig1_consort.drawio (draw.io) instead.
-# The matplotlib CONSORT is commented out; draw.io produces cleaner
-# flow diagrams with editable text.
+# FIGURE 1: CONSORT — Use fig1_consort.drawio (draw.io)
 # ══════════════════════════════════════════════════════════════════════
 print("\n" + "=" * 60)
-print("FIGURE 1: CONSORT — skipped (use fig1_consort.drawio)")
+print("FIGURE 1: CONSORT — use fig1_consort.drawio (not drawn here)")
 print("=" * 60)
 
 
-"""  # CONSORT code commented out — use fig1_consort.drawio instead
-    box = FancyBboxPatch(
-        (x - w / 2, y - h / 2),
-        w,
-        h,
-        boxstyle="round,pad=0.02",
-        facecolor=color,
-        edgecolor="black",
-        linewidth=0.5,
-        alpha=0.15,
-        zorder=1,
-    )
-    ax.add_patch(box)
-    # Border
-    box2 = FancyBboxPatch(
-        (x - w / 2, y - h / 2),
-        w,
-        h,
-        boxstyle="round,pad=0.02",
-        facecolor="none",
-        edgecolor="black",
-        linewidth=0.5,
-        zorder=2,
-    )
-    ax.add_patch(box2)
-    ax.text(
-        x,
-        y,
-        text,
-        ha="center",
-        va="center",
-        fontsize=fontsize,
-        fontweight="bold" if bold else "normal",
-        zorder=3,
-        wrap=True,
-        linespacing=1.3,
-    )
-
-
-def draw_arrow(ax, x1, y1, x2, y2):
-    ax.annotate(
-        "",
-        xy=(x2, y2),
-        xytext=(x1, y1),
-        arrowprops=dict(arrowstyle="->", color="black", lw=0.7),
-    )
-
-
-def draw_consort_panel(ax, data, title, panel_label):
-    ax.set_xlim(-0.5, 1.5)
-    ax.set_ylim(-0.1, 1.1)
-    ax.axis("off")
-    ax.set_title(title, fontsize=8, fontweight="bold", pad=8)
-    ax.text(
-        -0.02,
-        1.08,
-        panel_label,
-        fontsize=9,
-        fontweight="bold",
-        transform=ax.transAxes,
-        va="top",
-    )
-
-    bw, bh = 0.55, 0.11  # box width, height
-
-    # Top: total
-    draw_box(ax, 0.5, 1.0, bw, bh, data["top"], fontsize=5.5, bold=True)
-
-    # Exclusion (right side)
-    if "exclude" in data:
-        draw_box(ax, 1.2, 0.82, 0.45, bh, data["exclude"], color=C_BOX_EX, fontsize=5)
-        draw_arrow(ax, 0.5, 1.0 - bh / 2, 0.5, 0.82 + bh / 2 + 0.02)
-        ax.annotate(
-            "",
-            xy=(0.97, 0.82),
-            xytext=(0.77, 0.82),
-            arrowprops=dict(arrowstyle="->", color="black", lw=0.5),
-        )
-
-    # COVID positive
-    y_covid = 0.72 if "exclude" not in data else 0.64
-    draw_box(ax, 0.5, y_covid, bw, bh, data["covid"], fontsize=5.5)
-    draw_arrow(
-        ax,
-        0.5,
-        (1.0 if "exclude" not in data else 0.82) - bh / 2,
-        0.5,
-        y_covid + bh / 2 + 0.02,
-    )
-
-    # Split: cases / controls
-    y_split = y_covid - 0.22
-    draw_box(ax, 0.15, y_split, 0.4, bh, data["cases"], fontsize=5.5)
-    draw_box(ax, 0.85, y_split, 0.4, bh, data["controls"], fontsize=5.5)
-    draw_arrow(ax, 0.35, y_covid - bh / 2, 0.15, y_split + bh / 2 + 0.02)
-    draw_arrow(ax, 0.65, y_covid - bh / 2, 0.85, y_split + bh / 2 + 0.02)
-
-    # PSM
-    y_psm = y_split - 0.18
-    draw_box(ax, 0.5, y_psm, bw + 0.15, bh, data["psm"], fontsize=5.5, bold=True)
-    draw_arrow(ax, 0.15, y_split - bh / 2, 0.5, y_psm + bh / 2 + 0.02)
-    draw_arrow(ax, 0.85, y_split - bh / 2, 0.5, y_psm + bh / 2 + 0.02)
-
-    # Final
-    y_final = y_psm - 0.18
-    draw_box(ax, 0.5, y_final, bw + 0.15, bh, data["final"], fontsize=5.5, bold=True)
-    draw_arrow(ax, 0.5, y_psm - bh / 2, 0.5, y_final + bh / 2 + 0.02)
-
-
-aou_data = {
-    "top": "AoU participants\nN = 413,457",
-    "exclude": "Excluded: no EHR or\nBasics Survey\nn = 161,410",
-    "covid": "COVID-19 positive\nn = 25,160",
-    "cases": "Hospitalized ≤30d\n(cases)\nn = 6,531 (26.0%)",
-    "controls": "Outpatient only\n(controls)\nn = 18,629 (74.0%)",
-    "psm": "PSM 1:4, caliper = 0.112\ndropped = 0",
-    "final": "Matched cohort\n32,606 obs (6,531 strata)",
-}
-
-ms_data = {
-    "top": "MarketScan enrolled\nN ≈ 23.3M (2020)",
-    "covid": "COVID-19 positive (U07.1)\nn = 4,423,200",
-    "cases": "Hospitalized\n(cases)\nn = 149,796 (3.4%)",
-    "controls": "Outpatient only\n(controls)\nn = 4,273,404 (96.6%)",
-    "psm": "PSM 1:4, caliper-based\ndropped = 4",
-    "final": "Matched cohort\n748,857 obs (149,773 strata)",
-}
-
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(W_DOUBLE, 4.5))
-draw_consort_panel(ax1, aou_data, "All of Us Research Program", "a")
-draw_consort_panel(ax2, ms_data, "MarketScan Commercial Claims", "b")
-plt.subplots_adjust(wspace=0.15)
-save_fig(fig, "fig1_consort")
-"""  # end CONSORT comment block
-
-
-# ══════════════════════════════════════════════════════════════════════
 # ══════════════════════════════════════════════════════════════════════
 # FIGURE 2: BASE MODEL FOREST PLOT (hierarchical labels + gray bands)
 # ══════════════════════════════════════════════════════════════════════
@@ -274,22 +134,28 @@ BASE_GROUPS = [
     ),
     ("Ethnicity", [("f.ethnicityHispanic", "Hispanic"), ("f.ethnicityOther", "Other")]),
     (
+        "Wave",
+        [("f.wavedelta", "Delta"), ("f.waveomicron", "Omicron")],
+    ),
+    (
         "Comorbidities",
         [
             ("Cerebrovascular_Disease", "Cerebrovascular"),
             ("Congestive_Heart_Failure", "Heart failure"),
             ("Renal_Disease_Severe", "Renal (severe)"),
+            ("Metastatic_Solid_Tumor", "Metastatic tumor"),
+            ("Liver_Disease_Moderate_Severe", "Liver (mod/severe)"),
+            ("Dementia", "Dementia"),
+            ("Myocardial_Infarction", "MI"),
+            ("Renal_Disease_Mild_Moderate", "Renal (mild/mod)"),
             ("Chronic_Pulmonary_Disease", "Pulmonary"),
+            ("Liver_Disease_Mild", "Liver (mild)"),
             ("Diabetes_with_Chronic_Complications", "DM w/ complic."),
             ("Diabetes_without_Chronic_Complications", "DM w/o complic."),
-            ("Liver_Disease_Mild", "Liver (mild)"),
-            ("Malignancy", "Malignancy"),
+            ("Hemiplegia_Paraplegia", "Hemiplegia"),
+            ("Peripheral_Vascular_Disease", "PVD"),
             ("AIDS", "AIDS"),
             ("HIV", "HIV"),
-            ("Myocardial_Infarction", "MI"),
-            ("Hemiplegia_Paraplegia", "Hemiplegia"),
-            ("Renal_Disease_Mild_Moderate", "Renal (mild/mod)"),
-            ("Peripheral_Vascular_Disease", "PVD"),
         ],
     ),
 ]
@@ -403,7 +269,7 @@ def plot_hierarchical_forest(ax, groups, coef_df, panel_label, xlim, xticks):
     return plot_rows
 
 
-fig, ax = plt.subplots(figsize=(W_DOUBLE, 6.5))
+fig, ax = plt.subplots(figsize=(W_DOUBLE, 7.5))
 plot_hierarchical_forest(
     ax,
     BASE_GROUPS,
@@ -422,6 +288,15 @@ print("\n" + "=" * 60)
 print("FIGURE 3: SDoH Forest Plot")
 print("=" * 60)
 
+# Variable names match 02_models.R factor encoding:
+#   Insurance: f.insuranceMedicare, f.insuranceMedicaid, f.insuranceOther_None
+#   Income:    f.incomeless_10k, f.income10k_25k, ...
+#   Education: f.educationNever_Attended, f.educationBelow_GED, ...
+#   Employment: f.employmentUnemployed, f.employmentStudent, f.employmentOthers
+#   Housing:   f.housingRent, f.housingOthers
+#   Stability: f.housing_stabilityUnstable
+#   Disability: f.disability_anyYes
+
 SDOH_GROUPS = [
     (
         "Income",
@@ -437,9 +312,9 @@ SDOH_GROUPS = [
     (
         "Insurance",
         [
-            ("insurance", "ins_employer", "Employer"),
-            ("insurance", "ins_medicare", "Medicare"),
-            ("insurance", "ins_medicaid", "Medicaid"),
+            ("insurance", "f.insuranceMedicare", "Medicare"),
+            ("insurance", "f.insuranceMedicaid", "Medicaid"),
+            ("insurance", "f.insuranceOther_None", "Other/None"),
         ],
     ),
     (
@@ -460,7 +335,10 @@ SDOH_GROUPS = [
     ),
     (
         "Housing",
-        [("housing", "f.housingRent", "Rent"), ("housing", "f.housingOthers", "Other")],
+        [
+            ("housing", "f.housingRent", "Rent"),
+            ("housing", "f.housingOthers", "Other"),
+        ],
     ),
     ("Stability", [("housing_stability", "f.housing_stabilityUnstable", "Unstable")]),
     ("Disability", [("disability_lumped", "f.disability_anyYes", "Any disability")]),
@@ -478,36 +356,55 @@ plot_hierarchical_forest(
 save_fig(fig, "fig3_sdoh_forest")
 
 
-# TABLE 3: SDoH AOR SUMMARY
+# ══════════════════════════════════════════════════════════════════════
+# TABLE 3: SDoH AOR SUMMARY (domain-by-domain + joint)
 # ══════════════════════════════════════════════════════════════════════
 print("\n" + "=" * 60)
 print("TABLE 3: SDoH AOR Summary")
 print("=" * 60)
 
+# Joint model coefficients
+joint = aou[aou.model == "joint_sdoh"].copy()
+
 table3_rows = []
 for domain, items in SDOH_GROUPS:
     for model, var, label in items:
-        subset = aou[(aou.model == model) & (aou.variable == var)]
-        if len(subset) == 0:
+        # Domain-by-domain AOR
+        subset_d = aou[(aou.model == model) & (aou.variable == var)]
+        # Joint AOR — variable name is the same but model is joint_sdoh
+        subset_j = joint[joint.variable == var]
+
+        if len(subset_d) == 0:
             continue
-        r = subset.iloc[0]
-        sig = (
+        rd = subset_d.iloc[0]
+        sig_d = (
             "***"
-            if r.p_value < 0.001
-            else ("**" if r.p_value < 0.01 else ("*" if r.p_value < 0.05 else ""))
+            if rd.p_value < 0.001
+            else ("**" if rd.p_value < 0.01 else ("*" if rd.p_value < 0.05 else ""))
         )
-        table3_rows.append(
-            {
-                "Domain": domain,
-                "Variable": label,
-                "AOR": f"{r.AOR:.2f}",
-                "95% CI": f"{r.CI_lower:.2f}\u2013{r.CI_upper:.2f}",
-                "P-value": (
-                    f"{r.p_value:.2e}" if r.p_value < 0.001 else f"{r.p_value:.3f}"
-                ),
-                "Sig": sig,
-            }
-        )
+
+        row = {
+            "Domain": domain,
+            "Variable": label,
+            "Domain AOR": f"{rd.AOR:.2f}{sig_d}",
+            "Domain 95% CI": f"{rd.CI_lower:.2f}\u2013{rd.CI_upper:.2f}",
+        }
+
+        if len(subset_j) > 0:
+            rj = subset_j.iloc[0]
+            sig_j = (
+                "***"
+                if rj.p_value < 0.001
+                else ("**" if rj.p_value < 0.01 else ("*" if rj.p_value < 0.05 else ""))
+            )
+            row["Joint AOR"] = f"{rj.AOR:.2f}{sig_j}"
+            row["Joint 95% CI"] = f"{rj.CI_lower:.2f}\u2013{rj.CI_upper:.2f}"
+        else:
+            row["Joint AOR"] = ""
+            row["Joint 95% CI"] = ""
+
+        table3_rows.append(row)
+
 table3 = pd.DataFrame(table3_rows)
 table3.to_csv(os.path.join(TBL_DIR, "table3_sdoh_summary.csv"), index=False)
 print(table3.to_string(index=False))
@@ -548,25 +445,26 @@ if has_ms:
 
 
 # ══════════════════════════════════════════════════════════════════════
-# CONSORT COUNTS (for reference / manuscript)
+# CONSORT COUNTS (v7 strict phenotype — reference only)
 # ══════════════════════════════════════════════════════════════════════
 consort = pd.DataFrame(
     [
         {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
-        {"Site": "AoU", "Metric": "eligible_ehr_survey", "Value": 252047},
         {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
-        {"Site": "AoU", "Metric": "hospitalized_30d", "Value": 6531},
-        {"Site": "AoU", "Metric": "outpatient_only", "Value": 18629},
-        {"Site": "AoU", "Metric": "matched_total", "Value": 32606},
-        {"Site": "AoU", "Metric": "strata", "Value": 6531},
+        {"Site": "AoU", "Metric": "hospitalized_strict_14d", "Value": 4064},
+        {"Site": "AoU", "Metric": "hospitalized_broad_30d", "Value": 6531},
+        {"Site": "AoU", "Metric": "ed_only_reclassified", "Value": 2467},
+        {"Site": "AoU", "Metric": "outpatient_controls", "Value": 21096},
+        {"Site": "AoU", "Metric": "matched_observations", "Value": 20285},
+        {"Site": "AoU", "Metric": "matched_strata", "Value": 4064},
+        {"Site": "AoU", "Metric": "unique_controls", "Value": 9876},
+        {"Site": "AoU", "Metric": "control_observations", "Value": 16221},
+        {"Site": "AoU", "Metric": "caliper", "Value": 0.114},
         {"Site": "AoU", "Metric": "dropped", "Value": 0},
-        {"Site": "AoU", "Metric": "caliper", "Value": 0.1118},
         {"Site": "MS", "Metric": "covid_positive", "Value": 4423200},
-        {"Site": "MS", "Metric": "hospitalized", "Value": 149796},
-        {"Site": "MS", "Metric": "outpatient", "Value": 4273404},
-        {"Site": "MS", "Metric": "matched_total", "Value": 748857},
-        {"Site": "MS", "Metric": "strata", "Value": 149773},
-        {"Site": "MS", "Metric": "dropped", "Value": 4},
+        {"Site": "MS", "Metric": "hospitalized_strict_14d", "Value": 139489},
+        {"Site": "MS", "Metric": "matched_observations", "Value": 697354},
+        {"Site": "MS", "Metric": "matched_strata", "Value": 139472},
     ]
 )
 consort.to_csv(os.path.join(TBL_DIR, "consort_counts.csv"), index=False)
