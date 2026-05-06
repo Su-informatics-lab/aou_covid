@@ -1,8 +1,8 @@
 #!/usr/bin/env Rscript
 # ─────────────────────────────────────────────────────────────────────
-# COVID-19 Severity × SDoH — Conditional Logistic Regression  [v6]
+# COVID-19 Severity × SDoH — Conditional Logistic Regression
 #
-# v6 CHANGES:
+# Features:
 #   P0.2  Cluster-robust SEs via sandwich::vcovCL (Austin 2020)
 #   P0.3  Joint SDoH Model C (all 6 domains simultaneously)
 #   P0.3  Race attenuation table (Black AOR across 9 specifications)
@@ -19,7 +19,7 @@ library(survival)
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(readr))
 
-# ── v6: cluster-robust SEs ───────────────────────────────────────────
+# ──
 if (!requireNamespace("sandwich", quietly = TRUE)) install.packages("sandwich")
 if (!requireNamespace("lmtest", quietly = TRUE))   install.packages("lmtest")
 library(sandwich)
@@ -37,7 +37,7 @@ IS_MS  <- COHORT == "ms"
 RESULTS <- file.path("results", COHORT)
 
 cat(strrep("=", 70), "\n")
-cat("COVID-19 SEVERITY × SDoH — MODELS  [", toupper(COHORT), "]  (v6)\n")
+cat("COVID-19 SEVERITY × SDoH — MODELS  [", toupper(COHORT), "]  \n")
 cat(strrep("=", 70), "\n")
 cat("  Input/Output:", RESULTS, "\n")
 
@@ -92,7 +92,7 @@ if (has_plantype)  regression_bm$f.plan <- factor(regression_bm$plan_type,
                                 "Comprehensive","Basic","Unknown"))
 if (has_region)    regression_bm$f.region <- factor(regression_bm$region_name,
                      levels = c("South","NorthCentral","West","Northeast","Unknown"))
-# ── v6: pandemic wave in base model ─────────────────────────────────
+# ──
 if (has_wave)      regression_bm$f.wave <- factor(regression_bm$pandemic_wave,
                      levels = c("pre_delta","delta","omicron"))
 
@@ -106,7 +106,7 @@ como <- c("Myocardial_Infarction","Congestive_Heart_Failure",
           "Renal_Disease_Severe","HIV","Metastatic_Solid_Tumor","Malignancy","AIDS")
 for (c_col in como) regression_bm[[c_col]][is.na(regression_bm[[c_col]])] <- 0
 
-# ── v6: wave enters the base model ──────────────────────────────────
+# ──
 base_terms <- c("f.sex", "f.age", "f.vacc")
 if (has_race)      base_terms <- c(base_terms, "f.race")
 if (has_ethnicity) base_terms <- c(base_terms, "f.ethnicity")
@@ -219,9 +219,9 @@ if (IS_AOU && has_sdoh) {
     }
 
 
-    # ── v6: Insurance as hierarchical categorical ────────────────────
+    # ──
     # Reference: Employer (most advantaged, most common)
-    cat("\n--- insurance (v6: hierarchical categorical) ---\n")
+    cat("\n--- insurance (hierarchical categorical) ---\n")
     reg_sdoh$insurance_type[is.na(reg_sdoh$insurance_type)] <- "Missing"
     reg_sdoh$f.insurance <- factor(reg_sdoh$insurance_type,
       levels = c("Employer","Medicare","Medicaid","Other_None","Missing"))
