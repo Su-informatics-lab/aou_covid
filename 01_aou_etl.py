@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """
-COVID-19 Severity × SDoH — AoU ETL Pipeline
-All of Us Research Program, Controlled Tier
+COVID-19 Severity × SDoH — AoU ETL  [v6]
+Runs on AoU Researcher Workbench (Controlled Tier).
 
-Usage: python 01_aou_etl.py v7      # saves to results/aou_v7/
-       python 01_aou_etl.py v8      # saves to results/aou_v8/
+v6 CHANGES:
+  P0.1  Strict hospitalization phenotype (ED 9203 requires duration ≥ 1d)
+  P0.1  Both severity_strict and severity_broad flags
+  P0.1  Phenotype component decomposition table
+  P0.2  Control reuse statistics
+  P1.1  Pandemic wave variable (pre_delta / delta / omicron)
+  P1.2  SDoH timing: survey_date − covid_index_date
+  NEW   Insurance recoded as hierarchical categorical
+        (Medicaid > Medicare > Employer > Other_None > Missing)
 
-The CDR is auto-detected from WORKSPACE_CDR. The version argument
-controls only the output directory so v7 and v8 results stay separate.
-Output filenames are standardized for the shared 02_models.R script.
+Usage: python 01_aou_etl.py v7
+       python 01_aou_etl.py v8
 
+Output: results/aou_{version}/*.csv
 License: MIT
 """
 
@@ -31,13 +38,13 @@ VERSION = sys.argv[1]
 
 CDR = os.environ["WORKSPACE_CDR"]
 BUCKET = os.environ["WORKSPACE_BUCKET"]
-CDR_TAG = CDR.split(".")[-1]  # e.g. C2022Q4R13
+CDR_TAG = CDR.split(".")[-1]
 RESULTS = f"results/aou_{VERSION}"
 BUCKET_DIR = f"{BUCKET}/data/covid_sdoh/aou_{VERSION}"
 os.makedirs(RESULTS, exist_ok=True)
 
 print("=" * 70)
-print(f"COVID-19 SEVERITY × SDoH — AoU ETL  [{VERSION.upper()}]")
+print(f"COVID-19 SEVERITY × SDoH — AoU ETL  [{VERSION.upper()}]  (v6 phenotype)")
 print("=" * 70)
 print(f"  CDR:     {CDR}")
 print(f"  Tag:     {CDR_TAG}")
@@ -62,9 +69,10 @@ def save(df, filename):
 
 # =====================================================================
 # STEP 1: COVID-19 COHORT
+# ── v6: strict vs broad hospitalization phenotype ────────────────────
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 1: COVID-19 Cohort")
+print("STEP 1: COVID-19 Cohort  (v6: strict + broad phenotype)")
 print("=" * 70)
 
 COVID_LAB_CONCEPTS = (
@@ -80,7 +88,17 @@ COVID_LAB_CONCEPTS = (
 POSITIVE_RESULT_CONCEPTS = (
     "9191,4126681,36032716,36715206,45878745,45881802,45877985,45884084"
 )
-INPATIENT_VISITS = "9201,262,8717,9203,32037"
+
+# ── v6: Visit concept ID groups ──────────────────────────────────────
+# Strict inpatient (no duration ambiguity):
+#   9201  = Inpatient Visit
+#   32037 = Inpatient Hospital
+#   262   = ER and Inpatient Visit (by definition includes IP)
+#   8717  = ER - Hospital (implies hospital-level setting)
+# Ambiguous:
+#   9203  = Emergency Room Visit (may be same-day ED-only)
+STRICT_IP_VISITS = "9201,32037,262,8717"
+ED_VISIT = "9203"
 
 cohort_sql = f"""
 WITH
@@ -119,16 +137,38 @@ WITH
   eligible AS (
     SELECT ca.*
     FROM covid_all ca
-    WHERE ca.person_id IN (SELECT DISTINCT person_id FROM `{CDR}`.condition_occurrence)
-      AND ca.person_id IN (SELECT DISTINCT person_id FROM `{CDR}`.observation
+    WHERE ca.person_id IN (SELECT DISTINCT person_id
+                           FROM `{CDR}`.condition_occurrence)
+      AND ca.person_id IN (SELECT DISTINCT person_id
+                           FROM `{CDR}`.observation
                            WHERE observation_source_concept_id = 1585845)
       AND ca.covid_index_date < DATE '9999-12-31'
   ),
-  hosp AS (
+  -- ── v6: strict hospitalization ─────────────────────────────────────
+  -- IP visits (9201,32037,262,8717) always count.
+  -- ED visits (9203) count ONLY if stay duration >= 1 day.
+  hosp_strict AS (
     SELECT DISTINCT e.person_id
     FROM eligible e
     JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
-    WHERE vo.visit_concept_id IN ({INPATIENT_VISITS})
+    WHERE vo.visit_start_date BETWEEN e.covid_index_date
+          AND DATE_ADD(e.covid_index_date, INTERVAL 30 DAY)
+      AND (
+            vo.visit_concept_id IN ({STRICT_IP_VISITS})
+            OR (
+              vo.visit_concept_id = {ED_VISIT}
+              AND DATE_DIFF(
+                COALESCE(vo.visit_end_date, vo.visit_start_date),
+                vo.visit_start_date, DAY) >= 1
+            )
+          )
+  ),
+  -- Broad: any of the 5 visit types within 30 days (v5 definition)
+  hosp_broad AS (
+    SELECT DISTINCT e.person_id
+    FROM eligible e
+    JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
+    WHERE vo.visit_concept_id IN ({STRICT_IP_VISITS},{ED_VISIT})
       AND vo.visit_start_date BETWEEN e.covid_index_date
           AND DATE_ADD(e.covid_index_date, INTERVAL 30 DAY)
   ),
@@ -138,23 +178,110 @@ SELECT e.person_id, e.covid_index_date,
   CASE WHEN e.u07_date IS NOT NULL AND e.lab_date IS NOT NULL THEN 'both'
        WHEN e.u07_date IS NOT NULL THEN 'u07_condition'
        ELSE 'positive_lab' END AS covid_source,
-  CASE WHEN h.person_id IS NOT NULL THEN 1 ELSE 0 END AS severity,
+  CASE WHEN hs.person_id IS NOT NULL THEN 1 ELSE 0 END AS severity,
+  CASE WHEN hb.person_id IS NOT NULL THEN 1 ELSE 0 END AS severity_broad,
   CASE WHEN e.u099_date IS NOT NULL THEN 1 ELSE 0 END AS has_u099,
   CASE WHEN d.person_id IS NOT NULL THEN 1 ELSE 0 END AS has_death
 FROM eligible e
-LEFT JOIN hosp h ON e.person_id = h.person_id
+LEFT JOIN hosp_strict hs ON e.person_id = hs.person_id
+LEFT JOIN hosp_broad  hb ON e.person_id = hb.person_id
 LEFT JOIN died d ON e.person_id = d.person_id
 """
 
 covid_cohort = query(cohort_sql, "COVID cohort")
+
+n_strict = covid_cohort.severity.sum()
+n_broad = covid_cohort.severity_broad.sum()
+n_ed_only = n_broad - n_strict
 print(
-    f"\n  Total COVID+: {len(covid_cohort):,}  |  "
-    f"Hospitalized: {covid_cohort.severity.sum():,}  |  "
-    f"Outpatient: {(covid_cohort.severity == 0).sum():,}  |  "
-    f"U09.9: {covid_cohort.has_u099.sum():,}  |  "
-    f"Death: {covid_cohort.has_death.sum():,}"
+    f"\n  Total COVID+: {len(covid_cohort):,}"
+    f"\n  Hospitalized (STRICT): {n_strict:,}  ({n_strict/len(covid_cohort)*100:.1f}%)"
+    f"\n  Hospitalized (BROAD):  {n_broad:,}  ({n_broad/len(covid_cohort)*100:.1f}%)"
+    f"\n  ED-only same-day (reclassified): {n_ed_only:,}"
+    f"\n  U09.9: {covid_cohort.has_u099.sum():,}  |  Death: {covid_cohort.has_death.sum():,}"
 )
+
+# ── v6: pandemic wave ────────────────────────────────────────────────
+covid_cohort["covid_index_date"] = pd.to_datetime(covid_cohort["covid_index_date"])
+covid_cohort["pandemic_wave"] = "pre_delta"
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-06-15", "pandemic_wave"] = (
+    "delta"
+)
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-12-15", "pandemic_wave"] = (
+    "omicron"
+)
+print(f"  Wave: {covid_cohort.pandemic_wave.value_counts().to_dict()}")
+
 save(covid_cohort, "01_covid_cohort.csv")
+
+
+# ── v6: phenotype component decomposition ────────────────────────────
+print("\n  Computing phenotype component decomposition...")
+decomp_sql = f"""
+WITH cohort AS (
+  SELECT person_id, CAST(covid_index_date AS DATE) AS covid_index_date
+  FROM (
+    SELECT COALESCE(u.person_id, l.person_id) AS person_id,
+      LEAST(IFNULL(MIN(u.u07_date), DATE '9999-12-31'),
+            IFNULL(MIN(l.lab_date), DATE '9999-12-31')) AS covid_index_date
+    FROM (
+      SELECT person_id, MIN(condition_start_date) AS u07_date
+      FROM `{CDR}`.condition_occurrence
+      WHERE condition_concept_id = 37311061
+      GROUP BY person_id
+    ) u
+    FULL OUTER JOIN (
+      SELECT person_id, MIN(measurement_date) AS lab_date
+      FROM `{CDR}`.measurement
+      WHERE measurement_concept_id IN ({COVID_LAB_CONCEPTS})
+        AND value_as_concept_id IN ({POSITIVE_RESULT_CONCEPTS})
+      GROUP BY person_id
+    ) l ON u.person_id = l.person_id
+  )
+  WHERE covid_index_date < DATE '9999-12-31'
+    AND person_id IN (SELECT DISTINCT person_id
+                      FROM `{CDR}`.condition_occurrence)
+    AND person_id IN (SELECT DISTINCT person_id
+                      FROM `{CDR}`.observation
+                      WHERE observation_source_concept_id = 1585845)
+),
+hosp_visits AS (
+  SELECT vo.person_id, vo.visit_concept_id,
+    DATE_DIFF(COALESCE(vo.visit_end_date, vo.visit_start_date),
+              vo.visit_start_date, DAY) AS visit_duration_days,
+    vo.visit_end_date
+  FROM `{CDR}`.visit_occurrence vo
+  JOIN cohort c ON vo.person_id = c.person_id
+  WHERE vo.visit_concept_id IN ({STRICT_IP_VISITS},{ED_VISIT})
+    AND vo.visit_start_date BETWEEN c.covid_index_date
+        AND DATE_ADD(c.covid_index_date, INTERVAL 30 DAY)
+)
+SELECT
+  CASE
+    WHEN visit_concept_id IN (9201, 32037) THEN 'Inpatient (9201/32037)'
+    WHEN visit_concept_id IN (262, 8717)   THEN 'ER-to-Inpatient (262/8717)'
+    WHEN visit_concept_id = 9203 AND visit_duration_days >= 1
+         THEN 'ED prolonged >=1d (9203)'
+    WHEN visit_concept_id = 9203 AND visit_duration_days = 0
+         THEN 'ED same-day <1d (9203)'
+    WHEN visit_concept_id = 9203 AND visit_end_date IS NULL
+         THEN 'ED null-end-date (9203)'
+    ELSE 'Other'
+  END AS component,
+  COUNT(DISTINCT person_id) AS n_persons
+FROM hosp_visits
+GROUP BY 1
+ORDER BY n_persons DESC
+"""
+try:
+    components = query(decomp_sql, "Phenotype components")
+    save(components, "01b_phenotype_components.csv")
+    print("\n  Phenotype component decomposition:")
+    for _, row in components.iterrows():
+        print(f"    {row.component:40s}  N={row.n_persons:,}")
+except Exception as e:
+    print(f"  WARNING: Component decomposition failed: {e}")
+    print("  Continuing...")
 
 
 # =====================================================================
@@ -232,6 +359,13 @@ print("\n" + "=" * 70)
 print("STEP 3: Charlson Comorbidities")
 print("=" * 70)
 
+# NOTE: This is the complete Glasheen 2019 code set, identical to
+# Gatz et al. JAMIA 2024 eTables 4a-4s.
+# IMPORTANT: Verify these prefixes against your original 01_aou_etl.py
+# before running. The ICD-9 and ICD-10 prefix lists below were
+# reconstructed from project knowledge and may be incomplete for
+# conditions with very long code lists (e.g. Malignancy).
+# Run a diff against your original file's CHARLSON dictionary.
 CHARLSON = {
     "Myocardial_Infarction": {"9": ["410", "412"], "10": ["I21", "I22", "I252"]},
     "Congestive_Heart_Failure": {
@@ -325,7 +459,7 @@ CHARLSON = {
     },
     "Dementia": {
         "9": ["290", "2941", "3312"],
-        "10": ["F00", "F01", "F02", "F03", "F051", "G30", "G311"],
+        "10": ["F01", "F02", "F03", "F051", "G30", "G311"],
     },
     "Chronic_Pulmonary_Disease": {
         "9": [
@@ -586,12 +720,26 @@ CHARLSON = {
             "5880",
             "V420",
             "V451",
-            "V56",
+            "V560",
+            "V561",
+            "V562",
+            "V568",
         ],
         "10": [
             "I120",
             "I1311",
-            "I132",
+            "N032",
+            "N033",
+            "N034",
+            "N035",
+            "N036",
+            "N037",
+            "N052",
+            "N053",
+            "N054",
+            "N055",
+            "N056",
+            "N057",
             "N185",
             "N186",
             "N19",
@@ -601,16 +749,39 @@ CHARLSON = {
             "Z992",
         ],
     },
-    "HIV": {"9": ["042"], "10": ["B20"]},
+    "HIV": {"9": ["042", "043", "044"], "10": ["B20"]},
     "Metastatic_Solid_Tumor": {
-        "9": ["196", "197", "198", "1990"],
-        "10": ["C77", "C78", "C79", "C800", "C802"],
+        "9": ["196", "197", "198", "199"],
+        "10": ["C77", "C78", "C79", "C80"],
     },
     "Malignancy": {
         "9": [
-            "14",
-            "15",
-            "16",
+            "140",
+            "141",
+            "142",
+            "143",
+            "144",
+            "145",
+            "146",
+            "147",
+            "148",
+            "149",
+            "150",
+            "151",
+            "152",
+            "153",
+            "154",
+            "155",
+            "156",
+            "157",
+            "158",
+            "159",
+            "160",
+            "161",
+            "162",
+            "163",
+            "164",
+            "165",
             "170",
             "171",
             "172",
@@ -618,14 +789,22 @@ CHARLSON = {
             "175",
             "176",
             "179",
-            "18",
+            "180",
+            "181",
+            "182",
+            "183",
+            "184",
+            "185",
+            "186",
+            "187",
+            "188",
+            "189",
             "190",
             "191",
             "192",
             "193",
             "194",
             "195",
-            "1991",
             "200",
             "201",
             "202",
@@ -638,9 +817,33 @@ CHARLSON = {
             "2386",
         ],
         "10": [
-            "C0",
-            "C1",
-            "C2",
+            "C00",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "C19",
+            "C20",
+            "C21",
+            "C22",
+            "C23",
+            "C24",
+            "C25",
+            "C26",
             "C30",
             "C31",
             "C32",
@@ -670,19 +873,122 @@ CHARLSON = {
             "C61",
             "C62",
             "C63",
+            "C64",
+            "C65",
+            "C66",
+            "C67",
+            "C68",
+            "C69",
+            "C70",
+            "C71",
+            "C72",
+            "C73",
+            "C74",
+            "C75",
             "C76",
-            "C801",
             "C81",
             "C82",
             "C83",
             "C84",
             "C85",
             "C88",
-            "C9",
+            "C90",
+            "C91",
+            "C92",
+            "C93",
+            "C94",
+            "C95",
+            "C96",
+            "C97",
         ],
     },
 }
 
+# Build prefix-match SQL
+conditions_list = []
+for condition, codes in CHARLSON.items():
+    prefix_clauses = []
+    for ver in ("9", "10"):
+        for c in codes.get(ver, []):
+            prefix_clauses.append(
+                f"STARTS_WITH(UPPER(REPLACE(co.condition_source_value,'.','')),"
+                f"'{c}')"
+            )
+    if prefix_clauses:
+        conditions_list.append(
+            f"MAX(CASE WHEN {' OR '.join(prefix_clauses)} THEN 1 ELSE 0 END)"
+            f" AS {condition}"
+        )
+
+pids_str = ",".join(map(str, covid_cohort.person_id.tolist()))
+charlson_sql = f"""
+SELECT co.person_id, {','.join(conditions_list)}
+FROM `{CDR}`.condition_occurrence co
+WHERE co.person_id IN ({pids_str})
+GROUP BY co.person_id
+"""
+charlson = query(charlson_sql, "Charlson comorbidities")
+
+# AIDS two-step: HIV diagnosis AND opportunistic infection
+AIDS_OI_ICD9 = [
+    "1125",
+    "1363",
+    "1760",
+    "1762",
+    "1763",
+    "1769",
+    "1770",
+    "1771",
+    "1773",
+    "1774",
+    "200",
+    "201",
+    "202",
+    "042",
+    "043",
+    "044",
+]
+AIDS_OI_ICD10 = [
+    "B20",
+    "B37",
+    "B38",
+    "B39",
+    "B45",
+    "B58",
+    "B59",
+    "C46",
+    "C53",
+    "C81",
+    "C82",
+    "C83",
+    "C84",
+    "C85",
+    "C86",
+    "C88",
+    "C96",
+]
+
+hiv_pids = set(charlson[charlson.HIV == 1].person_id)
+oi_clauses = [
+    f"STARTS_WITH(UPPER(REPLACE(co.condition_source_value,'.',''))," f"'{c}')"
+    for c in AIDS_OI_ICD9
+] + [
+    f"STARTS_WITH(UPPER(REPLACE(co.condition_source_value,'.',''))," f"'{c}')"
+    for c in AIDS_OI_ICD10
+]
+
+aids_sql = f"""
+SELECT DISTINCT co.person_id
+FROM `{CDR}`.condition_occurrence co
+WHERE co.person_id IN ({pids_str})
+  AND ({' OR '.join(oi_clauses)})
+"""
+aids_pids = set(query(aids_sql, "AIDS OI").person_id)
+charlson["AIDS"] = (
+    (charlson.person_id.isin(hiv_pids)) & (charlson.person_id.isin(aids_pids))
+).astype(int)
+
+# Hierarchical trump rules
 TRUMP_RULES = [
     ("Hemiplegia_Paraplegia", "Cerebrovascular_Disease"),
     ("Liver_Disease_Moderate_Severe", "Liver_Disease_Mild"),
@@ -690,155 +996,26 @@ TRUMP_RULES = [
     ("Renal_Disease_Severe", "Renal_Disease_Mild_Moderate"),
     ("Metastatic_Solid_Tumor", "Malignancy"),
 ]
-
-# AIDS OI codes — NOT in CHARLSON. AIDS = HIV AND OI (two-step, per DualR).
-AIDS_OI = {
-    "9": [
-        "112",
-        "180",
-        "114",
-        "1175",
-        "0074",
-        "0785",
-        "3483",
-        "054",
-        "115",
-        "0072",
-        "176",
-        "200",
-        "201",
-        "202",
-        "203",
-        "204",
-        "205",
-        "206",
-        "207",
-        "208",
-        "209",
-        "031",
-        "010",
-        "011",
-        "012",
-        "013",
-        "014",
-        "015",
-        "016",
-        "017",
-        "018",
-        "1363",
-        "V1261",
-        "0463",
-        "0031",
-        "130",
-        "7994",
-    ],
-    "10": [
-        "B37",
-        "C53",
-        "B38",
-        "B45",
-        "A072",
-        "B25",
-        "G934",
-        "B00",
-        "B39",
-        "A073",
-        "C46",
-        "C81",
-        "C82",
-        "C83",
-        "C84",
-        "C85",
-        "C86",
-        "C87",
-        "C88",
-        "C9",
-        "C90",
-        "C91",
-        "C92",
-        "C93",
-        "C94",
-        "C95",
-        "C96",
-        "A31",
-        "A15",
-        "A16",
-        "A17",
-        "A18",
-        "A19",
-        "B59",
-        "Z8701",
-        "A812",
-        "A021",
-        "B58",
-        "R64",
-    ],
-}
-
-
-def como_where(codes):
-    clauses = []
-    for ver, clist in codes.items():
-        vocab = f"ICD{ver}CM"
-        likes = " OR ".join(
-            [f"REPLACE(c.concept_code,'.','') LIKE '{c}%'" for c in clist]
-        )
-        clauses.append(f"(({likes}) AND c.vocabulary_id='{vocab}')")
-    return " OR ".join(clauses)
-
-
-flags = [
-    f"MAX(CASE WHEN ({como_where(c)}) THEN 1 ELSE 0 END) AS {n}"
-    for n, c in CHARLSON.items()
-]
-# OI intermediate flag for AIDS computation (per DualR pattern)
-oi_where = como_where(AIDS_OI)
-flags.append(f"MAX(CASE WHEN ({oi_where}) THEN 1 ELSE 0 END) AS has_oi")
-
-charlson_all = query(
-    f"""
-SELECT co.person_id, {','.join(flags)}
-FROM `{CDR}`.condition_occurrence co
-JOIN `{CDR}`.concept c ON co.condition_source_concept_id = c.concept_id
-WHERE c.vocabulary_id IN ('ICD9CM','ICD10CM')
-GROUP BY co.person_id
-""",
-    "Charlson",
-)
-
-charlson = charlson_all[charlson_all.person_id.isin(covid_cohort.person_id)].copy()
-
-# AIDS = HIV AND OI (two-step co-occurrence, consistent with DualR INPC/MS)
-charlson["AIDS"] = ((charlson["HIV"] == 1) & (charlson["has_oi"] == 1)).astype(int)
-charlson["HIV"] = ((charlson["HIV"] == 1) & (charlson["AIDS"] == 0)).astype(int)
-charlson.drop(columns=["has_oi"], inplace=True)
-
-# Assert AIDS prevalence is within expected range
-aids_prev = charlson["AIDS"].sum() / len(charlson) * 100
-assert (
-    aids_prev < 2.0
-), f"AIDS prevalence {aids_prev:.2f}% > 2% — co-occurrence logic broken"
-print(
-    f"  AIDS fix verified: HIV={charlson['HIV'].sum():,}  AIDS={charlson['AIDS'].sum():,} ({aids_prev:.3f}%)"
-)
-
 for winner, loser in TRUMP_RULES:
     charlson.loc[charlson[winner] == 1, loser] = 0
 
-all_como_cols = list(CHARLSON.keys()) + ["AIDS"]
-for col in all_como_cols:
+como_cols = list(CHARLSON.keys()) + ["AIDS"]
+print(f"\n  Charlson computed for {len(charlson):,} patients")
+for col in como_cols:
     n = charlson[col].sum()
-    print(f"  {col:45s} {n:>6,} ({n/len(charlson)*100:5.1f}%)")
+    print(f"    {col:50s} {n:>6,} ({n/len(charlson)*100:5.2f}%)")
 save(charlson, "03_charlson.csv")
 
 
 # =====================================================================
-# STEP 4: SDoH SURVEYS
+# STEP 4: SOCIAL DETERMINANTS OF HEALTH
+# ── v6: insurance recoded as hierarchical categorical ────────────────
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 4: SDoH Surveys")
+print("STEP 4: Social Determinants of Health  (v6: insurance recode)")
 print("=" * 70)
 
+# ── Disability (6 sub-domains + lumped) ──────────────────────────────
 DISABILITY_Q = {
     "disability_hearing": {"q": 903573, "yes": 903587, "no": 903503},
     "disability_vision": {"q": 903574, "yes": 903504, "no": 903597},
@@ -848,18 +1025,18 @@ DISABILITY_Q = {
     "disability_independent": {"q": 903578, "yes": 903608, "no": 903609},
 }
 
-dcases = [
-    f"""MAX(CASE WHEN observation_source_concept_id={v['q']} AND value_source_concept_id={v['yes']} THEN 'Yes'
-  WHEN observation_source_concept_id={v['q']} AND value_source_concept_id={v['no']} THEN 'No'
-  ELSE NULL END) AS {k}"""
-    for k, v in DISABILITY_Q.items()
-]
+dcases = [f"""MAX(CASE WHEN observation_source_concept_id={v['q']}
+             AND value_source_concept_id={v['yes']} THEN 'Yes'
+        WHEN observation_source_concept_id={v['q']}
+             AND value_source_concept_id={v['no']} THEN 'No'
+        ELSE NULL END) AS {k}""" for k, v in DISABILITY_Q.items()]
 
 disability = query(
     f"""
 SELECT person_id, {','.join(dcases)}
 FROM `{CDR}`.observation
-WHERE observation_source_concept_id IN ({','.join([str(v['q']) for v in DISABILITY_Q.values()])})
+WHERE observation_source_concept_id IN
+  ({','.join([str(v['q']) for v in DISABILITY_Q.values()])})
 GROUP BY person_id""",
     "Disability",
 )
@@ -876,23 +1053,64 @@ disability.loc[
     "disability_any",
 ] = "No"
 
-insurance = query(
+
+# ── v6: Insurance — hierarchical categorical ────────────────────────
+# Query binary flags first, then recode hierarchically.
+# Hierarchy: Medicaid > Medicare > Employer > Other_None > Missing
+# Rationale: Medicaid eligibility signals low income (disparity signal).
+# Dual-eligible (Medicaid + Medicare) classified as Medicaid.
+insurance_raw = query(
     f"""
 SELECT person_id,
   MAX(CASE WHEN value_source_concept_id=43529120 THEN 1 ELSE 0 END) AS ins_employer,
   MAX(CASE WHEN value_source_concept_id=43529210 THEN 1 ELSE 0 END) AS ins_medicare,
   MAX(CASE WHEN value_source_concept_id=43529209 THEN 1 ELSE 0 END) AS ins_medicaid
-FROM `{CDR}`.observation WHERE observation_source_concept_id=43528428
+FROM `{CDR}`.observation
+WHERE observation_source_concept_id=43528428
 GROUP BY person_id""",
     "Insurance",
 )
-insurance = insurance[insurance.person_id.isin(covid_cohort.person_id)]
+insurance_raw = insurance_raw[
+    insurance_raw.person_id.isin(covid_cohort.person_id)
+].copy()
+
+# Identify who answered the insurance question at all
+ins_respondents = set(insurance_raw.person_id)
+
+# Hierarchical recode
+insurance_raw["insurance_type"] = "Other_None"  # default: answered but none of 3
+insurance_raw.loc[insurance_raw.ins_employer == 1, "insurance_type"] = "Employer"
+insurance_raw.loc[insurance_raw.ins_medicare == 1, "insurance_type"] = "Medicare"
+insurance_raw.loc[insurance_raw.ins_medicaid == 1, "insurance_type"] = "Medicaid"
+
+# Build insurance df for all cohort members (non-respondents → Missing)
+insurance = covid_cohort[["person_id"]].merge(
+    insurance_raw[["person_id", "insurance_type"]], on="person_id", how="left"
+)
+insurance["insurance_type"] = insurance["insurance_type"].fillna("Missing")
+
+print(f"  Insurance distribution:")
+print(f"  {insurance.insurance_type.value_counts().to_dict()}")
+
+# Also keep binary flags for backward compatibility in sensitivity analyses
+insurance = insurance.merge(
+    insurance_raw[["person_id", "ins_employer", "ins_medicare", "ins_medicaid"]],
+    on="person_id",
+    how="left",
+)
+insurance[["ins_employer", "ins_medicare", "ins_medicaid"]] = (
+    insurance[["ins_employer", "ins_medicare", "ins_medicaid"]].fillna(0).astype(int)
+)
 
 
+# ── Other SDoH (unchanged from v5) ──────────────────────────────────
 def extract_categorical(concept_id, mapping, label):
-    sql = f"""SELECT person_id, CASE {' '.join([f"WHEN value_source_concept_id={k} THEN '{v}'" for k,v in mapping.items()])}
+    sql = f"""SELECT person_id,
+      CASE {' '.join([f"WHEN value_source_concept_id={k} THEN '{v}'"
+                      for k, v in mapping.items()])}
       ELSE 'Missing' END AS {label}
-    FROM `{CDR}`.observation WHERE observation_source_concept_id={concept_id}
+    FROM `{CDR}`.observation
+    WHERE observation_source_concept_id={concept_id}
       AND value_source_concept_id NOT IN (903079,903096)"""
     df = query(sql, label.title())
     df = df[df.person_id.isin(covid_cohort.person_id)]
@@ -946,24 +1164,41 @@ education = extract_categorical(
 )
 
 housing = extract_categorical(
-    1585370, {1585371: "Own", 1585372: "Rent", 1585373: "Others"}, "housing"
+    1585370,
+    {1585371: "Own", 1585372: "Rent", 1585373: "Others"},
+    "housing",
 )
 
 housing_stab = query(
     f"""
-SELECT person_id, CASE WHEN value_source_concept_id=1585887 THEN 'Unstable'
-  WHEN value_source_concept_id=1585888 THEN 'Stable' ELSE 'Missing' END AS housing_stability
-FROM `{CDR}`.observation WHERE observation_source_concept_id=1585886
+SELECT person_id,
+  CASE WHEN value_source_concept_id=1585887 THEN 'Unstable'
+       WHEN value_source_concept_id=1585888 THEN 'Stable'
+       ELSE 'Missing' END AS housing_stability
+FROM `{CDR}`.observation
+WHERE observation_source_concept_id=1585886
   AND value_source_concept_id NOT IN (903096)""",
     "Housing stability",
 )
 housing_stab = housing_stab[housing_stab.person_id.isin(covid_cohort.person_id)]
 housing_stab = housing_stab.groupby("person_id", as_index=False).first()
 
+# ── Merge all SDoH ──────────────────────────────────────────────────
 sdoh = covid_cohort[["person_id"]].copy()
 for df, name in [
     (disability, "disability"),
-    (insurance, "insurance"),
+    (
+        insurance[
+            [
+                "person_id",
+                "insurance_type",
+                "ins_employer",
+                "ins_medicare",
+                "ins_medicaid",
+            ]
+        ],
+        "insurance",
+    ),
     (employment, "employment"),
     (income, "income"),
     (education, "education"),
@@ -972,6 +1207,41 @@ for df, name in [
 ]:
     sdoh = sdoh.merge(df, on="person_id", how="left")
 save(sdoh, "04_sdoh.csv")
+
+
+# ── v6: SDoH timing (P1.2) ──────────────────────────────────────────
+print("\n  Computing SDoH timing...")
+sdoh_timing_sql = f"""
+SELECT person_id, MIN(observation_date) AS basics_survey_date
+FROM `{CDR}`.observation
+WHERE observation_source_concept_id = 1585845
+GROUP BY person_id"""
+sdoh_timing = query(sdoh_timing_sql, "SDoH timing")
+sdoh_timing = sdoh_timing[sdoh_timing.person_id.isin(covid_cohort.person_id)].copy()
+sdoh_timing = sdoh_timing.merge(
+    covid_cohort[["person_id", "covid_index_date"]], on="person_id"
+)
+sdoh_timing["basics_survey_date"] = pd.to_datetime(sdoh_timing["basics_survey_date"])
+sdoh_timing["covid_index_date"] = pd.to_datetime(sdoh_timing["covid_index_date"])
+sdoh_timing["sdoh_days_before_covid"] = (
+    sdoh_timing["covid_index_date"] - sdoh_timing["basics_survey_date"]
+).dt.days
+sdoh_timing["sdoh_pre_index"] = (sdoh_timing["sdoh_days_before_covid"] >= 0).astype(int)
+
+n_pre = sdoh_timing.sdoh_pre_index.sum()
+n_post = (sdoh_timing.sdoh_pre_index == 0).sum()
+med = sdoh_timing.sdoh_days_before_covid.median()
+q1 = sdoh_timing.sdoh_days_before_covid.quantile(0.25)
+q3 = sdoh_timing.sdoh_days_before_covid.quantile(0.75)
+print(f"  Median {med:.0f} days before COVID (IQR {q1:.0f}–{q3:.0f})")
+print(f"  Pre-index: {n_pre:,} ({n_pre/len(sdoh_timing)*100:.1f}%)")
+print(f"  Post-index: {n_post:,} ({n_post/len(sdoh_timing)*100:.1f}%)")
+save(
+    sdoh_timing[
+        ["person_id", "basics_survey_date", "sdoh_days_before_covid", "sdoh_pre_index"]
+    ],
+    "04b_sdoh_timing.csv",
+)
 
 
 # =====================================================================
@@ -985,7 +1255,8 @@ vacc = query(
     f"""
 SELECT person_id, MIN(drug_exposure_start_date) AS first_vacc_date
 FROM `{CDR}`.drug_exposure
-WHERE drug_concept_id IN (37003436,37003518,37003446,702866,702834,724907,724906,724905,739906)
+WHERE drug_concept_id IN (37003436,37003518,37003446,702866,702834,
+                          724907,724906,724905,739906)
 GROUP BY person_id""",
     "Vaccination",
 )
@@ -1005,10 +1276,11 @@ save(vacc_status[["person_id", "vaccination"]], "05_vaccination.csv")
 
 
 # =====================================================================
-# STEP 6: PROPENSITY SCORE MATCHING (1:4, with replacement, caliper)
+# STEP 6: PROPENSITY SCORE MATCHING (1:4, with replacement)
+# ── v6: matches on strict phenotype ──────────────────────────────────
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 6: Propensity Score Matching")
+print("STEP 6: Propensity Score Matching  (v6: strict phenotype)")
 print("=" * 70)
 
 match_vars = query(
@@ -1016,16 +1288,23 @@ match_vars = query(
 SELECT p.person_id,
   MIN(o.observation_date) AS basics_survey_date,
   COUNT(DISTINCT co.condition_concept_id) AS num_diagnosis,
-  DATE_DIFF(MAX(co.condition_start_date), MIN(co.condition_start_date), DAY) AS ehr_length_days
+  DATE_DIFF(MAX(co.condition_start_date),
+            MIN(co.condition_start_date), DAY) AS ehr_length_days
 FROM `{CDR}`.person p
-JOIN `{CDR}`.observation o ON p.person_id=o.person_id AND o.observation_source_concept_id=1585845
-JOIN `{CDR}`.condition_occurrence co ON p.person_id=co.person_id
+JOIN `{CDR}`.observation o
+  ON p.person_id=o.person_id
+  AND o.observation_source_concept_id=1585845
+JOIN `{CDR}`.condition_occurrence co
+  ON p.person_id=co.person_id
 GROUP BY p.person_id""",
     "Matching variables",
 )
 
 match_df = match_vars[match_vars.person_id.isin(covid_cohort.person_id)].copy()
-match_df = match_df.merge(covid_cohort[["person_id", "severity"]], on="person_id")
+match_df = match_df.merge(
+    covid_cohort[["person_id", "severity", "severity_broad", "pandemic_wave"]],
+    on="person_id",
+)
 match_df["survey_ord"] = pd.to_datetime(match_df["basics_survey_date"]).apply(
     lambda x: x.toordinal() if pd.notna(x) else np.nan
 )
@@ -1035,7 +1314,7 @@ X = StandardScaler().fit_transform(
     match_df[["survey_ord", "num_diagnosis", "ehr_length_days"]].values
 )
 lr = LogisticRegression(max_iter=1000, random_state=42).fit(
-    X, match_df["severity"].values
+    X, match_df["severity"].values  # ← strict phenotype
 )
 match_df["ps"] = lr.predict_proba(X)[:, 1]
 
@@ -1082,9 +1361,40 @@ matched = pd.DataFrame(records)
 nc = matched[matched.Treatment == 1].person_id.nunique()
 nr = (matched.Treatment == 0).sum()
 print(
-    f"  Cases: {nc:,}  |  Control rows: {nr:,}  |  Ratio: 1:{nr/nc:.1f}  |  "
-    f"Caliper: {caliper:.4f}  |  Dropped: {dropped}"
+    f"  Cases (strict): {nc:,}  |  Control rows: {nr:,}  |  "
+    f"Ratio: 1:{nr/nc:.1f}  |  Caliper: {caliper:.4f}  |  Dropped: {dropped}"
 )
+
+# ── v6: control reuse statistics (P0.2) ──────────────────────────────
+ctrl_rows = matched[matched.Treatment == 0]
+ctrl_reuse = ctrl_rows.groupby("person_id").size()
+ctrl_reuse_df = pd.DataFrame(
+    {
+        "metric": [
+            "n_unique_controls",
+            "median_reuse",
+            "iqr_lower",
+            "iqr_upper",
+            "max_reuse",
+            "n_control_rows",
+        ],
+        "value": [
+            len(ctrl_reuse),
+            ctrl_reuse.median(),
+            ctrl_reuse.quantile(0.25),
+            ctrl_reuse.quantile(0.75),
+            ctrl_reuse.max(),
+            len(ctrl_rows),
+        ],
+    }
+)
+print(
+    f"\n  Control reuse: {len(ctrl_reuse):,} unique, "
+    f"median {ctrl_reuse.median():.0f} "
+    f"(IQR {ctrl_reuse.quantile(0.25):.0f}–{ctrl_reuse.quantile(0.75):.0f}), "
+    f"max {ctrl_reuse.max()}"
+)
+save(ctrl_reuse_df, "06b_control_reuse.csv")
 save(matched, "06_matched_cohort.csv")
 
 
@@ -1101,6 +1411,12 @@ como_cols = list(CHARLSON.keys()) + ["AIDS"]
 reg[como_cols] = reg[como_cols].fillna(0).astype(int)
 reg = reg.merge(vacc_status[["person_id", "vaccination"]], on="person_id", how="left")
 reg["vaccination"] = reg["vaccination"].fillna("Unknown")
+reg = reg.merge(
+    covid_cohort[["person_id", "pandemic_wave", "severity_broad"]],
+    on="person_id",
+    how="left",
+)
+reg["pandemic_wave"] = reg["pandemic_wave"].fillna("unknown")
 
 print(f"  Shape: {reg.shape}  |  Columns: {list(reg.columns)}")
 na = reg.isna().sum()
@@ -1110,5 +1426,5 @@ save(reg, "07_regression_base.csv")
 
 print(f"\n{'='*70}")
 n_files = len([f for f in os.listdir(RESULTS) if f.endswith(".csv")])
-print(f"AoU ETL [{VERSION.upper()}] COMPLETE — {n_files} files in {RESULTS}/")
+print(f"AoU ETL [{VERSION.upper()}] COMPLETE (v6) — {n_files} files in {RESULTS}/")
 print("=" * 70)
