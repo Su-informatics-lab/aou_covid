@@ -157,7 +157,7 @@ WITH
     FROM eligible e
     JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
     WHERE vo.visit_start_date BETWEEN e.covid_index_date
-          AND DATE_ADD(e.covid_index_date, INTERVAL 30 DAY)
+          AND DATE_ADD(e.covid_index_date, INTERVAL 14 DAY)
       AND (
             vo.visit_concept_id IN ({STRICT_IP_VISITS})
             OR (
