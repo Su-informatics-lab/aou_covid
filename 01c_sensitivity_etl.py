@@ -41,6 +41,59 @@ print("=" * 70)
 print(f"SENSITIVITY ETL ADD-ON  [{VERSION.upper()}]")
 print("=" * 70)
 
+# ── Reusable COVID lab/condition constants (same as 01_aou_etl.py) ───
+COVID_LAB_CONCEPTS = (
+    "586520,586523,586525,586526,586529,706157,706159,715261,715272,"
+    "723470,723472,757678,36032061,36032174,36032258,36661371,586518,"
+    "586524,706154,706175,723464,723467,723478,36031453,586516,706158,"
+    "706160,706163,706171,706172,715260,723469,36031213,36661377,586528,"
+    "706161,706165,706167,723463,723468,723471,757677,36031238,36031944,"
+    "586519,706166,706169,706173,723465,723476,757685,36031506,706155,"
+    "706156,706170,723466,36031652,36661370,706168,706174,715262,723477,"
+    "36032419,36661378,37310257"
+)
+POSITIVE_RESULT_CONCEPTS = (
+    "9191,4126681,36032716,36715206,45878745,45881802,45877985,45884084"
+)
+
+# ── Reusable CTE: covid_index_date per person ────────────────────────
+# Same logic as 01_aou_etl.py cohort_sql.  Used by queries 1, 2, 3.
+COVID_CTE = f"""
+  u07 AS (
+    SELECT person_id, MIN(condition_start_date) AS u07_date
+    FROM `{CDR}`.condition_occurrence
+    WHERE condition_concept_id = 37311061
+    GROUP BY person_id
+  ),
+  pos_lab AS (
+    SELECT person_id, MIN(measurement_date) AS lab_date
+    FROM `{CDR}`.measurement
+    WHERE measurement_concept_id IN ({COVID_LAB_CONCEPTS})
+      AND value_as_concept_id IN ({POSITIVE_RESULT_CONCEPTS})
+    GROUP BY person_id
+  ),
+  covid AS (
+    SELECT
+      COALESCE(u.person_id, l.person_id) AS person_id,
+      LEAST(
+        IFNULL(u.u07_date, DATE '9999-12-31'),
+        IFNULL(l.lab_date,  DATE '9999-12-31')
+      ) AS covid_index_date
+    FROM u07 u
+    FULL OUTER JOIN pos_lab l ON u.person_id = l.person_id
+  ),
+  eligible AS (
+    SELECT c.*
+    FROM covid c
+    WHERE c.covid_index_date < DATE '9999-12-31'
+      AND c.person_id IN (
+        SELECT DISTINCT person_id FROM `{CDR}`.condition_occurrence)
+      AND c.person_id IN (
+        SELECT DISTINCT person_id FROM `{CDR}`.observation
+        WHERE observation_source_concept_id = 1585845)
+  )
+"""
+
 
 def query(sql, label=""):
     print(f"\n  [{label}] Running query...")
@@ -67,10 +120,6 @@ controls = matched[matched.Treatment == 0]
 print(f"  Cohort: {len(cohort):,} | Matched: {len(matched):,}")
 print(f"  Cases: {len(cases):,} | Controls: {len(controls):,}")
 
-case_ids = ",".join(map(str, cases.person_id.unique()))
-# Controls may be reused; get unique IDs
-ctrl_ids = ",".join(map(str, controls.person_id.unique()))
-
 
 # =====================================================================
 # 1. CASE VISIT COMPONENTS (person-level)
@@ -79,44 +128,11 @@ print("\n" + "=" * 70)
 print("1. Case visit components (person-level)")
 print("=" * 70)
 
-# For each case, determine which visit types qualified them.
-# A case can have multiple visit types; we flag each.
 case_component_sql = f"""
-WITH case_cohort AS (
-  SELECT person_id, covid_index_date
-  FROM ({f"SELECT person_id, MIN(condition_start_date) AS u07_date FROM `{CDR}`.condition_occurrence WHERE condition_concept_id = 37311061 GROUP BY person_id"})
-    -- simplified: reload index dates from cohort
-),
--- Actually, let's just join to the cohort CSV approach won't work in BQ.
--- Instead, use the full eligible CTE from the main ETL.
-covid AS (
-  SELECT person_id,
-    LEAST(
-      IFNULL(MIN(CASE WHEN src='u07' THEN dt END), DATE '9999-12-31'),
-      IFNULL(MIN(CASE WHEN src='lab' THEN dt END), DATE '9999-12-31')
-    ) AS covid_index_date
-  FROM (
-    SELECT person_id, 'u07' AS src, condition_start_date AS dt
-    FROM `{CDR}`.condition_occurrence
-    WHERE condition_concept_id = 37311061
-    UNION ALL
-    SELECT person_id, 'lab' AS src, measurement_date AS dt
-    FROM `{CDR}`.measurement
-    WHERE measurement_concept_id IN (586520,586523,586525,586526,586529,
-      706157,706159,715261,715272,723470,723472,757678,36032061,36032174,
-      36032258,36661371,586518,586524,706154,706175,723464,723467,723478,
-      36031453,586516,706158,706160,706163,706171,706172,715260,723469,
-      36031213,36661377,586528,706161,706165,706167,723463,723468,723471,
-      757677,36031238,36031944,586519,706166,706169,706173,723465,723476,
-      757685,36031506,706155,706156,706170,723466,36031652,36661370,
-      706168,706174,715262,723477,36032419,36661378,37310257)
-      AND value_as_concept_id IN (9191,4126681,36032716,36715206,
-                                   45878745,45881802,45877985,45884084)
-  ) t
-  GROUP BY person_id
-)
+WITH
+{COVID_CTE}
 SELECT
-  c.person_id,
+  e.person_id,
   MAX(CASE WHEN vo.visit_concept_id IN (9201, 32037) THEN 1 ELSE 0 END)
     AS has_ip,
   MAX(CASE WHEN vo.visit_concept_id IN (262, 8717) THEN 1 ELSE 0 END)
@@ -131,16 +147,12 @@ SELECT
                           vo.visit_start_date, DAY) = 0
        THEN 1 ELSE 0 END)
     AS has_ed_sameday
-FROM covid c
-JOIN `{CDR}`.visit_occurrence vo ON c.person_id = vo.person_id
-WHERE vo.visit_start_date BETWEEN c.covid_index_date
-      AND DATE_ADD(c.covid_index_date, INTERVAL 14 DAY)
+FROM eligible e
+JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
+WHERE vo.visit_start_date BETWEEN e.covid_index_date
+      AND DATE_ADD(e.covid_index_date, INTERVAL 14 DAY)
   AND vo.visit_concept_id IN (9201, 32037, 262, 8717, 9203)
-  AND c.person_id IN (
-    SELECT DISTINCT person_id FROM `{CDR}`.observation
-    WHERE observation_source_concept_id = 1585845
-  )
-GROUP BY c.person_id
+GROUP BY e.person_id
 """
 
 case_components = query(case_component_sql, "Case visit components")
@@ -169,12 +181,14 @@ case_components["ed_prolonged_only"] = (
 save(case_components, "08a_case_visit_components.csv")
 
 print("\n  Component summary (matched cases):")
-print(f"    IP only (9201/32037):        {case_components.has_ip.sum():,}")
-print(f"    ER-to-IP (262/8717):         {case_components.has_er_to_ip.sum():,}")
-print(f"    ED prolonged (9203, >=1d):   {case_components.has_ed_prolonged.sum():,}")
-print(f"    ED same-day (9203, 0d):      {case_components.has_ed_sameday.sum():,}")
-print(f"    IP or ER-to-IP (no ED only): {case_components.ip_only.sum():,}")
-print(f"    ED-prolonged-only cases:     {case_components.ed_prolonged_only.sum():,}")
+print(f"    Has IP (9201/32037):           {case_components.has_ip.sum():,}")
+print(f"    Has ER-to-IP (262/8717):       {case_components.has_er_to_ip.sum():,}")
+print(f"    Has ED prolonged (9203, >=1d): {case_components.has_ed_prolonged.sum():,}")
+print(f"    Has ED same-day (9203, 0d):    {case_components.has_ed_sameday.sum():,}")
+print(f"    IP or ER-to-IP (no ED-only):   {case_components.ip_only.sum():,}")
+print(
+    f"    ED-prolonged-only cases:        {case_components.ed_prolonged_only.sum():,}"
+)
 
 
 # =====================================================================
@@ -184,53 +198,23 @@ print("\n" + "=" * 70)
 print("2. Control ED utilization flags")
 print("=" * 70)
 
-# Identify controls who had ANY ED or acute-care visit within 14 days
-# of their COVID index date (these are the "contaminated" controls)
 ctrl_ed_sql = f"""
-WITH covid AS (
-  SELECT person_id,
-    LEAST(
-      IFNULL(MIN(CASE WHEN src='u07' THEN dt END), DATE '9999-12-31'),
-      IFNULL(MIN(CASE WHEN src='lab' THEN dt END), DATE '9999-12-31')
-    ) AS covid_index_date
-  FROM (
-    SELECT person_id, 'u07' AS src, condition_start_date AS dt
-    FROM `{CDR}`.condition_occurrence
-    WHERE condition_concept_id = 37311061
-    UNION ALL
-    SELECT person_id, 'lab' AS src, measurement_date AS dt
-    FROM `{CDR}`.measurement
-    WHERE measurement_concept_id IN (586520,586523,586525,586526,586529,
-      706157,706159,715261,715272,723470,723472,757678,36032061,36032174,
-      36032258,36661371,586518,586524,706154,706175,723464,723467,723478,
-      36031453,586516,706158,706160,706163,706171,706172,715260,723469,
-      36031213,36661377,586528,706161,706165,706167,723463,723468,723471,
-      757677,36031238,36031944,586519,706166,706169,706173,723465,723476,
-      757685,36031506,706155,706156,706170,723466,36031652,36661370,
-      706168,706174,715262,723477,36032419,36661378,37310257)
-      AND value_as_concept_id IN (9191,4126681,36032716,36715206,
-                                   45878745,45881802,45877985,45884084)
-  ) t
-  GROUP BY person_id
-)
+WITH
+{COVID_CTE}
 SELECT
-  c.person_id,
+  e.person_id,
   MAX(CASE WHEN vo.visit_concept_id = 9203
             AND DATE_DIFF(COALESCE(vo.visit_end_date, vo.visit_start_date),
                           vo.visit_start_date, DAY) = 0
        THEN 1 ELSE 0 END) AS ctrl_had_sameday_ed_14d,
   MAX(CASE WHEN vo.visit_concept_id IN (9201, 32037, 262, 8717, 9203)
        THEN 1 ELSE 0 END) AS ctrl_had_any_acute_14d
-FROM covid c
-JOIN `{CDR}`.visit_occurrence vo ON c.person_id = vo.person_id
-WHERE vo.visit_start_date BETWEEN c.covid_index_date
-      AND DATE_ADD(c.covid_index_date, INTERVAL 14 DAY)
+FROM eligible e
+JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
+WHERE vo.visit_start_date BETWEEN e.covid_index_date
+      AND DATE_ADD(e.covid_index_date, INTERVAL 14 DAY)
   AND vo.visit_concept_id IN (9201, 32037, 262, 8717, 9203)
-  AND c.person_id IN (
-    SELECT DISTINCT person_id FROM `{CDR}`.observation
-    WHERE observation_source_concept_id = 1585845
-  )
-GROUP BY c.person_id
+GROUP BY e.person_id
 """
 
 ctrl_ed = query(ctrl_ed_sql, "Control ED flags")
@@ -256,60 +240,33 @@ print("\n" + "=" * 70)
 print("3. SDoH survey responder vs nonresponder comparison")
 print("=" * 70)
 
-# Among ALL COVID+ AoU participants (not just matched), compare those
-# who completed the Basics Survey vs those who did not.
+# Among ALL COVID+ AoU participants with EHR data (not just those with
+# Basics Survey), compare responders vs nonresponders on demographics,
+# comorbidity burden, and hospitalization rate.
 resp_sql = f"""
 WITH
-  u07 AS (
-    SELECT person_id, MIN(condition_start_date) AS u07_date
-    FROM `{CDR}`.condition_occurrence
-    WHERE condition_concept_id = 37311061
-    GROUP BY person_id
-  ),
-  pos_lab AS (
-    SELECT person_id, MIN(measurement_date) AS lab_date
-    FROM `{CDR}`.measurement
-    WHERE measurement_concept_id IN (586520,586523,586525,586526,586529,
-      706157,706159,715261,715272,723470,723472,757678,36032061,36032174,
-      36032258,36661371,586518,586524,706154,706175,723464,723467,723478,
-      36031453,586516,706158,706160,706163,706171,706172,715260,723469,
-      36031213,36661377,586528,706161,706165,706167,723463,723468,723471,
-      757677,36031238,36031944,586519,706166,706169,706173,723465,723476,
-      757685,36031506,706155,706156,706170,723466,36031652,36661370,
-      706168,706174,715262,723477,36032419,36661378,37310257)
-      AND value_as_concept_id IN (9191,4126681,36032716,36715206,
-                                   45878745,45881802,45877985,45884084)
-  ),
-  covid_all AS (
-    SELECT COALESCE(u.person_id, l.person_id) AS person_id,
-      LEAST(
-        IFNULL(u.u07_date, DATE '9999-12-31'),
-        IFNULL(l.lab_date, DATE '9999-12-31')
-      ) AS covid_index_date
-    FROM u07 u FULL OUTER JOIN pos_lab l ON u.person_id = l.person_id
-  ),
-  -- All COVID+ with EHR data
-  covid_ehr AS (
-    SELECT ca.*
-    FROM covid_all ca
-    WHERE ca.covid_index_date < DATE '9999-12-31'
-      AND ca.person_id IN (
-        SELECT DISTINCT person_id FROM `{CDR}`.condition_occurrence
-      )
-  ),
-  -- Basics Survey flag
+{COVID_CTE},
+  -- Basics Survey completion flag
   basics AS (
     SELECT DISTINCT person_id, 1 AS has_basics
     FROM `{CDR}`.observation
     WHERE observation_source_concept_id = 1585845
   ),
-  -- Strict hospitalization
+  -- Broaden eligible to ALL COVID+ with EHR data (drop Basics req)
+  covid_ehr AS (
+    SELECT c.*
+    FROM covid c
+    WHERE c.covid_index_date < DATE '9999-12-31'
+      AND c.person_id IN (
+        SELECT DISTINCT person_id FROM `{CDR}`.condition_occurrence)
+  ),
+  -- Strict hospitalization (same phenotype as main analysis)
   hosp AS (
-    SELECT DISTINCT e.person_id
-    FROM covid_ehr e
-    JOIN `{CDR}`.visit_occurrence vo ON e.person_id = vo.person_id
-    WHERE vo.visit_start_date BETWEEN e.covid_index_date
-          AND DATE_ADD(e.covid_index_date, INTERVAL 14 DAY)
+    SELECT DISTINCT ce.person_id
+    FROM covid_ehr ce
+    JOIN `{CDR}`.visit_occurrence vo ON ce.person_id = vo.person_id
+    WHERE vo.visit_start_date BETWEEN ce.covid_index_date
+          AND DATE_ADD(ce.covid_index_date, INTERVAL 14 DAY)
       AND (
         vo.visit_concept_id IN (9201, 32037, 262, 8717)
         OR (vo.visit_concept_id = 9203
@@ -320,14 +277,14 @@ WITH
   -- Demographics
   demo AS (
     SELECT p.person_id,
-      EXTRACT(YEAR FROM covid_ehr.covid_index_date) - p.year_of_birth AS age,
+      EXTRACT(YEAR FROM ce.covid_index_date) - p.year_of_birth AS age,
       p.sex_at_birth_concept_id,
       r.concept_name AS race_name
     FROM `{CDR}`.person p
-    JOIN covid_ehr ON p.person_id = covid_ehr.person_id
+    JOIN covid_ehr ce ON p.person_id = ce.person_id
     LEFT JOIN `{CDR}`.concept r ON p.race_concept_id = r.concept_id
   ),
-  -- Diagnosis count
+  -- Diagnosis count (proxy for comorbidity burden)
   dx_count AS (
     SELECT person_id, COUNT(DISTINCT condition_concept_id) AS num_dx
     FROM `{CDR}`.condition_occurrence
@@ -355,13 +312,20 @@ resp_df = query(resp_sql, "Responder comparison")
 save(resp_df, "08c_responder_vs_nonresponder.csv")
 
 # Print summary
-for grp, label in [(1, "Responders"), (0, "Nonresponders")]:
+for grp, label in [
+    (1, "Responders (has Basics Survey)"),
+    (0, "Nonresponders (no Basics Survey)"),
+]:
     sub = resp_df[resp_df.has_basics == grp]
     print(f"\n  {label} (N={len(sub):,}):")
     print(f"    Hospitalized: {sub.hospitalized.mean()*100:.1f}%")
     print(f"    Age (median): {sub.age.median():.0f}")
     print(f"    Female: {(sub.sex=='Female').mean()*100:.1f}%")
     print(f"    Num Dx (median): {sub.num_dx.median():.0f}")
+    if "race_name" in sub.columns:
+        top_races = sub.race_name.value_counts(normalize=True).head(5)
+        for race, pct in top_races.items():
+            print(f"    {race}: {pct*100:.1f}%")
 
 
 # =====================================================================
