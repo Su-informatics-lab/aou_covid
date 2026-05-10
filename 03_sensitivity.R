@@ -43,22 +43,67 @@ cat(strrep("=", 70), "\n")
 cat("SENSITIVITY ANALYSES  [", toupper(COHORT), "]\n")
 cat(strrep("=", 70), "\n")
 
-# ── Load data ────────────────────────────────────────────────────────
-reg_path   <- file.path(RESULTS, "08_regression_base.csv")
-sdoh_path  <- file.path(RESULTS, "04_sdoh.csv")
-timing_path <- file.path(RESULTS, "04b_sdoh_timing.csv")
-case_comp_path <- file.path(RESULTS, "09a_case_visit_components.csv")
-ctrl_ed_path   <- file.path(RESULTS, "09b_control_ed_flags.csv")
-income3_path   <- file.path(RESULTS, "09d_income_collapsed.csv")
+# ── Load data (auto-detect old vs new pipeline numbering) ────────────
+# New pipeline (01b_psm.R):  08_regression_base.csv, 09a/b/d
+# Old pipeline (embedded PSM): 07_regression_base.csv, 08a/b/d
+resolve <- function(new_name, old_name) {
+  p_new <- file.path(RESULTS, new_name)
+  p_old <- file.path(RESULTS, old_name)
+  if (file.exists(p_new)) return(p_new)
+  if (file.exists(p_old)) return(p_old)
+  return(p_new)  # default to new (will trigger bucket download)
+}
+
+reg_path       <- resolve("08_regression_base.csv", "07_regression_base.csv")
+sdoh_path      <- file.path(RESULTS, "04_sdoh.csv")
+timing_path    <- file.path(RESULTS, "04b_sdoh_timing.csv")
+case_comp_path <- resolve("09a_case_visit_components.csv", "08a_case_visit_components.csv")
+ctrl_ed_path   <- resolve("09b_control_ed_flags.csv", "08b_control_ed_flags.csv")
+income3_path   <- resolve("09d_income_collapsed.csv", "08d_income_collapsed.csv")
+
+cat("  Resolved paths:\n")
+cat("    reg_base:   ", basename(reg_path), "\n")
+cat("    case_comp:  ", basename(case_comp_path), "\n")
+cat("    ctrl_ed:    ", basename(ctrl_ed_path), "\n")
+cat("    income3:    ", basename(income3_path), "\n")
 
 # Download from bucket if needed
 bucket <- Sys.getenv("WORKSPACE_BUCKET")
 if (!file.exists(case_comp_path) && nchar(bucket) > 0) {
   bdir <- paste0(bucket, "/data/covid_sdoh/", COHORT, "/")
-  for (f in c("09a_case_visit_components.csv", "09b_control_ed_flags.csv",
-              "09d_income_collapsed.csv")) {
-    system(paste0("gsutil cp ", bdir, f, " ", RESULTS, "/"), intern = TRUE)
+  # Try both naming conventions
+  for (pair in list(
+    c("09a_case_visit_components.csv", "08a_case_visit_components.csv"),
+    c("09b_control_ed_flags.csv", "08b_control_ed_flags.csv"),
+    c("09d_income_collapsed.csv", "08d_income_collapsed.csv")
+  )) {
+    for (f in pair) {
+      local_f <- file.path(RESULTS, f)
+      if (!file.exists(local_f)) {
+        res <- suppressWarnings(
+          system(paste0("gsutil cp ", bdir, f, " ", RESULTS, "/"),
+                 intern = TRUE, ignore.stderr = TRUE))
+        if (file.exists(local_f)) break
+      }
+    }
   }
+  # Also get regression base if missing
+  if (!file.exists(reg_path)) {
+    for (f in c("08_regression_base.csv", "07_regression_base.csv")) {
+      local_f <- file.path(RESULTS, f)
+      if (!file.exists(local_f)) {
+        suppressWarnings(
+          system(paste0("gsutil cp ", bdir, f, " ", RESULTS, "/"),
+                 intern = TRUE, ignore.stderr = TRUE))
+        if (file.exists(local_f)) { reg_path <- local_f; break }
+      }
+    }
+  }
+  # Re-resolve after downloads
+  reg_path       <- resolve("08_regression_base.csv", "07_regression_base.csv")
+  case_comp_path <- resolve("09a_case_visit_components.csv", "08a_case_visit_components.csv")
+  ctrl_ed_path   <- resolve("09b_control_ed_flags.csv", "08b_control_ed_flags.csv")
+  income3_path   <- resolve("09d_income_collapsed.csv", "08d_income_collapsed.csv")
 }
 
 regression_bm <- read_csv(reg_path, show_col_types = FALSE)

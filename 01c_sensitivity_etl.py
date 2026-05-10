@@ -7,10 +7,12 @@ Produces person-level flags needed for reviewer-requested sensitivity
 analyses. Does NOT re-run matching; works with existing matched cohort.
 
 Outputs (to results/aou_{version}/):
-  09a_case_visit_components.csv     Per-case visit type flags
-  09b_control_ed_flags.csv          Per-control ED utilization flags
-  09c_responder_vs_nonresponder.csv SDoH survey responder comparison table
-  09d_income_collapsed.csv          3-level income for sensitivity model
+  {N}a_case_visit_components.csv     Per-case visit type flags
+  {N}b_control_ed_flags.csv          Per-control ED utilization flags
+  {N}c_responder_vs_nonresponder.csv SDoH survey responder comparison table
+  {N}d_income_collapsed.csv          3-level income for sensitivity model
+
+  where N=09 if new pipeline (08_regression_base), N=08 if old (07_regression_base)
 
 Usage: python 01c_sensitivity_etl.py v7
 License: MIT
@@ -110,10 +112,26 @@ def save(df, filename):
 
 
 # ── Load existing cohort and matched data ────────────────────────────
+# Auto-detect old vs new pipeline numbering:
+#   New pipeline (01b_psm.R):     08_regression_base.csv → outputs 09a/b/c/d
+#   Old pipeline (embedded PSM):  07_regression_base.csv → outputs 08a/b/c/d
 cohort = pd.read_csv(os.path.join(RESULTS, "01_covid_cohort.csv"))
-matched = pd.read_csv(os.path.join(RESULTS, "08_regression_base.csv"))
 sdoh = pd.read_csv(os.path.join(RESULTS, "04_sdoh.csv"))
 timing = pd.read_csv(os.path.join(RESULTS, "04b_sdoh_timing.csv"))
+
+reg_path_new = os.path.join(RESULTS, "08_regression_base.csv")
+reg_path_old = os.path.join(RESULTS, "07_regression_base.csv")
+if os.path.exists(reg_path_new):
+    matched = pd.read_csv(reg_path_new)
+    OUT_PREFIX = "09"
+    print(f"  Using new pipeline: 08_regression_base.csv → outputs {OUT_PREFIX}a/b/c/d")
+elif os.path.exists(reg_path_old):
+    matched = pd.read_csv(reg_path_old)
+    OUT_PREFIX = "08"
+    print(f"  Using old pipeline: 07_regression_base.csv → outputs {OUT_PREFIX}a/b/c/d")
+else:
+    print("  ERROR: No regression base found (tried 08_ and 07_)")
+    sys.exit(1)
 
 cases = matched[matched.Treatment == 1]
 controls = matched[matched.Treatment == 0]
@@ -178,7 +196,7 @@ case_components["ed_prolonged_only"] = (
     & (case_components.has_er_to_ip == 0)
 ).astype(int)
 
-save(case_components, "09a_case_visit_components.csv")
+save(case_components, f"{OUT_PREFIX}a_case_visit_components.csv")
 
 print("\n  Component summary (matched cases):")
 print(f"    Has IP (9201/32037):           {case_components.has_ip.sum():,}")
@@ -230,7 +248,7 @@ print(f"  With same-day ED (14d): {n_sameday:,}")
 print(f"  With any acute care (14d): {n_any:,}")
 print(f"  Clean (no acute care): {n_clean:,}")
 
-save(ctrl_ed, "09b_control_ed_flags.csv")
+save(ctrl_ed, f"{OUT_PREFIX}b_control_ed_flags.csv")
 
 
 # =====================================================================
@@ -309,7 +327,7 @@ LEFT JOIN dx_count dx ON ce.person_id = dx.person_id
 """
 
 resp_df = query(resp_sql, "Responder comparison")
-save(resp_df, "09c_responder_vs_nonresponder.csv")
+save(resp_df, f"{OUT_PREFIX}c_responder_vs_nonresponder.csv")
 
 # Print summary
 for grp, label in [
@@ -348,7 +366,7 @@ sdoh_income["income_3cat"] = sdoh_income["income"].map(
     }
 )
 sdoh_income.loc[sdoh_income.income_3cat.isna(), "income_3cat"] = "Missing"
-save(sdoh_income[["person_id", "income_3cat"]], "09d_income_collapsed.csv")
+save(sdoh_income[["person_id", "income_3cat"]], f"{OUT_PREFIX}d_income_collapsed.csv")
 print(f"  Income 3-cat distribution:\n{sdoh_income.income_3cat.value_counts()}")
 
 

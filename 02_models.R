@@ -41,20 +41,35 @@ cat("COVID-19 SEVERITY × SDoH — MODELS  [", toupper(COHORT), "]  \n")
 cat(strrep("=", 70), "\n")
 cat("  Input/Output:", RESULTS, "\n")
 
-# ── Load data ────────────────────────────────────────────────────────
+# ── Load data (auto-detect old vs new pipeline numbering) ────────────
+# New pipeline (01b_psm.R):     08_regression_base.csv
+# Old pipeline (embedded PSM):  07_regression_base.csv
 reg_path  <- file.path(RESULTS, "08_regression_base.csv")
+if (!file.exists(reg_path)) {
+  reg_path <- file.path(RESULTS, "07_regression_base.csv")
+}
 sdoh_path <- file.path(RESULTS, "04_sdoh.csv")
 
 if (!file.exists(reg_path)) {
   bucket <- Sys.getenv("WORKSPACE_BUCKET")
   if (nchar(bucket) > 0) {
     cat("  Downloading from bucket...\n")
-    system(paste0("gsutil cp ", bucket, "/data/covid_sdoh/", COHORT,
-                  "/08_regression_base.csv ", RESULTS, "/"), intern = TRUE)
-    system(paste0("gsutil cp ", bucket, "/data/covid_sdoh/", COHORT,
-                  "/04_sdoh.csv ", RESULTS, "/"), intern = TRUE)
+    bdir <- paste0(bucket, "/data/covid_sdoh/", COHORT, "/")
+    # Try new name first, then old
+    for (f in c("08_regression_base.csv", "07_regression_base.csv")) {
+      suppressWarnings(
+        system(paste0("gsutil cp ", bdir, f, " ", RESULTS, "/"),
+               intern = TRUE, ignore.stderr = TRUE))
+      if (file.exists(file.path(RESULTS, f))) {
+        reg_path <- file.path(RESULTS, f)
+        break
+      }
+    }
+    system(paste0("gsutil cp ", bdir, "04_sdoh.csv ", RESULTS, "/"),
+           intern = TRUE)
   }
 }
+cat("  Regression base:", basename(reg_path), "\n")
 
 regression_bm <- read_csv(reg_path, show_col_types = FALSE)
 cat("  Regression data:", nrow(regression_bm), "rows,", ncol(regression_bm), "cols\n")
