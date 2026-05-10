@@ -7,10 +7,10 @@ Produces person-level flags needed for reviewer-requested sensitivity
 analyses. Does NOT re-run matching; works with existing matched cohort.
 
 Outputs (to results/aou_{version}/):
-  08a_case_visit_components.csv     Per-case visit type flags
-  08b_control_ed_flags.csv          Per-control ED utilization flags
-  08c_responder_vs_nonresponder.csv SDoH survey responder comparison table
-  08d_income_collapsed.csv          3-level income for sensitivity model
+  09a_case_visit_components.csv     Per-case visit type flags
+  09b_control_ed_flags.csv          Per-control ED utilization flags
+  09c_responder_vs_nonresponder.csv SDoH survey responder comparison table
+  09d_income_collapsed.csv          3-level income for sensitivity model
 
 Usage: python 01c_sensitivity_etl.py v7
 License: MIT
@@ -111,7 +111,7 @@ def save(df, filename):
 
 # ── Load existing cohort and matched data ────────────────────────────
 cohort = pd.read_csv(os.path.join(RESULTS, "01_covid_cohort.csv"))
-matched = pd.read_csv(os.path.join(RESULTS, "07_regression_base.csv"))
+matched = pd.read_csv(os.path.join(RESULTS, "08_regression_base.csv"))
 sdoh = pd.read_csv(os.path.join(RESULTS, "04_sdoh.csv"))
 timing = pd.read_csv(os.path.join(RESULTS, "04b_sdoh_timing.csv"))
 
@@ -178,7 +178,7 @@ case_components["ed_prolonged_only"] = (
     & (case_components.has_er_to_ip == 0)
 ).astype(int)
 
-save(case_components, "08a_case_visit_components.csv")
+save(case_components, "09a_case_visit_components.csv")
 
 print("\n  Component summary (matched cases):")
 print(f"    Has IP (9201/32037):           {case_components.has_ip.sum():,}")
@@ -230,7 +230,7 @@ print(f"  With same-day ED (14d): {n_sameday:,}")
 print(f"  With any acute care (14d): {n_any:,}")
 print(f"  Clean (no acute care): {n_clean:,}")
 
-save(ctrl_ed, "08b_control_ed_flags.csv")
+save(ctrl_ed, "09b_control_ed_flags.csv")
 
 
 # =====================================================================
@@ -309,7 +309,7 @@ LEFT JOIN dx_count dx ON ce.person_id = dx.person_id
 """
 
 resp_df = query(resp_sql, "Responder comparison")
-save(resp_df, "08c_responder_vs_nonresponder.csv")
+save(resp_df, "09c_responder_vs_nonresponder.csv")
 
 # Print summary
 for grp, label in [
@@ -348,7 +348,7 @@ sdoh_income["income_3cat"] = sdoh_income["income"].map(
     }
 )
 sdoh_income.loc[sdoh_income.income_3cat.isna(), "income_3cat"] = "Missing"
-save(sdoh_income[["person_id", "income_3cat"]], "08d_income_collapsed.csv")
+save(sdoh_income[["person_id", "income_3cat"]], "09d_income_collapsed.csv")
 print(f"  Income 3-cat distribution:\n{sdoh_income.income_3cat.value_counts()}")
 
 

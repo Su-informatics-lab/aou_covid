@@ -3,11 +3,13 @@
 COVID-19 Severity × SDoH — AoU ETL
 Runs on AoU Researcher Workbench (Controlled Tier).
 
+Steps 1–6: cohort, demographics, Charlson, SDoH, vaccination,
+matching variable extraction. PSM is handled by 01b_psm.R (MatchIt).
+
 Features:
   - Strict hospitalization phenotype (ED 9203 requires duration >= 1d)
   - Both severity_strict and severity_broad flags
   - Phenotype component decomposition table
-  - Control reuse statistics
   - Pandemic wave variable (pre_delta / delta / omicron)
   - SDoH timing: survey_date - covid_index_date
   - Insurance recoded as hierarchical categorical
@@ -18,7 +20,8 @@ Features:
 Usage: python 01_aou_etl.py v7
        python 01_aou_etl.py v8
 
-Output: results/aou_{version}/*.csv
+Output: results/aou_{version}/*.csv  (01–06)
+Next:   Rscript 01b_psm.R aou_{version}
 License: MIT
 """
 
@@ -31,9 +34,6 @@ warnings.filterwarnings("ignore", message=".*read_gbq is deprecated.*")
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import NearestNeighbors
-from sklearn.preprocessing import StandardScaler
 
 # ─── Parse version argument ──────────────────────────────────────────
 if len(sys.argv) < 2 or sys.argv[1] not in ("v7", "v8"):
@@ -1297,11 +1297,12 @@ save(vacc_status[["person_id", "vaccination"]], "05_vaccination.csv")
 
 
 # =====================================================================
-# STEP 6: PROPENSITY SCORE MATCHING (1:4, with replacement)
-#  matches on strict phenotype ──────────────────────────────────
+# STEP 6: MATCHING VARIABLE EXTRACTION
+# Extracts EHR-observability proxies for 01b_psm.R (MatchIt).
+# PSM is now handled in R — see 01b_psm.R.
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 6: Propensity Score Matching  (strict phenotype)")
+print("STEP 6: Matching Variable Extraction  (for 01b_psm.R)")
 print("=" * 70)
 
 match_vars = query(
@@ -1322,130 +1323,41 @@ GROUP BY p.person_id""",
 )
 
 match_df = match_vars[match_vars.person_id.isin(covid_cohort.person_id)].copy()
-match_df = match_df.merge(
-    covid_cohort[["person_id", "severity", "severity_broad", "pandemic_wave"]],
-    on="person_id",
-)
-match_df["survey_ord"] = pd.to_datetime(match_df["basics_survey_date"]).apply(
+
+# Convert survey date to ordinal (days since epoch) for MatchIt
+match_df["enrollment_ord"] = pd.to_datetime(match_df["basics_survey_date"]).apply(
     lambda x: x.toordinal() if pd.notna(x) else np.nan
 )
-match_df = match_df.dropna(subset=["survey_ord", "num_diagnosis", "ehr_length_days"])
 
-X = StandardScaler().fit_transform(
-    match_df[["survey_ord", "num_diagnosis", "ehr_length_days"]].values
-)
-lr = LogisticRegression(max_iter=1000, random_state=42).fit(
-    X, match_df["severity"].values  # ← strict phenotype
-)
-match_df["ps"] = lr.predict_proba(X)[:, 1]
-
-logit_ps = np.log(match_df["ps"] / (1 - match_df["ps"]))
-caliper = 0.2 * logit_ps.std()
-
-cases = match_df[match_df.severity == 1]
-controls = match_df[match_df.severity == 0]
-nn = NearestNeighbors(n_neighbors=min(20, len(controls)), metric="euclidean")
-nn.fit(controls[["ps"]].values)
-_, indices = nn.kneighbors(cases[["ps"]].values)
-
-records, dropped = [], 0
-for i, (cidx, ctrl_idx) in enumerate(zip(cases.index, indices)):
-    case_logit = np.log(cases.loc[cidx, "ps"] / (1 - cases.loc[cidx, "ps"]))
-    valid = [
-        controls.index[ci]
-        for ci in ctrl_idx
-        if abs(
-            case_logit
-            - np.log(
-                controls.loc[controls.index[ci], "ps"]
-                / (1 - controls.loc[controls.index[ci], "ps"])
-            )
-        )
-        <= caliper
-    ][:4]
-    if not valid:
-        dropped += 1
-        continue
-    records.append(
-        {"person_id": cases.loc[cidx, "person_id"], "Treatment": 1, "stratum": i + 1}
-    )
-    for vi in valid:
-        records.append(
-            {
-                "person_id": controls.loc[vi, "person_id"],
-                "Treatment": 0,
-                "stratum": i + 1,
-            }
-        )
-
-matched = pd.DataFrame(records)
-nc = matched[matched.Treatment == 1].person_id.nunique()
-nr = (matched.Treatment == 0).sum()
+n_complete = match_df.dropna(
+    subset=["enrollment_ord", "num_diagnosis", "ehr_length_days"]
+).shape[0]
+print(f"  Complete matching variables: {n_complete:,} / {len(match_df):,}")
 print(
-    f"  Cases (strict): {nc:,}  |  Control rows: {nr:,}  |  "
-    f"Ratio: 1:{nr/nc:.1f}  |  Caliper: {caliper:.4f}  |  Dropped: {dropped}"
+    f"  Cases with matching vars: "
+    f"{match_df[match_df.person_id.isin(covid_cohort[covid_cohort.severity==1].person_id)].dropna(subset=['enrollment_ord','num_diagnosis','ehr_length_days']).shape[0]:,}"
 )
 
-#  control reuse statistics (P0.2) ──────────────────────────────
-ctrl_rows = matched[matched.Treatment == 0]
-ctrl_reuse = ctrl_rows.groupby("person_id").size()
-ctrl_reuse_df = pd.DataFrame(
-    {
-        "metric": [
-            "n_unique_controls",
-            "median_reuse",
-            "iqr_lower",
-            "iqr_upper",
-            "max_reuse",
-            "n_control_rows",
-        ],
-        "value": [
-            len(ctrl_reuse),
-            ctrl_reuse.median(),
-            ctrl_reuse.quantile(0.25),
-            ctrl_reuse.quantile(0.75),
-            ctrl_reuse.max(),
-            len(ctrl_rows),
-        ],
-    }
+save(
+    match_df[
+        [
+            "person_id",
+            "basics_survey_date",
+            "enrollment_ord",
+            "num_diagnosis",
+            "ehr_length_days",
+        ]
+    ],
+    "06_matching_variables.csv",
 )
-print(
-    f"\n  Control reuse: {len(ctrl_reuse):,} unique, "
-    f"median {ctrl_reuse.median():.0f} "
-    f"(IQR {ctrl_reuse.quantile(0.25):.0f}–{ctrl_reuse.quantile(0.75):.0f}), "
-    f"max {ctrl_reuse.max()}"
-)
-save(ctrl_reuse_df, "06b_control_reuse.csv")
-save(matched, "06_matched_cohort.csv")
 
 
 # =====================================================================
-# STEP 7: MERGE REGRESSION DATAFRAME
+# ETL COMPLETE — next step: Rscript 01b_psm.R aou_{version}
 # =====================================================================
-print("\n" + "=" * 70)
-print("STEP 7: Final Regression DataFrame")
-print("=" * 70)
-
-reg = matched.merge(demo_out, on="person_id", how="left")
-reg = reg.merge(charlson, on="person_id", how="left")
-como_cols = list(CHARLSON.keys()) + ["AIDS"]
-reg[como_cols] = reg[como_cols].fillna(0).astype(int)
-reg = reg.merge(vacc_status[["person_id", "vaccination"]], on="person_id", how="left")
-reg["vaccination"] = reg["vaccination"].fillna("Unknown")
-reg = reg.merge(
-    covid_cohort[["person_id", "pandemic_wave", "severity_broad"]],
-    on="person_id",
-    how="left",
-)
-reg["pandemic_wave"] = reg["pandemic_wave"].fillna("unknown")
-
-print(f"  Shape: {reg.shape}  |  Columns: {list(reg.columns)}")
-na = reg.isna().sum()
-if na.any():
-    print(f"  NAs: {na[na>0].to_dict()}")
-save(reg, "07_regression_base.csv")
-
 print(f"\n{'='*70}")
 n_files = len([f for f in os.listdir(RESULTS) if f.endswith(".csv")])
 print(f"AoU ETL [{VERSION.upper()}] COMPLETE — {n_files} files in {RESULTS}/")
 print("=" * 70)
+print(f"\n  Next: Rscript 01b_psm.R aou_{VERSION}")
+print(f"  (PSM via MatchIt → 07_matched_cohort.csv, 08_regression_base.csv)")

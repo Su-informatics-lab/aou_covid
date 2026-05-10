@@ -11,7 +11,7 @@
 #   P1.1  Pandemic wave as base-model covariate + stratified sensitivity
 #   NEW   Insurance as hierarchical categorical (Employer = reference)
 #
-# Usage: Rscript 02_models.R aou_v7
+# Usage: Rscript 03_models.R aou_v7
 # License: MIT
 # ─────────────────────────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ cat(strrep("=", 70), "\n")
 cat("  Input/Output:", RESULTS, "\n")
 
 # ── Load data ────────────────────────────────────────────────────────
-reg_path  <- file.path(RESULTS, "07_regression_base.csv")
+reg_path  <- file.path(RESULTS, "08_regression_base.csv")
 sdoh_path <- file.path(RESULTS, "04_sdoh.csv")
 
 if (!file.exists(reg_path)) {
@@ -50,7 +50,7 @@ if (!file.exists(reg_path)) {
   if (nchar(bucket) > 0) {
     cat("  Downloading from bucket...\n")
     system(paste0("gsutil cp ", bucket, "/data/covid_sdoh/", COHORT,
-                  "/07_regression_base.csv ", RESULTS, "/"), intern = TRUE)
+                  "/08_regression_base.csv ", RESULTS, "/"), intern = TRUE)
     system(paste0("gsutil cp ", bucket, "/data/covid_sdoh/", COHORT,
                   "/04_sdoh.csv ", RESULTS, "/"), intern = TRUE)
   }

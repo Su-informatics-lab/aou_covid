@@ -3,15 +3,18 @@
 COVID-19 Severity × SDoH — MarketScan ETL (Clinical Transportability)
 Runs on Quartz HPC with DuckDB. Reads from /N/project/Marketscan1/parquet/.
 
+Steps 1–5: cohort, demographics, Charlson, vaccination, matching variable
+extraction. PSM is handled by 01b_psm.R (MatchIt).
+
 Consistent with AoU implementation:
   - 14-day hospitalization window (primary), visit-linked (inpatient file)
-  - Charlson: Shihui/Chenxi 2021 (NCI update of Glasheen 2019)
+  - Charlson: Glasheen 2019 CDMF CCI
   - AIDS: two-step (HIV AND OI), AIDS→HIV trump rule
   - Pandemic wave variable
-  - Control reuse statistics
 
 Usage: python 01_ms_etl.py
-Output: results/ms/*.csv
+Output: results/ms/*.csv  (01–06)
+Next:   Rscript 01b_psm.R ms
 """
 
 import os
@@ -22,9 +25,6 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 import duckdb
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import NearestNeighbors
-from sklearn.preprocessing import StandardScaler
 
 MS_DIR = "/N/project/Marketscan1/parquet"
 RESULTS = "results/ms"
@@ -42,6 +42,13 @@ print(f"  Source: {MS_DIR}")
 print(f"  Years:  {YEARS}")
 print(f"  Output: {RESULTS}/")
 print("=" * 70)
+
+
+def save(df, filename):
+    filepath = os.path.join(RESULTS, filename)
+    df.to_csv(filepath, index=False)
+    print(f"  Saved: {filepath} ({len(df):,} rows)")
+
 
 # =====================================================================
 # STEP 1: COVID COHORT (14-day hospitalization window)
@@ -80,7 +87,6 @@ print(
     f" + {len(op_unions)} outpatient queries..."
 )
 
-# 14-day window: hospitalization = inpatient COVID claim within 14 days of index
 covid_sql = f"""
 WITH covid_all AS (
     {' UNION ALL '.join(ip_unions + op_unions)}
@@ -129,10 +135,12 @@ covid_cohort.loc[covid_cohort.covid_index_date >= "2021-12-15", "pandemic_wave"]
 )
 print(f"  Wave: {covid_cohort.pandemic_wave.value_counts().to_dict()}")
 
-covid_cohort[
-    ["person_id", "covid_index_date", "severity", "severity_broad", "pandemic_wave"]
-].to_csv(f"{RESULTS}/01_covid_cohort.csv", index=False)
-print(f"  Saved: {RESULTS}/01_covid_cohort.csv")
+save(
+    covid_cohort[
+        ["person_id", "covid_index_date", "severity", "severity_broad", "pandemic_wave"]
+    ],
+    "01_covid_cohort.csv",
+)
 
 
 # =====================================================================
@@ -226,13 +234,11 @@ demo_out = demo[
 
 print(f"  Sex: {demo_out.sex_at_birth.value_counts().to_dict()}")
 print(f"  Age: {demo_out.age_group.value_counts().to_dict()}")
-demo_out.to_csv(f"{RESULTS}/02_demographics.csv", index=False)
+save(demo_out, "02_demographics.csv")
 
 
 # =====================================================================
-# STEP 3: CHARLSON COMORBIDITIES
-# Glasheen 2019 CDMF CCI (the BIBLE)
-# Flat lists (ICD-9 + ICD-10 mixed) for MarketScan prefix matching
+# STEP 3: CHARLSON COMORBIDITIES (Glasheen 2019 CDMF CCI)
 # =====================================================================
 print("\n" + "=" * 70)
 print("STEP 3: Charlson Comorbidities")
@@ -263,9 +269,7 @@ WHERE person_id IN (SELECT person_id FROM covid_pids)
 dx_count = con.sql("SELECT COUNT(*) FROM dx_long").fetchone()[0]
 print(f"  Diagnosis rows (COVID patients): {dx_count:,}")
 
-# Charlson code sets: Glasheen 2019 CDMF CCI (the BIBLE)
-# Source: Glasheen WP et al. Am Health Drug Benefits 2019;12(4):188-197
-# Flat lists (ICD-9 + ICD-10 mixed) for MarketScan prefix matching.
+# Charlson code sets: Glasheen 2019 CDMF CCI
 CHARLSON = {
     "Myocardial_Infarction": ["410", "412", "I21", "I22", "I252"],
     "Congestive_Heart_Failure": [
@@ -442,16 +446,7 @@ CHARLSON = {
         "M353",
         "M360",
     ],
-    "Peptic_Ulcer_Disease": [
-        "531",
-        "532",
-        "533",
-        "534",
-        "K25",
-        "K26",
-        "K27",
-        "K28",
-    ],
+    "Peptic_Ulcer_Disease": ["531", "532", "533", "534", "K25", "K26", "K27", "K28"],
     "Liver_Disease_Mild": [
         "07022",
         "07023",
@@ -733,8 +728,6 @@ TRUMP_RULES = [
     ("Metastatic_Solid_Tumor", "Malignancy"),
 ]
 
-# AIDS OI codes — NOT in CHARLSON. AIDS = HIV AND OI (two-step, per DualR).
-# NO HIV codes (042/B20) in this list.
 AIDS_OI = [
     "112",
     "180",
@@ -818,7 +811,6 @@ flag_exprs = []
 for name, codes in CHARLSON.items():
     likes = " OR ".join([f"dx_code LIKE '{c}%'" for c in codes])
     flag_exprs.append(f"MAX(CASE WHEN ({likes}) THEN 1 ELSE 0 END) AS {name}")
-# OI intermediate flag
 oi_likes = " OR ".join([f"dx_code LIKE '{c}%'" for c in AIDS_OI])
 flag_exprs.append(f"MAX(CASE WHEN ({oi_likes}) THEN 1 ELSE 0 END) AS has_oi")
 
@@ -852,7 +844,7 @@ print(f"\n  Charlson computed for {len(charlson):,} patients")
 for col in all_como_cols:
     n = charlson[col].sum()
     print(f"    {col:45s} {n:>8,} ({n/len(charlson)*100:5.1f}%)")
-charlson.to_csv(f"{RESULTS}/03_charlson.csv", index=False)
+save(charlson, "03_charlson.csv")
 
 
 # =====================================================================
@@ -895,27 +887,30 @@ vacc_status = covid_cohort[["person_id"]].merge(
 vacc_status["vaccination"] = "Unknown"
 vacc_status.loc[vacc_status.pre_covid == True, "vaccination"] = "Vaccinated"
 print(f"  {vacc_status.vaccination.value_counts().to_dict()}")
-vacc_status[["person_id", "vaccination"]].to_csv(
-    f"{RESULTS}/05_vaccination.csv", index=False
+save(vacc_status[["person_id", "vaccination"]], "05_vaccination.csv")
+
+# No SDoH in MarketScan — create placeholder
+pd.DataFrame({"person_id": covid_cohort.person_id}).to_csv(
+    f"{RESULTS}/04_sdoh.csv", index=False
 )
+print(f"  Saved: {RESULTS}/04_sdoh.csv (placeholder, person_id only)")
 
 
 # =====================================================================
-# STEP 5: PROPENSITY SCORE MATCHING (1:4, with replacement)
+# STEP 5: MATCHING VARIABLE EXTRACTION
+# Extracts EHR-observability proxies for 01b_psm.R (MatchIt).
 # =====================================================================
 print("\n" + "=" * 70)
-print("STEP 5: Propensity Score Matching (strict 14-day phenotype)")
+print("STEP 5: Matching Variable Extraction  (for 01b_psm.R)")
 print("=" * 70)
 
-match_df = covid_cohort[["person_id", "severity"]].copy()
-
+# Diagnosis count (already in dx_long table)
 dx_counts = con.sql("""
 SELECT person_id, COUNT(DISTINCT dx_code) AS num_diagnosis
 FROM dx_long GROUP BY person_id
 """).df()
-match_df = match_df.merge(dx_counts, on="person_id", how="left")
-match_df["num_diagnosis"] = match_df["num_diagnosis"].fillna(0)
 
+# Enrollment dates + coverage span
 print("  Computing enrollment dates for matching...")
 enroll_date_unions = []
 for y in YEARS:
@@ -933,140 +928,45 @@ FROM ({' UNION ALL '.join(enroll_date_unions)}) e
 WHERE e.person_id IN (SELECT person_id FROM covid_pids)
 GROUP BY e.person_id
 """).df()
-enroll_dates["enroll_ord"] = pd.to_datetime(enroll_dates["first_enrollment"]).apply(
+enroll_dates["enrollment_ord"] = pd.to_datetime(enroll_dates["first_enrollment"]).apply(
     lambda x: x.toordinal() if pd.notna(x) else np.nan
 )
 
-match_df = match_df.merge(
-    enroll_dates[["person_id", "enroll_ord", "coverage_span_days"]],
+match_df = dx_counts.merge(
+    enroll_dates[
+        ["person_id", "first_enrollment", "enrollment_ord", "coverage_span_days"]
+    ],
     on="person_id",
-    how="left",
-)
-match_df = match_df.dropna(subset=["enroll_ord", "num_diagnosis", "coverage_span_days"])
-print(
-    f"  Matching on: enroll_ord, num_diagnosis, coverage_span_days (N={len(match_df):,})"
+    how="inner",
 )
 
-X = StandardScaler().fit_transform(
-    match_df[["enroll_ord", "num_diagnosis", "coverage_span_days"]].values
+n_complete = match_df.dropna(
+    subset=["enrollment_ord", "num_diagnosis", "coverage_span_days"]
+).shape[0]
+print(f"  Complete matching variables: {n_complete:,} / {len(match_df):,}")
+
+save(
+    match_df[
+        [
+            "person_id",
+            "first_enrollment",
+            "enrollment_ord",
+            "num_diagnosis",
+            "coverage_span_days",
+        ]
+    ],
+    "06_matching_variables.csv",
 )
-lr = LogisticRegression(max_iter=1000, random_state=42).fit(
-    X, match_df["severity"].values
-)
-match_df["ps"] = lr.predict_proba(X)[:, 1]
-
-logit_ps = np.log(match_df["ps"] / (1 - match_df["ps"]))
-caliper = 0.2 * logit_ps.std()
-
-cases = match_df[match_df.severity == 1]
-controls = match_df[match_df.severity == 0]
-nn = NearestNeighbors(n_neighbors=min(20, len(controls)), metric="euclidean")
-nn.fit(controls[["ps"]].values)
-_, indices = nn.kneighbors(cases[["ps"]].values)
-
-records, dropped = [], 0
-for i, (cidx, ctrl_idx) in enumerate(zip(cases.index, indices)):
-    case_logit = np.log(cases.loc[cidx, "ps"] / (1 - cases.loc[cidx, "ps"]))
-    valid = [
-        controls.index[ci]
-        for ci in ctrl_idx
-        if abs(
-            case_logit
-            - np.log(
-                controls.loc[controls.index[ci], "ps"]
-                / (1 - controls.loc[controls.index[ci], "ps"])
-            )
-        )
-        <= caliper
-    ][:4]
-    if not valid:
-        dropped += 1
-        continue
-    records.append(
-        {"person_id": cases.loc[cidx, "person_id"], "Treatment": 1, "stratum": i + 1}
-    )
-    for vi in valid:
-        records.append(
-            {
-                "person_id": controls.loc[vi, "person_id"],
-                "Treatment": 0,
-                "stratum": i + 1,
-            }
-        )
-
-matched = pd.DataFrame(records)
-nc = matched[matched.Treatment == 1].person_id.nunique()
-nr = (matched.Treatment == 0).sum()
-print(
-    f"  Cases: {nc:,}  |  Control rows: {nr:,}  |  Ratio: 1:{nr/nc:.1f}  |  Dropped: {dropped}"
-)
-
-# Control reuse statistics
-ctrl_rows = matched[matched.Treatment == 0]
-ctrl_reuse = ctrl_rows.groupby("person_id").size()
-print(
-    f"  Control reuse: {len(ctrl_reuse):,} unique, median {ctrl_reuse.median():.0f}"
-    f" (IQR {ctrl_reuse.quantile(0.25):.0f}–{ctrl_reuse.quantile(0.75):.0f}),"
-    f" max {ctrl_reuse.max()}"
-)
-
-pd.DataFrame(
-    {
-        "metric": [
-            "n_unique_controls",
-            "median_reuse",
-            "iqr_lower",
-            "iqr_upper",
-            "max_reuse",
-            "n_control_rows",
-        ],
-        "value": [
-            len(ctrl_reuse),
-            ctrl_reuse.median(),
-            ctrl_reuse.quantile(0.25),
-            ctrl_reuse.quantile(0.75),
-            ctrl_reuse.max(),
-            len(ctrl_rows),
-        ],
-    }
-).to_csv(f"{RESULTS}/06b_control_reuse.csv", index=False)
-
-matched.to_csv(f"{RESULTS}/06_matched_cohort.csv", index=False)
-
-
-# =====================================================================
-# STEP 6: FINAL REGRESSION DATAFRAME
-# =====================================================================
-print("\n" + "=" * 70)
-print("STEP 6: Final Regression DataFrame")
-print("=" * 70)
-
-reg = matched.merge(demo_out, on="person_id", how="left")
-reg = reg.merge(charlson, on="person_id", how="left")
-como_cols = list(CHARLSON.keys()) + ["AIDS"]
-reg[como_cols] = reg[como_cols].fillna(0).astype(int)
-reg = reg.merge(vacc_status[["person_id", "vaccination"]], on="person_id", how="left")
-reg["vaccination"] = reg["vaccination"].fillna("Unknown")
-
-# Add pandemic wave and broad severity
-reg = reg.merge(
-    covid_cohort[["person_id", "pandemic_wave", "severity_broad"]],
-    on="person_id",
-    how="left",
-)
-reg["pandemic_wave"] = reg["pandemic_wave"].fillna("unknown")
-
-print(f"  Shape: {reg.shape}")
-reg.to_csv(f"{RESULTS}/07_regression_base.csv", index=False)
-
-# No SDoH in MarketScan — create empty placeholder
-pd.DataFrame({"person_id": covid_cohort.person_id}).to_csv(
-    f"{RESULTS}/04_sdoh.csv", index=False
-)
-
-n_files = len([f for f in os.listdir(RESULTS) if f.endswith(".csv")])
-print(f"\n{'='*70}")
-print(f"PIPELINE COMPLETE — {n_files} files in {RESULTS}/")
-print("=" * 70)
 
 con.close()
+
+
+# =====================================================================
+# ETL COMPLETE — next step: Rscript 01b_psm.R ms
+# =====================================================================
+n_files = len([f for f in os.listdir(RESULTS) if f.endswith(".csv")])
+print(f"\n{'='*70}")
+print(f"MarketScan ETL COMPLETE — {n_files} files in {RESULTS}/")
+print("=" * 70)
+print(f"\n  Next: Rscript 01b_psm.R ms")
+print(f"  (PSM via MatchIt → 07_matched_cohort.csv, 08_regression_base.csv)")
