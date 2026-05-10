@@ -21,8 +21,8 @@ logistic framework of [Gatz, Su et al. *JAMIA* 2024;31(12):2932–2939](https://
 ├─────────────────────────────────────────────────────────────┤
 │  MODELS (03–04)  — runs on-platform, reads CSV              │
 ├─────────────────────────────────────────────────────────────┤
-│  03_models.R          Base + SDoH + joint + race attenuation │
-│  04_sensitivity.R     Reviewer sensitivity S1–S5             │
+│  02_models.R          Base + SDoH + joint + race attenuation │
+│  03_sensitivity.R     Reviewer sensitivity S1–S5             │
 ├─────────────────────────────────────────────────────────────┤
 │  OUTPUT (05–07)  — 05 on-platform; 06–07 off-platform       │
 ├─────────────────────────────────────────────────────────────┤
@@ -38,15 +38,15 @@ logistic framework of [Gatz, Su et al. *JAMIA* 2024;31(12):2932–2939](https://
 # ── AoU (on Researcher Workbench) ──────────────────────────
 python 01_aou_etl.py v7             # Steps 1–6: cohort → matching vars
 Rscript 01b_psm.R aou_v7            # PSM (MatchIt) → matched cohort + balance
-Rscript 03_models.R aou_v7          # Base + 6 SDoH domain + joint + wave-stratified
+Rscript 02_models.R aou_v7          # Base + 6 SDoH domain + joint + wave-stratified
 python 01c_sensitivity_etl.py v7    # Sensitivity flags (phenotype components, etc.)
-Rscript 04_sensitivity.R aou_v7     # S1–S5 reviewer sensitivity analyses
+Rscript 03_sensitivity.R aou_v7     # S1–S5 reviewer sensitivity analyses
 python 05_tables.py aou_v7          # Table 1, Table 2
 
 # ── MarketScan (on Quartz HPC) ─────────────────────────────
 python 01_ms_etl.py                  # Steps 1–5: cohort → matching vars
 Rscript 01b_psm.R ms                # PSM (MatchIt) → matched cohort + balance
-Rscript 03_models.R ms              # Base model only (no SDoH surveys)
+Rscript 02_models.R ms              # Base model only (no SDoH surveys)
 python 05_tables.py ms               # Table 1
 
 # ── Figures & supplement (anywhere, from aggregate CSVs) ────
@@ -97,7 +97,7 @@ python 07_supplement.py              # All supplementary eTables (S2b–S15)
 | `09c_responder_vs_nonresponder.csv` | Survey responder comparison |
 | `09d_income_collapsed.csv` | 3-level income |
 
-### 03_models.R → results/{cohort}/
+### 02_models.R → results/{cohort}/
 | Output | Description |
 |---|---|
 | `base_model_coefficients.csv` | Model A |
@@ -108,7 +108,7 @@ python 07_supplement.py              # All supplementary eTables (S2b–S15)
 | `aids_sensitivity.csv` | HIV/AIDS phenotype comparison |
 | `all_model_coefficients.csv` | Combined |
 
-### 04_sensitivity.R → results/aou_{v7|v8}/
+### 03_sensitivity.R → results/aou_{v7|v8}/
 | Output | Description |
 |---|---|
 | `sensitivity_S1_*.csv` | IP-only cases |
