@@ -1,7 +1,0 @@
-Metric,AoU
-Unique control individuals,"9,876"
-Median times a control appears,1
-IQR lower bound (reuse count),1
-IQR upper bound (reuse count),2
-Maximum reuse count,13
-Total control observations (with reuse),"16,221"
