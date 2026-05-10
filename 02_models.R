@@ -20,6 +20,10 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(readr))
 
 # ──
+# Set CRAN mirror for non-interactive environments (HPC, Rscript)
+if (is.null(getOption("repos")) || getOption("repos")["CRAN"] == "@CRAN@") {
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+}
 if (!requireNamespace("sandwich", quietly = TRUE)) install.packages("sandwich")
 if (!requireNamespace("lmtest", quietly = TRUE))   install.packages("lmtest")
 library(sandwich)

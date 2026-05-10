@@ -48,6 +48,11 @@
 # ─────────────────────────────────────────────────────────────────────
 
 # ── Package management ───────────────────────────────────────────────
+# ── Package management ───────────────────────────────────────────────
+# Set CRAN mirror for non-interactive environments (HPC, Rscript)
+if (is.null(getOption("repos")) || getOption("repos")["CRAN"] == "@CRAN@") {
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+}
 for (pkg in c("MatchIt", "cobalt", "dplyr", "readr")) {
   if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
 }
