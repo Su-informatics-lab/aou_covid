@@ -147,8 +147,8 @@ python 07_supplement.py              # All supplementary eTables (S2b–S15)
 ```
 Python  ≥3.10   pandas ≥1.5  numpy ≥1.24  matplotlib ≥3.7
                  duckdb ≥0.9 (MarketScan only)
-R       ≥4.5    survival ≥3.5  MatchIt ≥4.5  cobalt ≥4.5
-                 dplyr ≥1.1  readr ≥2.1  sandwich ≥3.0  lmtest ≥0.9
+R       4.5    survival 3.8.3  MatchIt ≥4.5  cobalt ≥4.5
+                 dplyr 1.1.4  readr 2.1.5  sandwich 3.1.1  lmtest 0.9.40
 ```
 
 AoU Researcher Workbench (Controlled Tier). Quartz HPC for MarketScan.
