@@ -1,0 +1,13 @@
+Site,Metric,Value
+AoU,total_participants,413457
+AoU,covid_positive,25160
+AoU,hospitalized_strict_14d,4064
+AoU,hospitalized_broad_30d,6531
+AoU,ed_only_reclassified,2467
+AoU,outpatient_controls,21096
+AoU,matched_observations,20308
+AoU,matched_strata,4064
+AoU,unique_controls,9928
+AoU,control_observations,16244
+MS,covid_positive,4423200
+MS,hospitalized_strict_14d,139489

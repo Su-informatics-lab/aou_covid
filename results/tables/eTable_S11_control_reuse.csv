@@ -1,0 +1,9 @@
+Metric,AoU
+Unique control individuals,"9,928"
+Total control observations,"16,244"
+Median reuse count,1.0
+IQR lower bound,1.0
+IQR upper bound,2.0
+Maximum reuse count,13
+Caliper (SD units),0.2
+Cases dropped (no match),0.0

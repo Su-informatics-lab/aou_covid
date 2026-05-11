@@ -1,0 +1,5 @@
+Component,In strict?,N,% of broad
+ED same-day (excluded from strict),No,"3,278",39.1
+Inpatient,Yes,"2,920",34.8
+ED-to-inpatient,Yes,"1,406",16.8
+ED with stay ≥1 day,Yes,782,9.3
