@@ -1,0 +1,5 @@
+Study,Data,N COVID+,N hosp (%),SDoH domains,Key
+Choi et al. 2025,AoU v7,"25,650",662 (2.6%),3,Income dose-response; education null
+Vaidya et al. 2024,N3C,"280,441",NR,3,EHR-coded SDoH underdocumented
+Gatz et al. 2024,AoU v7,"13,310",N/A (acidosis),6,PSM+clogit precedent in AoU
+This study,AoU v7 + MS,"25,160 + 4.4M","4,064 (16.2%) + 139K (3.2%)",6,"Joint SDoH, race attenuation, transportability"

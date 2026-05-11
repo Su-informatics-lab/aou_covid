@@ -1,0 +1,20 @@
+Domain,Variable,Domain AOR,Domain 95% CI,Joint AOR,Joint 95% CI
+Income,<$10K,1.42***,1.26–1.61,1.16*,1.01–1.34
+Income,$10–25K,1.35***,1.19–1.52,1.17*,1.03–1.34
+Income,$25–35K,1.16,1.00–1.34,1.10,0.94–1.28
+Income,$100–150K,1.22*,1.04–1.42,1.26**,1.07–1.47
+Income,$150–200K,1.20,0.97–1.49,1.26*,1.01–1.57
+Income,>$200K,1.10,0.90–1.35,1.15,0.94–1.41
+Insurance,Medicare,1.05,0.92–1.19,0.95,0.83–1.09
+Insurance,Medicaid,1.55***,1.39–1.72,1.31***,1.15–1.49
+Insurance,Other/None,1.30***,1.12–1.50,1.15,0.99–1.35
+Education,Never attended,3.38***,1.67–6.87,2.90**,1.42–5.94
+Education,Below GED,1.32***,1.16–1.50,1.11,0.97–1.28
+Education,GED/some college,1.09,1.00–1.18,1.01,0.92–1.11
+Employment,Unemployed,1.38***,1.25–1.52,1.22**,1.08–1.37
+Employment,Student,1.62***,1.25–2.10,1.54**,1.18–2.00
+Employment,Others/retired,1.34***,1.21–1.49,1.25***,1.11–1.40
+Housing,Rent,1.26***,1.15–1.37,1.13*,1.02–1.24
+Housing,Other,0.98,0.86–1.13,0.86*,0.74–1.00
+Stability,Unstable,1.01,0.92–1.11,0.95,0.86–1.05
+Disability,Any disability,0.93,0.82–1.06,0.86*,0.75–0.98
