@@ -227,8 +227,8 @@ WITH cohort AS (
   SELECT person_id, CAST(covid_index_date AS DATE) AS covid_index_date
   FROM (
     SELECT COALESCE(u.person_id, l.person_id) AS person_id,
-      LEAST(IFNULL(MIN(u.u07_date), DATE '9999-12-31'),
-            IFNULL(MIN(l.lab_date), DATE '9999-12-31')) AS covid_index_date
+      LEAST(IFNULL(u.u07_date, DATE '9999-12-31'),
+            IFNULL(l.lab_date, DATE '9999-12-31')) AS covid_index_date
     FROM (
       SELECT person_id, MIN(condition_start_date) AS u07_date
       FROM `{CDR}`.condition_occurrence
