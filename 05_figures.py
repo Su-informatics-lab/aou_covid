@@ -578,28 +578,87 @@ if has_ms:
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# CONSORT COUNTS
+# CONSORT COUNTS — read PSM-dependent values from pipeline CSVs
 # ═══════════════════════════════════════════════════════════════════════
-consort = pd.DataFrame(
+print("\n" + "=" * 60)
+print("CONSORT COUNTS")
+print("=" * 60)
+
+# ETL counts (stable, from 01_aou_etl.py / 01_ms_etl.py)
+consort_rows = [
+    {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
+    {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
+    {"Site": "AoU", "Metric": "hospitalized_strict_14d", "Value": 4064},
+    {"Site": "AoU", "Metric": "hospitalized_broad_30d", "Value": 6531},
+    {"Site": "AoU", "Metric": "ed_only_reclassified", "Value": 2467},
+    {"Site": "AoU", "Metric": "outpatient_controls", "Value": 21096},
+]
+
+
+# PSM-dependent counts — read from 07b_control_reuse.csv
+def read_reuse(site_dir):
+    """Read PSM counts from 07b_control_reuse.csv (MatchIt) or
+    06b_control_reuse.csv (legacy sklearn)."""
+    for fname in ["07b_control_reuse.csv", "06b_control_reuse.csv"]:
+        path = os.path.join(site_dir, fname)
+        if os.path.exists(path):
+            df = pd.read_csv(path)
+            out = {}
+            for _, r in df.iterrows():
+                out[r.metric] = r.value
+            print(f"  Read PSM counts from {path}")
+            return out
+    return None
+
+
+# AoU PSM counts
+aou_reuse = read_reuse(os.path.join(BASE, "aou_v7"))
+if aou_reuse:
+    n_ctrl_rows = int(aou_reuse.get("n_control_rows", 0))
+    n_unique = int(aou_reuse.get("n_unique_controls", 0))
+    n_cases = 4064  # stable from ETL
+    n_matched = n_cases + n_ctrl_rows
+    consort_rows.extend(
+        [
+            {"Site": "AoU", "Metric": "matched_observations", "Value": n_matched},
+            {"Site": "AoU", "Metric": "matched_strata", "Value": n_cases},
+            {"Site": "AoU", "Metric": "unique_controls", "Value": n_unique},
+            {"Site": "AoU", "Metric": "control_observations", "Value": n_ctrl_rows},
+        ]
+    )
+    print(f"  AoU: {n_matched:,} matched obs, {n_unique:,} unique controls")
+else:
+    print("  WARNING: AoU 07b_control_reuse.csv not found, skipping PSM counts")
+
+# MS counts
+consort_rows.extend(
     [
-        {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
-        {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
-        {"Site": "AoU", "Metric": "hospitalized_strict_14d", "Value": 4064},
-        {"Site": "AoU", "Metric": "hospitalized_broad_30d", "Value": 6531},
-        {"Site": "AoU", "Metric": "ed_only_reclassified", "Value": 2467},
-        {"Site": "AoU", "Metric": "outpatient_controls", "Value": 21096},
-        {"Site": "AoU", "Metric": "matched_observations", "Value": 20308},
-        {"Site": "AoU", "Metric": "matched_strata", "Value": 4064},
-        {"Site": "AoU", "Metric": "unique_controls", "Value": 9928},
-        {"Site": "AoU", "Metric": "control_observations", "Value": 16244},
         {"Site": "MS", "Metric": "covid_positive", "Value": 4423200},
         {"Site": "MS", "Metric": "hospitalized_strict_14d", "Value": 139489},
-        {"Site": "MS", "Metric": "matched_observations", "Value": 697360},
-        {"Site": "MS", "Metric": "matched_strata", "Value": 139472},
     ]
 )
+
+ms_reuse = read_reuse(os.path.join(BASE, "ms"))
+if ms_reuse:
+    ms_ctrl_rows = int(ms_reuse.get("n_control_rows", 0))
+    ms_unique = int(ms_reuse.get("n_unique_controls", 0))
+    ms_cases = 139489  # from ETL; some may be dropped by caliper
+    ms_dropped = int(ms_reuse.get("n_cases_dropped", 0))
+    ms_cases_matched = ms_cases - ms_dropped
+    ms_matched = ms_cases_matched + ms_ctrl_rows
+    consort_rows.extend(
+        [
+            {"Site": "MS", "Metric": "matched_observations", "Value": ms_matched},
+            {"Site": "MS", "Metric": "matched_strata", "Value": ms_cases_matched},
+        ]
+    )
+    print(f"  MS: {ms_matched:,} matched obs, {ms_cases_matched:,} strata")
+else:
+    print("  WARNING: MS 07b_control_reuse.csv not found, skipping MS PSM counts")
+
+consort = pd.DataFrame(consort_rows)
 consort.to_csv(os.path.join(TBL_DIR, "consort_counts.csv"), index=False)
-print(f"\n  Saved: {TBL_DIR}/consort_counts.csv")
+print(f"  Saved: {TBL_DIR}/consort_counts.csv")
 
 print(f"\n{'='*60}")
 print(f"ALL OUTPUTS: {FIG_DIR}/ and {TBL_DIR}/")
