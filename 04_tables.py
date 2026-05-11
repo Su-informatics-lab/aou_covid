@@ -280,22 +280,14 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
     rows2 = []
 
     def sdoh_section(df_c, df_k, col, values, section_label):
-        rows2.append(
-            {
-                "Variable": section_label,
-                "Cases_n": "",
-                "Cases_pct": "",
-                "Controls_n": "",
-                "Controls_pct": "",
-            }
+        # Insurance (hierarchical categorical from insurance_type column)
+        sdoh_section(
+            s_cases,
+            s_ctrls,
+            "insurance_type",
+            ["Employer", "Medicare", "Medicaid", "Other_None"],
+            "Insurance type",
         )
-        for val in values:
-            cn = (df_c[col] == val).sum() if col in df_c.columns else 0
-            kn = (df_k[col] == val).sum() if col in df_k.columns else 0
-            rows2.append(table_row(f"  {val}", int(cn), snc, int(kn), snk))
-        cn = df_c[col].isna().sum() if col in df_c.columns else snc
-        kn = df_k[col].isna().sum() if col in df_k.columns else snk
-        rows2.append(table_row("  Missing", int(cn), snc, int(kn), snk))
 
     sdoh_section(
         s_cases,
