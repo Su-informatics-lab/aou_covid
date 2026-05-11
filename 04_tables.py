@@ -341,7 +341,7 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
         s_cases,
         s_ctrls,
         "insurance_type",
-        ["Employer", "Medicare", "Medicaid", "Other_None"],
+        ["Employer", "Medicare", "Medicaid", "Other_None", "Missing"],
         "Insurance type",
     )
 
