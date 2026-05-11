@@ -11,3 +11,5 @@ AoU,unique_controls,9928
 AoU,control_observations,16244
 MS,covid_positive,4423200
 MS,hospitalized_strict_14d,139489
+MS,matched_observations,697377
+MS,matched_strata,139489
