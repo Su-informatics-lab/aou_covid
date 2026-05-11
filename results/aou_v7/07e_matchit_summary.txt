@@ -1,0 +1,43 @@
+MatchIt Summary for AOU_V7 
+Date: 2026-05-11 14:36:23.610832 
+R: R version 4.5.0 (2025-04-11) 
+MatchIt: 4.7.2 
+
+
+Call:
+matchit(formula = ps_formula, data = match_df, method = "nearest", 
+    distance = "glm", replace = TRUE, caliper = 0.2, std.caliper = TRUE, 
+    ratio = 4)
+
+Summary of Balance for All Data:
+                Means Treated Means Control Std. Mean Diff. Var. Ratio
+distance               0.2118        0.1518          0.4685     2.5051
+enrollment_ord    737309.1922   737347.7172         -0.0921     0.8164
+num_diagnosis        138.3846       88.4064          0.4892     1.7872
+ehr_length_days     4593.1230     4463.7354          0.0421     0.8519
+                eCDF Mean eCDF Max
+distance           0.1821   0.2702
+enrollment_ord     0.0299   0.0763
+num_diagnosis      0.0937   0.2322
+ehr_length_days    0.0259   0.0875
+
+Summary of Balance for Matched Data:
+                Means Treated Means Control Std. Mean Diff. Var. Ratio
+distance               0.2118        0.2118         -0.0000     0.9997
+enrollment_ord    737309.1922   737298.8927          0.0246     0.9157
+num_diagnosis        138.3846      137.7487          0.0062     0.9288
+ehr_length_days     4593.1230     4558.6050          0.0112     0.9412
+                eCDF Mean eCDF Max Std. Pair Dist.
+distance           0.0001   0.0015          0.0014
+enrollment_ord     0.0185   0.0428          1.0941
+num_diagnosis      0.0045   0.0224          0.3991
+ehr_length_days    0.0174   0.0690          1.0194
+
+Sample Sizes:
+              Control Treated
+All           21096.     4064
+Matched (ESS)  6952.4    4064
+Matched        9928.     4064
+Unmatched     11168.        0
+Discarded         0.        0
+

@@ -1,0 +1,5 @@
+component,n_persons
+ED same-day <1d (9203),3278
+Inpatient (9201/32037),2920
+ER-to-Inpatient (262/8717),1406
+ED prolonged >=1d (9203),782
