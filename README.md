@@ -5,9 +5,6 @@ COVID-19 hospitalization in the NIH *All of Us* Research Program,
 with clinical-model transportability evaluation in Merative MarketScan
 Commercial Claims.
 
-Targets *JAMIA* (Research and Applications). Extends the PSM + conditional
-logistic framework of [Gatz, Su et al. *JAMIA* 2024;31(12):2932–2939](https://doi.org/10.1093/jamia/ocae256).
-
 ## Pipeline
 
 ```
@@ -19,16 +16,16 @@ logistic framework of [Gatz, Su et al. *JAMIA* 2024;31(12):2932–2939](https://
 │  01b_psm.R            PSM via MatchIt + cobalt balance       │
 │  01c_sensitivity_etl.py  Sensitivity flags (BQ, AoU only)   │
 ├─────────────────────────────────────────────────────────────┤
-│  MODELS (03–04)  — runs on-platform, reads CSV              │
+│  MODELS (02–03)  — runs on-platform, reads CSV              │
 ├─────────────────────────────────────────────────────────────┤
 │  02_models.R          Base + SDoH + joint + race attenuation │
 │  03_sensitivity.R     Reviewer sensitivity S1–S5             │
 ├─────────────────────────────────────────────────────────────┤
-│  OUTPUT (05–07)  — 05 on-platform; 06–07 off-platform       │
+│  OUTPUT (04–06)  — 04 on-platform; 05–06 off-platform       │
 ├─────────────────────────────────────────────────────────────┤
-│  05_tables.py         Table 1 (demographics), Table 2 (SDoH) │
-│  06_figures.py        Figures 2–5, Table 3, cross-site eTable │
-│  07_supplement.py     All supplementary eTables (S2b–S15)    │
+│  04_tables.py         Table 1 (demographics), Table 2 (SDoH) │
+│  05_figures.py        Figures 3–5, Table 3, cross-site eTable │
+│  06_supplement.py     All supplementary eTables (S2b–S16)    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -41,20 +38,21 @@ Rscript 01b_psm.R aou_v7            # PSM (MatchIt) → matched cohort + balance
 Rscript 02_models.R aou_v7          # Base + 6 SDoH domain + joint + wave-stratified
 python 01c_sensitivity_etl.py v7    # Sensitivity flags (phenotype components, etc.)
 Rscript 03_sensitivity.R aou_v7     # S1–S5 reviewer sensitivity analyses
-python 05_tables.py aou_v7          # Table 1, Table 2
+python 04_tables.py aou_v7          # Table 1, Table 2
 
 # ── MarketScan (on Quartz HPC) ─────────────────────────────
 python 01_ms_etl.py                  # Steps 1–5: cohort → matching vars
 Rscript 01b_psm.R ms                # PSM (MatchIt) → matched cohort + balance
 Rscript 02_models.R ms              # Base model only (no SDoH surveys)
-python 05_tables.py ms               # Table 1
+python 04_tables.py ms               # Table 1
 
 # ── Figures & supplement (anywhere, from aggregate CSVs) ────
-python 06_figures.py                 # Figs 2–5, Table 3, cross-site eTable
-python 07_supplement.py              # All supplementary eTables (S2b–S15)
+python 05_figures.py                 # Figs 3–5, Table 3, cross-site eTable
+python 06_supplement.py              # All supplementary eTables (S2b–S16)
 ```
 
-## File I/O Contract
+<details>
+<summary>File I/O Contract (click to expand)</summary>
 
 ### 01_aou_etl.py → results/aou_{v7|v8}/
 | Output | Description |
@@ -111,48 +109,80 @@ python 07_supplement.py              # All supplementary eTables (S2b–S15)
 ### 03_sensitivity.R → results/aou_{v7|v8}/
 | Output | Description |
 |---|---|
-| `sensitivity_S1_*.csv` | IP-only cases |
-| `sensitivity_S2_*.csv` | Clean controls |
-| `sensitivity_S3_*.csv` | Pre-index SDoH only |
-| `sensitivity_S4_*.csv` | No vaccination covariate |
-| `sensitivity_S5_*.csv` | Collapsed income |
+| `sensitivity_S1–S5_*.csv` | 5 sensitivity model coefficients |
 | `sensitivity_summary_comparison.csv` | Side-by-side key AORs |
 
-## Design
+</details>
 
-| | AoU | MarketScan |
-|---|---|---|
-| **Source** | Controlled Tier v7 C2022Q4R13 | Commercial Claims 2020–2023 |
-| **Outcome** | 14-day strict hospitalization (IP + ER-to-IP + ED≥1d) | Inpatient claim with U07.1 ≤14 days |
-| **Matching** | 1:4 NN, replacement, 0.2 SD caliper (MatchIt) | Same |
-| **PS covariates** | Enrollment date, Dx count, EHR length | Enrollment date, Dx count, coverage span |
-| **Analysis** | Conditional logistic (survival::clogit) | Same |
-| **Race/ethnicity** | In base model | Not available |
-| **SDoH** | 6 domains: domain-by-domain (B) + joint (C) | Plan type + region only |
-| **Charlson** | Glasheen 2019 CDMF CCI, 19 conditions | Same codes |
-| **Pandemic wave** | Pre-Delta / Delta / Omicron covariate | Same |
-| **Framing** | Primary analysis | Clinical-model transportability |
+[//]: # (## Design)
 
-## Key Results (AoU, strict 14-day phenotype)
+[//]: # ()
+[//]: # (| | AoU | MarketScan |)
 
-- **Cohort:** 25,160 COVID+ → 4,064 hospitalized (16.2%) → ~20,285 matched obs
-- **Income dose-response:** <$10K AOR 1.42 (1.26–1.61); persists through Omicron
-- **Insurance:** Medicaid AOR 1.52 vs employer (domain); 1.29 (joint)
-- **Race attenuation:** Black AOR 2.28 → 2.04 after all SDoH (13.6%)
-- **Joint model:** Medicaid, low income, unemployment, renter independently significant
-- **Sensitivity (S1–S5):** All key SDoH associations robust
+[//]: # (|---|---|---|)
+
+[//]: # (| **Source** | Controlled Tier v7 C2022Q4R13 | Commercial Claims 2020–2023 |)
+
+[//]: # (| **Outcome** | 14-day strict hospitalization &#40;IP + ER-to-IP + ED≥1d&#41; | Inpatient claim with U07.1 ≤14 days |)
+
+[//]: # (| **Matching** | 1:4 NN, replacement, 0.2 SD caliper &#40;MatchIt&#41; | Same |)
+
+[//]: # (| **PS covariates** | Enrollment date, Dx count, EHR length | Enrollment date, Dx count, coverage span |)
+
+[//]: # (| **Analysis** | Conditional logistic &#40;survival::clogit&#41; | Same |)
+
+[//]: # (| **Race/ethnicity** | In base model | Not available |)
+
+[//]: # (| **SDoH** | 6 domains: domain-by-domain &#40;B&#41; + joint &#40;C&#41; | Plan type + region only |)
+
+[//]: # (| **Charlson** | Glasheen 2019 CDMF CCI, 19 conditions | Same codes |)
+
+[//]: # (| **Pandemic wave** | Pre-Delta / Delta / Omicron covariate | Same |)
+
+[//]: # (| **Framing** | Primary analysis | Clinical-model transportability |)
+
+[//]: # (## Key Results &#40;AoU, strict 14-day phenotype&#41;)
+
+[//]: # ()
+[//]: # (- **Cohort:** 25,160 COVID+ → 4,064 hospitalized &#40;16.2%&#41; → 20,308 matched obs)
+
+[//]: # (- **Income:** <$10K AOR 1.42 &#40;domain&#41;, 1.16 &#40;joint&#41;; gradient persists through Omicron)
+
+[//]: # (- **Insurance:** Medicaid AOR 1.55 &#40;domain&#41;, 1.32 &#40;joint&#41; vs employer)
+
+[//]: # (- **Race attenuation:** Black AOR 2.26 → 1.99 after all SDoH &#40;15.7%&#41;)
+
+[//]: # (- **Joint model:** Medicaid, low income, unemployment, renter, disability independently significant)
+
+[//]: # (- **Sensitivity &#40;S1–S5&#41;:** All key SDoH associations robust across 5 specifications)
 
 ## Requirements
 
 ```
-Python  ≥3.10   pandas ≥1.5  numpy ≥1.24  matplotlib ≥3.7
-                 duckdb ≥0.9 (MarketScan only)
-R       4.5    survival 3.8.3  MatchIt ≥4.5  cobalt ≥4.5
-                 dplyr 1.1.4  readr 2.1.5  sandwich 3.1.1  lmtest 0.9.40
-```
+Python  3.10
+  pandas          2.3.3
+  numpy           1.26.4
+  matplotlib      3.7.3
+  duckdb          1.4.3
 
-AoU Researcher Workbench (Controlled Tier). Quartz HPC for MarketScan.
+R       4.5.1
+  survival        3.8.3
+  MatchIt         4.7.2
+  cobalt          4.6.2
+  dplyr           1.1.4
+  readr           2.1.5
+  sandwich        3.1.1
+  lmtest          0.9.40
+```
 
 ## License
 
-MIT
+[MIT](LICENSE)
+
+## Contact
+
+- [Jing Su](mailto:su1@iu.edu) for general questions.
+- [Haining Wang](mailto:hw56@iu.edu) for reproduction.
+
+
+Su Lab in Biomedical Informatics, Biostatistics & Health Data Science · Indiana University School of Medicine
