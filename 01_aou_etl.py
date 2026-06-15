@@ -974,14 +974,49 @@ conditions_list.append(
     f"MAX(CASE WHEN {' OR '.join(oi_clauses)} THEN 1 ELSE 0 END) AS has_oi"
 )
 
-pids_str = ",".join(map(str, covid_cohort.person_id.tolist()))
+# Pre-index Charlson: ascertain comorbidities from conditions recorded
+# BEFORE the COVID-19 index date only, to avoid post-treatment bias
+# (e.g., post-COVID dementia, AKI, myocarditis).  Dr. Li review, June 2026.
 charlson_sql = f"""
+WITH covid_idx AS (
+  SELECT
+    COALESCE(u.person_id, l.person_id) AS person_id,
+    LEAST(
+      IFNULL(u.u07_date, DATE '9999-12-31'),
+      IFNULL(l.lab_date,  DATE '9999-12-31')
+    ) AS covid_index_date
+  FROM (
+    SELECT person_id, MIN(condition_start_date) AS u07_date
+    FROM `{CDR}`.condition_occurrence
+    WHERE condition_concept_id = 37311061
+    GROUP BY person_id
+  ) u
+  FULL OUTER JOIN (
+    SELECT person_id, MIN(measurement_date) AS lab_date
+    FROM `{CDR}`.measurement
+    WHERE measurement_concept_id IN ({COVID_LAB_CONCEPTS})
+      AND value_as_concept_id IN ({POSITIVE_RESULT_CONCEPTS})
+    GROUP BY person_id
+  ) l ON u.person_id = l.person_id
+),
+eligible AS (
+  SELECT ci.*
+  FROM covid_idx ci
+  WHERE ci.covid_index_date < DATE '9999-12-31'
+    AND ci.person_id IN (
+      SELECT DISTINCT person_id FROM `{CDR}`.condition_occurrence)
+    AND ci.person_id IN (
+      SELECT DISTINCT person_id FROM `{CDR}`.observation
+      WHERE observation_source_concept_id = 1585845)
+)
 SELECT co.person_id, {','.join(conditions_list)}
 FROM `{CDR}`.condition_occurrence co
 JOIN `{CDR}`.concept c
   ON c.concept_id = co.condition_source_concept_id
-WHERE co.person_id IN ({pids_str})
-  AND c.vocabulary_id IN ('ICD9CM', 'ICD10CM')
+JOIN eligible e
+  ON co.person_id = e.person_id
+WHERE c.vocabulary_id IN ('ICD9CM', 'ICD10CM')
+  AND co.condition_start_date < e.covid_index_date
 GROUP BY co.person_id
 """
 charlson = query(charlson_sql, "Charlson")

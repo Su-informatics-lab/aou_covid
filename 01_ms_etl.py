@@ -244,30 +244,39 @@ print("\n" + "=" * 70)
 print("STEP 3: Charlson Comorbidities")
 print("=" * 70)
 
-print("  Building long-format diagnosis table...")
+# Pre-index Charlson: include dates in diagnosis table, filter to conditions
+# recorded BEFORE the COVID index date (Dr. Li review, June 2026).
+print("  Building long-format diagnosis table (pre-index only)...")
 dx_unions = []
 for y in YEARS:
     ip_f = f"{MS_DIR}/mscan_{y}_i.parquet"
     if os.path.exists(ip_f):
         for col in ["PDX"] + [f"DX{i}" for i in range(1, 16)]:
             dx_unions.append(f"""
-            SELECT ENROLID AS person_id, REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') AS dx_code
+            SELECT ENROLID AS person_id,
+                   ADMDATE AS dx_date,
+                   REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') AS dx_code
             FROM read_parquet('{ip_f}') WHERE {col} IS NOT NULL""")
     op_f = f"{MS_DIR}/mscan_{y}_o.parquet"
     if os.path.exists(op_f):
         for col in ["DX1", "DX2", "DX3", "DX4"]:
             dx_unions.append(f"""
-            SELECT ENROLID AS person_id, REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') AS dx_code
+            SELECT ENROLID AS person_id,
+                   SVCDATE AS dx_date,
+                   REPLACE(UPPER(CAST({col} AS VARCHAR)),'.','') AS dx_code
             FROM read_parquet('{op_f}') WHERE {col} IS NOT NULL""")
+
+con.register("covid_dates", covid_cohort[["person_id", "covid_index_date"]])
 
 con.sql(f"""
 CREATE OR REPLACE TABLE dx_long AS
-SELECT DISTINCT person_id, dx_code
-FROM ({' UNION ALL '.join(dx_unions)}) sub
-WHERE person_id IN (SELECT person_id FROM covid_pids)
+SELECT DISTINCT d.person_id, d.dx_code
+FROM ({' UNION ALL '.join(dx_unions)}) d
+INNER JOIN covid_dates c ON d.person_id = c.person_id
+WHERE d.dx_date < c.covid_index_date
 """)
 dx_count = con.sql("SELECT COUNT(*) FROM dx_long").fetchone()[0]
-print(f"  Diagnosis rows (COVID patients): {dx_count:,}")
+print(f"  Pre-index diagnosis rows (COVID patients): {dx_count:,}")
 
 # Charlson code sets: Glasheen 2019 CDMF CCI
 CHARLSON = {
