@@ -36,6 +36,7 @@ Commercial Claims.
 python 01_aou_etl.py v7             # Steps 1–6: cohort → matching vars
 Rscript 01b_psm.R aou_v7            # PSM (MatchIt) → matched cohort + balance
 Rscript 02_models.R aou_v7          # Base + 6 SDoH domain + joint + wave-stratified
+Rscript 02b_variance_sensitivity.R aou_v7
 python 01c_sensitivity_etl.py v7    # Sensitivity flags (phenotype components, etc.)
 Rscript 03_sensitivity.R aou_v7     # S1–S5 reviewer sensitivity analyses
 python 04_tables.py aou_v7          # Table 1, Table 2
