@@ -1,0 +1,43 @@
+Variable,Cases_n,Cases_pct,Controls_n,Controls_pct
+N,"4,064",,"15,856",
+  Female,"2,441",(60.1),"10,834",(68.3)
+  Male,"1,586",(39.0),"4,854",(30.6)
+  Other,37,(0.9),168,(1.1)
+Race,,,,
+  White,"1,726",(42.5),"8,644",(54.5)
+  Black,"1,217",(29.9),"2,833",(17.9)
+  Asian,62,(1.5),260,(1.6)
+  Other,"1,059",(26.1),"4,119",(26.0)
+Ethnicity,,,,
+  Not Hispanic,"3,013",(74.1),"11,727",(74.0)
+  Hispanic,919,(22.6),"3,670",(23.1)
+  Other,132,(3.2),459,(2.9)
+Age group,,,,
+  <45,920,(22.6),"4,624",(29.2)
+  45-54,639,(15.7),"2,901",(18.3)
+  55-64,"1,055",(26.0),"3,492",(22.0)
+  65+,"1,450",(35.7),"4,839",(30.5)
+  Mean age (SD),57.4,(16.2),54.6,(16.2)
+Vaccination,,,,
+  Vaccinated,361,(8.9),"2,700",(17.0)
+  Unknown,"3,703",(91.1),"13,156",(83.0)
+Charlson comorbidities,,,,
+  Myocardial Infarction,570,(14.0),"1,842",(11.6)
+  Congestive Heart Failure,"1,034",(25.4),"3,100",(19.6)
+  Peripheral Vascular Disease,882,(21.7),"3,042",(19.2)
+  Cerebrovascular Disease,786,(19.3),"2,502",(15.8)
+  Dementia,243,(6.0),763,(4.8)
+  Chronic Pulmonary Disease,"1,819",(44.8),"7,744",(48.8)
+  Rheumatic Disease,437,(10.8),"1,936",(12.2)
+  Peptic Ulcer Disease,336,(8.3),"1,299",(8.2)
+  Liver Disease Mild,854,(21.0),"4,124",(26.0)
+  Liver Disease Moderate Severe,163,(4.0),391,(2.5)
+  Diabetes without Chronic Complications,551,(13.6),"2,058",(13.0)
+  Diabetes with Chronic Complications,"1,075",(26.5),"3,542",(22.3)
+  Hemiplegia Paraplegia,212,(5.2),794,(5.0)
+  Renal Disease Mild Moderate,630,(15.5),"2,174",(13.7)
+  Renal Disease Severe,479,(11.8),"1,236",(7.8)
+  HIV,44,(1.1),135,(0.9)
+  Metastatic Solid Tumor,191,(4.7),609,(3.8)
+  Malignancy,700,(17.2),"2,528",(15.9)
+  AIDS,63,(1.6),264,(1.7)
