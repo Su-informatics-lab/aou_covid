@@ -2,54 +2,24 @@
 # ─────────────────────────────────────────────────────────────────────
 # COVID-19 Severity × SDoH — Propensity Score Matching (MatchIt)
 #
-# Replaces the sklearn/NearestNeighbors PSM previously embedded in
-# 01_aou_etl.py and 01_ms_etl.py with the canonical MatchIt package.
-#
-# Specification (unchanged from pilot):
+# Specification:
 #   - 1:4 nearest-neighbor matching with replacement
 #   - Logistic regression propensity score (distance = "glm")
 #   - 0.2 SD caliper on the logit propensity score
 #   - AoU covariates: enrollment_ord, num_diagnosis, ehr_length_days
 #   - MS  covariates: enrollment_ord, num_diagnosis, coverage_span_days
-#
-# Inputs  (from 01_aou_etl.py / 01_ms_etl.py):
-#   {RESULTS}/01_covid_cohort.csv
-#   {RESULTS}/02_demographics.csv
-#   {RESULTS}/03_charlson.csv
-#   {RESULTS}/05_vaccination.csv
-#   {RESULTS}/06_matching_variables.csv
-#   {RESULTS}/04_sdoh.csv          (AoU only)
-#   {RESULTS}/04b_sdoh_timing.csv  (AoU only)
-#
-# Outputs:
-#   {RESULTS}/07_matched_cohort.csv       Case-control matched pairs
-#   {RESULTS}/07b_control_reuse.csv       Control reuse statistics
-#   {RESULTS}/07c_smd_pre_matching.csv    Pre-matching SMDs
-#   {RESULTS}/07d_smd_post_matching.csv   Post-matching SMDs (full covariate)
-#   {RESULTS}/07e_matchit_summary.txt     MatchIt summary for audit
-#   {RESULTS}/08_regression_base.csv      Merged regression-ready data frame
-#   {RESULTS}/figures/efig_love_plot.pdf   Love plot (Nature style)
+#   - Post-matching: trims controls whose index date falls within
+#     14 days of the CDR cutoff (incomplete follow-up, Dr. Li C4)
 #
 # Usage:
 #   Rscript 01b_psm.R aou_v7
 #   Rscript 01b_psm.R aou_v8
 #   Rscript 01b_psm.R ms
 #
-# References:
-#   Ho DE, Imai K, King G, Stuart EA. MatchIt: Nonparametric
-#     preprocessing for parametric causal inference. J Stat Softw. 2011.
-#   Austin PC. An introduction to propensity score methods for reducing
-#     the effects of confounding in observational studies. Multivariate
-#     Behav Res. 2011;46(3):399-424.
-#   Austin PC. Variance estimation when using propensity-score matching
-#     with replacement. Stat Med. 2020;39(13):1838-1855.
-#
 # License: MIT
 # ─────────────────────────────────────────────────────────────────────
 
 # ── Package management ───────────────────────────────────────────────
-# ── Package management ───────────────────────────────────────────────
-# Set CRAN mirror for non-interactive environments (HPC, Rscript)
 if (is.null(getOption("repos")) || getOption("repos")["CRAN"] == "@CRAN@") {
   options(repos = c(CRAN = "https://cloud.r-project.org"))
 }
@@ -114,21 +84,18 @@ cat("\n", strrep("=", 60), "\n")
 cat("BUILDING MATCHING DATA FRAME\n")
 cat(strrep("=", 60), "\n")
 
-# Identify matching covariates by cohort type
 if (IS_AOU) {
   MATCH_COVS <- c("enrollment_ord", "num_diagnosis", "ehr_length_days")
 } else {
   MATCH_COVS <- c("enrollment_ord", "num_diagnosis", "coverage_span_days")
 }
 
-# Merge severity labels into matching variables
 match_df <- merge(
   match_raw[, c("person_id", MATCH_COVS)],
   cohort[, c("person_id", "severity")],
   by = "person_id"
 )
 
-# Drop rows with missing matching covariates
 n_before <- nrow(match_df)
 match_df <- match_df[complete.cases(match_df[, MATCH_COVS]), ]
 cat("  Complete cases:", nrow(match_df), "/", n_before, "\n")
@@ -143,27 +110,24 @@ cat("\n", strrep("=", 60), "\n")
 cat("RUNNING MatchIt\n")
 cat(strrep("=", 60), "\n")
 
-# Build formula: severity ~ cov1 + cov2 + cov3
 ps_formula <- as.formula(paste("severity ~", paste(MATCH_COVS, collapse = " + ")))
 cat("  PS formula:", deparse(ps_formula), "\n")
 cat("  Method: nearest, ratio=4, replace=TRUE, caliper=0.2 (logit PS SD)\n")
 
-# Run matching
 m <- matchit(
   ps_formula,
   data      = match_df,
   method    = "nearest",
-  distance  = "glm",       # logistic regression PS
+  distance  = "glm",
   ratio     = 4,
   replace   = TRUE,
-  caliper   = 0.2,         # 0.2 SD of logit PS (MatchIt default unit)
-  std.caliper = TRUE        # caliper in SD units (default)
+  caliper   = 0.2,
+  std.caliper = TRUE
 )
 
 cat("\n  MatchIt summary:\n")
 print(summary(m))
 
-# Save MatchIt summary to text file for audit trail
 sink(file.path(RESULTS, "07e_matchit_summary.txt"))
 cat("MatchIt Summary for", toupper(COHORT), "\n")
 cat("Date:", as.character(Sys.time()), "\n")
@@ -180,12 +144,8 @@ cat("\n", strrep("=", 60), "\n")
 cat("EXTRACTING MATCHED COHORT\n")
 cat(strrep("=", 60), "\n")
 
-# get_matches() returns one row per unit per match (controls duplicated
-# if matched to multiple cases). This replicates the with-replacement
-# format from the pilot (person_id, Treatment, stratum).
 matched_pairs <- get_matches(m, data = match_df)
 
-# Rename to match downstream pipeline expectations
 matched <- data.frame(
   person_id = matched_pairs$person_id,
   Treatment = matched_pairs$severity,
@@ -202,7 +162,6 @@ cat(sprintf("  Cases: %s | Control rows: %s | Strata: %s | Ratio: 1:%.1f\n",
             format(n_strata, big.mark = ","),
             n_ctrls / n_cases))
 
-# Cases dropped (no match within caliper)
 n_cases_total <- sum(match_df$severity == 1)
 n_dropped <- n_cases_total - n_cases
 cat(sprintf("  Dropped (no match within caliper): %d\n", n_dropped))
@@ -220,7 +179,7 @@ q1_reuse  <- quantile(ctrl_reuse, 0.25)
 q3_reuse  <- quantile(ctrl_reuse, 0.75)
 max_reuse <- max(ctrl_reuse)
 
-cat(sprintf("  Control reuse: %s unique, median %.0f (IQR %.0f–%.0f), max %d\n",
+cat(sprintf("  Control reuse: %s unique, median %.0f (IQR %.0f-%.0f), max %d\n",
             format(n_unique, big.mark = ","),
             med_reuse, q1_reuse, q3_reuse, max_reuse))
 
@@ -241,12 +200,10 @@ cat("\n", strrep("=", 60), "\n")
 cat("BALANCE DIAGNOSTICS\n")
 cat(strrep("=", 60), "\n")
 
-# Pre-matching SMDs
 bal_pre <- bal.tab(m, un = TRUE, stats = c("mean.diffs", "variance.ratios"))
 cat("\n  Pre/post matching balance:\n")
 print(bal_pre)
 
-# Extract SMD table for CSV export
 smd_tab <- bal_pre$Balance
 smd_df <- data.frame(
   variable           = rownames(smd_tab),
@@ -260,17 +217,13 @@ write_csv(smd_df, file.path(RESULTS, "07c_smd_pre_matching.csv"))
 cat("  Saved: 07c_smd_pre_matching.csv\n")
 
 # Full-covariate post-matching SMDs
-# (demographics, comorbidities, vaccination — variables NOT in the PS model)
-# These are expected to have residual imbalance, especially SDoH.
 cat("\n  Computing full-covariate post-matching SMDs...\n")
 
-# Merge all covariates into matched data
 reg <- merge(matched, demo, by = "person_id", all.x = TRUE)
 reg <- merge(reg, charlson, by = "person_id", all.x = TRUE)
 reg <- merge(reg, vacc[, c("person_id", "vaccination")], by = "person_id", all.x = TRUE)
 reg$vaccination[is.na(reg$vaccination)] <- "Unknown"
 
-# Charlson columns — fill NA with 0
 como_cols <- c("Myocardial_Infarction", "Congestive_Heart_Failure",
                "Peripheral_Vascular_Disease", "Cerebrovascular_Disease", "Dementia",
                "Chronic_Pulmonary_Disease", "Rheumatic_Disease", "Peptic_Ulcer_Disease",
@@ -284,12 +237,13 @@ for (col in como_cols) {
   if (col %in% names(reg)) reg[[col]][is.na(reg[[col]])] <- 0
 }
 
-# Add pandemic wave
-reg <- merge(reg, cohort[, c("person_id", "pandemic_wave", "severity_broad")],
+# ── Merge pandemic wave + covid_index_date (needed for C4 trim) ──────
+reg <- merge(reg, cohort[, c("person_id", "pandemic_wave", "severity_broad",
+                              "covid_index_date")],
              by = "person_id", all.x = TRUE)
 reg$pandemic_wave[is.na(reg$pandemic_wave)] <- "unknown"
 
-# Compute SMDs for all covariates in the regression model
+# Compute SMDs for all covariates
 full_smd_rows <- list()
 cases_r  <- reg[reg$Treatment == 1, ]
 ctrls_r  <- reg[reg$Treatment == 0, ]
@@ -300,15 +254,6 @@ smd_binary <- function(cases, controls, col, val = 1) {
   pooled <- sqrt((p1*(1-p1) + p2*(1-p2)) / 2)
   if (pooled == 0) return(0)
   (p1 - p2) / pooled
-}
-
-smd_continuous <- function(cases, controls, col) {
-  c_vals <- cases[[col]][!is.na(cases[[col]])]
-  k_vals <- controls[[col]][!is.na(controls[[col]])]
-  if (length(c_vals) == 0 || length(k_vals) == 0) return(NA)
-  pooled <- sqrt((sd(c_vals)^2 + sd(k_vals)^2) / 2)
-  if (pooled == 0) return(0)
-  (mean(c_vals) - mean(k_vals)) / pooled
 }
 
 # Demographics
@@ -366,7 +311,7 @@ for (col in como_cols) {
   )
 }
 
-# SDoH (AoU only — expected residual imbalance since not in PS model)
+# SDoH (AoU only)
 if (IS_AOU) {
   sdoh_path <- file.path(RESULTS, "04_sdoh.csv")
   if (file.exists(sdoh_path)) {
@@ -420,49 +365,35 @@ cat(sprintf("  Variables with |SMD| > 0.05: %d\n", sum(full_smd_df$abs_smd > 0.0
 
 
 # ══════════════════════════════════════════════════════════════════════
-# LOVE PLOT (Nature style, saved as PDF + PNG for publication)
+# LOVE PLOT
 # ══════════════════════════════════════════════════════════════════════
 cat("\n", strrep("=", 60), "\n")
 cat("LOVE PLOT\n")
 cat(strrep("=", 60), "\n")
 
-# Use cobalt's built-in Love plot for quick diagnostic
 tryCatch({
   pdf(file.path(FIG_DIR, paste0("efig_love_plot_", COHORT, ".pdf")),
       width = 7.205, height = 9.0, family = "Helvetica")
-  love.plot(m,
-            stats = "mean.diffs",
-            abs = TRUE,
-            thresholds = c(m = 0.1),
-            var.order = "unadjusted",
+  love.plot(m, stats = "mean.diffs", abs = TRUE,
+            thresholds = c(m = 0.1), var.order = "unadjusted",
             shapes = c("circle filled", "triangle filled"),
             colors = c("#D55E00", "#0072B2"),
-            sample.names = c("Unadjusted", "Adjusted"),
-            title = NULL)
+            sample.names = c("Unadjusted", "Adjusted"), title = NULL)
   dev.off()
   cat("  Saved: efig_love_plot_", COHORT, ".pdf\n")
-}, error = function(e) {
-  cat("  WARNING: Love plot failed (", e$message, ")\n")
-})
+}, error = function(e) cat("  WARNING: Love plot failed (", e$message, ")\n"))
 
-# Also save PNG
 tryCatch({
   png(file.path(FIG_DIR, paste0("efig_love_plot_", COHORT, ".png")),
       width = 7.205, height = 9.0, units = "in", res = 600, family = "Helvetica")
-  love.plot(m,
-            stats = "mean.diffs",
-            abs = TRUE,
-            thresholds = c(m = 0.1),
-            var.order = "unadjusted",
+  love.plot(m, stats = "mean.diffs", abs = TRUE,
+            thresholds = c(m = 0.1), var.order = "unadjusted",
             shapes = c("circle filled", "triangle filled"),
             colors = c("#D55E00", "#0072B2"),
-            sample.names = c("Unadjusted", "Adjusted"),
-            title = NULL)
+            sample.names = c("Unadjusted", "Adjusted"), title = NULL)
   dev.off()
   cat("  Saved: efig_love_plot_", COHORT, ".png\n")
-}, error = function(e) {
-  cat("  WARNING: Love plot PNG failed (", e$message, ")\n")
-})
+}, error = function(e) cat("  WARNING: Love plot PNG failed (", e$message, ")\n"))
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -474,16 +405,58 @@ cat(strrep("=", 60), "\n")
 
 # 'reg' was already built above during the full-covariate SMD step.
 # It has: person_id, Treatment, stratum, demographics, Charlson,
-# vaccination, pandemic_wave, severity_broad.
-# Just need to add plan_type/region for MS.
+# vaccination, pandemic_wave, severity_broad, covid_index_date.
 
 if (IS_MS) {
-  # plan_type and region_name are already in demo
-  # (they're in the merge from 02_demographics.csv)
   cat("  MarketScan: plan_type and region_name from demographics\n")
 }
 
-cat(sprintf("  Shape: %d rows × %d cols\n", nrow(reg), ncol(reg)))
+cat(sprintf("  Pre-trim shape: %d rows x %d cols\n", nrow(reg), ncol(reg)))
+
+
+# ── Trim near-cutoff controls (Dr. Li C4) ────────────────────────────
+# Controls whose COVID index date falls within 14 days of the CDR
+# cutoff may have incomplete hospitalization verification.  Drop them
+# and any strata left without controls.  The bias from misclassified
+# controls is toward the null, so trimming is conservative.
+reg$covid_index_date <- as.Date(reg$covid_index_date)
+cdr_cutoff  <- max(reg$covid_index_date, na.rm = TRUE)
+safe_cutoff <- cdr_cutoff - 14
+
+near_cutoff <- !is.na(reg$covid_index_date) &
+               reg$Treatment == 0 &
+               reg$covid_index_date > safe_cutoff
+n_trimmed <- sum(near_cutoff)
+
+if (n_trimmed > 0) {
+  cat(sprintf("\n  Trimming %d control obs with index > %s (CDR cutoff - 14d)\n",
+              n_trimmed, safe_cutoff))
+  reg <- reg[!near_cutoff, ]
+
+  # Drop strata left without controls
+  strata_ok <- reg %>% group_by(stratum) %>%
+    summarise(has_ctrl = any(Treatment == 0), .groups = "drop") %>%
+    filter(has_ctrl) %>% pull(stratum)
+  n_strata_lost <- length(unique(reg$stratum)) - length(strata_ok)
+  reg <- reg[reg$stratum %in% strata_ok, ]
+
+  n_cases_final  <- sum(reg$Treatment == 1)
+  n_ctrls_final  <- sum(reg$Treatment == 0)
+  n_strata_final <- length(unique(reg$stratum))
+  cat(sprintf("  After trim: %s obs (%s cases, %s controls, %s strata)\n",
+              format(nrow(reg), big.mark = ","),
+              format(n_cases_final, big.mark = ","),
+              format(n_ctrls_final, big.mark = ","),
+              format(n_strata_final, big.mark = ",")))
+  if (n_strata_lost > 0) cat(sprintf("  Strata dropped: %d\n", n_strata_lost))
+} else {
+  cat("  No near-cutoff controls to trim.\n")
+}
+
+# Drop covid_index_date before save (temporal, not needed downstream)
+reg$covid_index_date <- NULL
+
+cat(sprintf("  Final shape: %d rows x %d cols\n", nrow(reg), ncol(reg)))
 cat("  Columns:", paste(names(reg), collapse = ", "), "\n")
 
 # Check NAs
@@ -525,15 +498,16 @@ cat(sprintf("  Cases: %s | Controls: %s (unique: %s) | Strata: %s\n",
             format(n_unique, big.mark = ","),
             format(n_strata, big.mark = ",")))
 cat(sprintf("  Max control reuse: %d | Dropped: %d\n", max_reuse, n_dropped))
+cat(sprintf("  Near-cutoff controls trimmed: %d\n", n_trimmed))
 cat(sprintf("  Post-matching |SMD| > 0.10: %d variables\n", n_imbalanced))
 cat("\n  Outputs:\n")
-cat("    07_matched_cohort.csv      — matched pairs\n")
-cat("    07b_control_reuse.csv      — reuse statistics\n")
-cat("    07c_smd_pre_matching.csv   — pre-matching SMDs\n")
-cat("    07d_smd_post_matching.csv  — full-covariate post-matching SMDs\n")
-cat("    07e_matchit_summary.txt    — MatchIt audit trail\n")
-cat("    08_regression_base.csv     — regression-ready data frame\n")
-cat("    efig_love_plot_*.pdf/png   — Love plot\n")
+cat("    07_matched_cohort.csv      - matched pairs\n")
+cat("    07b_control_reuse.csv      - reuse statistics\n")
+cat("    07c_smd_pre_matching.csv   - pre-matching SMDs\n")
+cat("    07d_smd_post_matching.csv  - full-covariate post-matching SMDs\n")
+cat("    07e_matchit_summary.txt    - MatchIt audit trail\n")
+cat("    08_regression_base.csv     - regression-ready data frame (trimmed)\n")
+cat("    efig_love_plot_*.pdf/png   - Love plot\n")
 cat("\n--- Session Info ---\n")
 cat("R:", R.version$version.string, "\n")
 for (p in c("MatchIt", "cobalt", "dplyr", "readr"))
