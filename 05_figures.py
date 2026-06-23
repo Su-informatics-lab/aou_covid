@@ -10,6 +10,7 @@ Fixes from v1:
   - Standalone figures: no panel labels (ScholarOne requires separate files)
   - Fig 5 wave labels: no overprint on income labels
   - Fig 4 "Never attended": CI capped with arrow indicator at axis edge
+  - Figure numbering: Fig 3 (base), Fig 4 (SDoH), Fig 5 (wave income)
   - Font sizes: JAMIA-appropriate (slightly larger than Nature strict minimum)
 
 Usage: python 05_figures.py [results_dir]
@@ -18,7 +19,7 @@ Inputs:  results/aou_v7/all_model_coefficients.csv
          results/aou_v7/wave_stratified_income.csv
          results/ms/all_model_coefficients.csv  (optional)
 
-Outputs: results/figures/fig{2,3,4}_*.pdf/.png
+Outputs: results/figures/fig{3,4,5}_*.pdf/.png
          results/tables/table3_sdoh_summary.csv
          results/tables/etable_ms_comparison.csv
 """
@@ -284,10 +285,10 @@ def plot_hierarchical_forest(
 
 
 # ===================================================================
-# FIGURE 2: BASE MODEL FOREST PLOT (was Fig 3 in v1)
+# FIGURE 3: BASE MODEL FOREST PLOT
 # ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 2: Base Model Forest Plot")
+print("FIGURE 3: Base Model Forest Plot")
 print("=" * 60)
 
 base = aou[aou.model == "base"].copy()
@@ -342,14 +343,14 @@ plot_hierarchical_forest(
     group_label_x=-0.02,
 )
 fig.subplots_adjust(left=0.22, right=0.78)
-save_fig(fig, "fig2_base_forest")
+save_fig(fig, "fig3_base_forest")
 
 
 # ===================================================================
-# FIGURE 3: SDoH DOMAIN-BY-DOMAIN FOREST PLOT (was Fig 4 in v1)
+# FIGURE 4: SDoH DOMAIN-BY-DOMAIN FOREST PLOT
 # ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 3: SDoH Forest Plot")
+print("FIGURE 4: SDoH Forest Plot")
 print("=" * 60)
 
 SDOH_GROUPS = [
@@ -420,14 +421,14 @@ plot_hierarchical_forest(
     ci_cap_x=4.0,  # cap "Never attended" CI at axis edge with arrow
 )
 fig.subplots_adjust(left=0.20, right=0.78)
-save_fig(fig, "fig3_sdoh_forest")
+save_fig(fig, "fig4_sdoh_forest")
 
 
 # ===================================================================
-# FIGURE 4: WAVE-STRATIFIED INCOME FOREST PLOT (was Fig 5 in v1)
+# FIGURE 5: WAVE-STRATIFIED INCOME FOREST PLOT
 # ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 4: Wave-Stratified Income Forest Plot")
+print("FIGURE 5: Wave-Stratified Income Forest Plot")
 print("=" * 60)
 
 wave_path = os.path.join(BASE, "aou_v7", "wave_stratified_income.csv")
@@ -582,7 +583,7 @@ if os.path.exists(wave_path):
         )
 
     fig.subplots_adjust(left=0.22, right=0.78)
-    save_fig(fig, "fig4_wave_income")
+    save_fig(fig, "fig5_wave_income")
 else:
     print(f"  WARNING: {wave_path} not found, skipping Figure 4")
 
