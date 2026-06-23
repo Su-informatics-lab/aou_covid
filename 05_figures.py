@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 """
-COVID-19 Severity × SDoH — Publication Figures & Tables
-Nature Portfolio style (Arial 7pt, Wong/Okabe-Ito, 600 DPI vector).
+COVID-19 Severity x SDoH -- Publication Figures & Tables
+JAMIA (OUP) submission-ready. Arial, Wong/Okabe-Ito, vector PDF + 600 DPI PNG.
+
+Fixes from v1:
+  - Log-scale x-axis: decimal tick labels ("0.5") not scientific ("5 x 10^-1")
+  - Group labels: collision-free, rendered as row headers inside the plot area
+  - AOR annotations: proportional Arial, right-aligned, no monospace
+  - Standalone figures: no panel labels (ScholarOne requires separate files)
+  - Fig 5 wave labels: no overprint on income labels
+  - Fig 4 "Never attended": CI capped with arrow indicator at axis edge
+  - Font sizes: JAMIA-appropriate (slightly larger than Nature strict minimum)
 
 Usage: python 05_figures.py [results_dir]
 
@@ -9,9 +18,7 @@ Inputs:  results/aou_v7/all_model_coefficients.csv
          results/aou_v7/wave_stratified_income.csv
          results/ms/all_model_coefficients.csv  (optional)
 
-Outputs: results/figures/fig3_base_forest.pdf
-         results/figures/fig4_sdoh_forest.pdf
-         results/figures/fig5_wave_income.pdf
+Outputs: results/figures/fig{2,3,4}_*.pdf/.png
          results/tables/table3_sdoh_summary.csv
          results/tables/etable_ms_comparison.csv
 """
@@ -23,21 +30,20 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import pandas as pd
-from matplotlib.transforms import blended_transform_factory
 
-# ═══════════════════════════════════════════════════════════════════════
-# NATURE PORTFOLIO MANDATORY rcParams (from nature-visualizer skill)
-# ═══════════════════════════════════════════════════════════════════════
-mpl.rcParams["pdf.fonttype"] = 42
+# ===================================================================
+# JAMIA / OUP rcParams (Nature-grade quality, JAMIA-appropriate sizing)
+# ===================================================================
+mpl.rcParams["pdf.fonttype"] = 42  # TrueType embedding (editable text)
 mpl.rcParams["ps.fonttype"] = 42
 mpl.rcParams["font.family"] = "sans-serif"
 mpl.rcParams["font.sans-serif"] = ["Arial", "Helvetica", "DejaVu Sans"]
 mpl.rcParams["font.size"] = 7
-mpl.rcParams["axes.labelsize"] = 7
-mpl.rcParams["axes.titlesize"] = 7
-mpl.rcParams["xtick.labelsize"] = 6
-mpl.rcParams["ytick.labelsize"] = 6
-mpl.rcParams["legend.fontsize"] = 6
+mpl.rcParams["axes.labelsize"] = 8
+mpl.rcParams["axes.titlesize"] = 8
+mpl.rcParams["xtick.labelsize"] = 7
+mpl.rcParams["ytick.labelsize"] = 7
+mpl.rcParams["legend.fontsize"] = 7
 mpl.rcParams["legend.title_fontsize"] = 7
 mpl.rcParams["axes.linewidth"] = 0.5
 mpl.rcParams["xtick.major.width"] = 0.5
@@ -59,28 +65,28 @@ mpl.rcParams["figure.facecolor"] = "white"
 mpl.rcParams["savefig.facecolor"] = "white"
 mpl.rcParams["savefig.dpi"] = 300
 mpl.rcParams["savefig.bbox"] = "tight"
-mpl.rcParams["savefig.pad_inches"] = 0.02
-mpl.rcParams["figure.constrained_layout.use"] = True
+mpl.rcParams["savefig.pad_inches"] = 0.04
 
 # Wong/Okabe-Ito colorblind-safe palette
-C_RISK = "#D55E00"  # vermillion — significant risk
-C_PROTECT = "#0072B2"  # blue — significant protective
-C_NS = "#999999"  # grey — non-significant
+C_RISK = "#D55E00"  # vermillion: significant risk (AOR > 1)
+C_PROTECT = "#0072B2"  # blue: significant protective (AOR < 1)
+C_NS = "#999999"  # grey: non-significant
+C_BAND_EVEN = "#F5F5F5"  # alternating group bands
 
-# Nature column widths
-W_SINGLE = 3.504  # 89 mm
-W_DOUBLE = 7.205  # 183 mm
+# JAMIA column widths (close to Nature; OUP single ~86mm, double ~178mm)
+W_SINGLE = 3.386  # 86 mm
+W_DOUBLE = 7.008  # 178 mm
 W_1_5 = 4.724  # 120 mm
 MAX_H = 9.724  # 247 mm
 
-# ── Paths ─────────────────────────────────────────────────────────────
+# -- Paths ---------------------------------------------------------
 BASE = sys.argv[1] if len(sys.argv) > 1 else "results"
 FIG_DIR = os.path.join(BASE, "figures")
 TBL_DIR = os.path.join(BASE, "tables")
 os.makedirs(FIG_DIR, exist_ok=True)
 os.makedirs(TBL_DIR, exist_ok=True)
 
-# ── Load data ─────────────────────────────────────────────────────────
+# -- Load data -----------------------------------------------------
 aou_path = os.path.join(BASE, "aou_v7", "all_model_coefficients.csv")
 ms_path = os.path.join(BASE, "ms", "all_model_coefficients.csv")
 
@@ -94,6 +100,7 @@ if has_ms:
 
 
 def save_fig(fig, name):
+    """Save as PDF (vector, JAMIA submission) + PNG (600 DPI, review)."""
     for ext in ["pdf", "png"]:
         fig.savefig(
             os.path.join(FIG_DIR, f"{name}.{ext}"), dpi=600 if ext == "png" else 300
@@ -102,19 +109,39 @@ def save_fig(fig, name):
     plt.close(fig)
 
 
-def add_panel_label(ax, label, x=-0.02, y=1.02):
-    """Nature-style panel label: 8pt, bold, lowercase."""
-    ax.text(
-        x, y, label, fontsize=8, fontweight="bold", transform=ax.transAxes, va="bottom"
-    )
+def _decimal_formatter(x, pos):
+    """Format log-scale ticks as clean decimals, never scientific notation."""
+    if x == int(x):
+        return f"{int(x)}"
+    # Show up to 2 decimal places, strip trailing zeros
+    s = f"{x:.2f}".rstrip("0").rstrip(".")
+    return s
 
 
-# ═══════════════════════════════════════════════════════════════════════
-# HIERARCHICAL FOREST PLOT ENGINE
-# ═══════════════════════════════════════════════════════════════════════
-def plot_hierarchical_forest(ax, groups, coef_df, panel_label, xlim, xticks):
-    plot_rows, y_labels, group_spans = [], [], []
+# ===================================================================
+# HIERARCHICAL FOREST PLOT ENGINE (v2 -- collision-free)
+# ===================================================================
+def plot_hierarchical_forest(
+    ax,
+    groups,
+    coef_df,
+    xlim,
+    xticks,
+    annot_x=1.01,  # x position in axes coords for AOR text
+    group_label_x=-0.01,  # x for group labels (axes coords, right-aligned)
+    ci_cap_x=None,  # if set, cap CIs at this AOR value and draw arrow
+):
+    """
+    Render a grouped horizontal forest plot.
+
+    groups: list of (group_name, items) where items is a list of
+            (variable, label) or (model, variable, label) tuples.
+    coef_df: DataFrame with columns: model, variable, AOR, CI_lower, CI_upper, p_value.
+    """
+    plot_rows, y_labels, group_names_for_rows = [], [], []
+    group_spans = []
     y = 0
+
     for gi, (grp, items) in enumerate(groups):
         y_start = y
         for item in items:
@@ -136,21 +163,32 @@ def plot_hierarchical_forest(ax, groups, coef_df, panel_label, xlim, xticks):
                     "p": float(r.p_value),
                 }
             )
-            y_labels.append("  " + label)
+            y_labels.append(label)
+            group_names_for_rows.append(grp)
             y += 1
-        group_spans.append((grp, y_start, y - 1, gi))
-        y += 0.4
+        if y > y_start:
+            group_spans.append((grp, y_start, y - 1, gi))
+        y += 0.5  # gap between groups
 
-    max_y = y - 0.4
+    max_y = y - 0.5
     positions = [max_y - r["y"] for r in plot_rows]
 
-    # Gray bands (alternating groups)
+    # -- Alternating group bands ------------------------------------
     for grp, ys, ye, gi in group_spans:
         if gi % 2 == 0:
-            ax.axhspan(max_y - ye - 0.45, max_y - ys + 0.45, color="#F5F5F5", zorder=0)
+            ax.axhspan(
+                max_y - ye - 0.45,
+                max_y - ys + 0.45,
+                color=C_BAND_EVEN,
+                zorder=0,
+                linewidth=0,
+            )
+
+    # -- Group name labels (left margin, right-aligned) -------------
+    for grp, ys, ye, gi in group_spans:
         y_mid = max_y - (ys + ye) / 2
         ax.text(
-            -0.12,
+            group_label_x,
             y_mid,
             grp,
             fontsize=7,
@@ -161,17 +199,31 @@ def plot_hierarchical_forest(ax, groups, coef_df, panel_label, xlim, xticks):
             color="#333333",
         )
 
-    # Points + CIs
+    # -- Points + confidence intervals ------------------------------
     for i, r in enumerate(plot_rows):
         c = (
             C_RISK
             if (r["p"] < 0.05 and r["aor"] > 1)
             else (C_PROTECT if (r["p"] < 0.05 and r["aor"] < 1) else C_NS)
         )
+        lo_plot = r["lo"]
+        hi_plot = r["hi"]
+        arrow_lo = False
+        arrow_hi = False
+
+        # Cap CIs if they exceed axis limits
+        if ci_cap_x is not None:
+            if r["hi"] > ci_cap_x:
+                hi_plot = ci_cap_x
+                arrow_hi = True
+            if r["lo"] < xlim[0]:
+                lo_plot = xlim[0]
+                arrow_lo = True
+
         ax.errorbar(
             r["aor"],
             positions[i],
-            xerr=[[r["aor"] - r["lo"]], [r["hi"] - r["aor"]]],
+            xerr=[[r["aor"] - lo_plot], [hi_plot - r["aor"]]],
             fmt="o",
             color=c,
             ecolor=c,
@@ -184,38 +236,58 @@ def plot_hierarchical_forest(ax, groups, coef_df, panel_label, xlim, xticks):
             zorder=3,
         )
 
+        # Arrow indicators for capped CIs
+        if arrow_hi:
+            ax.annotate(
+                "",
+                xy=(hi_plot + 0.02 * (xlim[1] - xlim[0]), positions[i]),
+                xytext=(hi_plot, positions[i]),
+                arrowprops=dict(arrowstyle="->", color=c, lw=0.8),
+                zorder=3,
+            )
+
+    # -- Reference line at AOR = 1.0 --------------------------------
     ax.axvline(1.0, color="black", linewidth=0.5, linestyle="-", zorder=1)
+
+    # -- Y-axis labels (variable names) ------------------------------
     ax.set_yticks(positions)
-    ax.set_yticklabels(y_labels, fontsize=6)
-    ax.set_xlabel("Adjusted odds ratio (95% CI)", fontsize=7)
+    ax.set_yticklabels(y_labels, fontsize=6.5)
+    ax.tick_params(axis="y", length=0, pad=4)  # no tick marks, just labels
+
+    # -- X-axis: log scale with decimal tick labels ------------------
+    ax.set_xlabel("Adjusted odds ratio (95% CI)", fontsize=8)
     ax.set_xscale("log")
     ax.set_xlim(*xlim)
     ax.set_xticks(xticks)
-    ax.get_xaxis().set_major_formatter(ticker.ScalarFormatter())
-    add_panel_label(ax, panel_label)
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(_decimal_formatter))
+    ax.xaxis.set_minor_formatter(ticker.NullFormatter())
 
-    # AOR text annotations
+    # -- AOR annotation column (right side, proportional font) -------
+    from matplotlib.transforms import blended_transform_factory
+
     tt = blended_transform_factory(ax.transAxes, ax.transData)
     for i, r in enumerate(plot_rows):
-        sig = "\u2020" if r["p"] < 0.05 else ""
+        sig = "*" if r["p"] < 0.05 else ""
+        txt = f'{r["aor"]:.2f} ({r["lo"]:.2f}\u2013{r["hi"]:.2f}){sig}'
         ax.text(
-            1.02,
+            annot_x,
             positions[i],
-            f'{r["aor"]:.2f} ({r["lo"]:.2f}\u2013{r["hi"]:.2f}){sig}',
+            txt,
             va="center",
             ha="left",
-            fontsize=5.5,
-            family="monospace",
+            fontsize=6,
+            family="sans-serif",
             transform=tt,
         )
+
     return plot_rows
 
 
-# ═══════════════════════════════════════════════════════════════════════
-# FIGURE 3: BASE MODEL FOREST PLOT
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
+# FIGURE 2: BASE MODEL FOREST PLOT (was Fig 3 in v1)
+# ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 3: Base Model Forest Plot")
+print("FIGURE 2: Base Model Forest Plot")
 print("=" * 60)
 
 base = aou[aou.model == "base"].copy()
@@ -238,7 +310,7 @@ BASE_GROUPS = [
     ("Ethnicity", [("f.ethnicityHispanic", "Hispanic"), ("f.ethnicityOther", "Other")]),
     ("Wave", [("f.wavedelta", "Delta"), ("f.waveomicron", "Omicron")]),
     (
-        "Comorbidities",
+        "Comorbidity",
         [
             ("Cerebrovascular_Disease", "Cerebrovascular"),
             ("Congestive_Heart_Failure", "Heart failure"),
@@ -265,18 +337,19 @@ plot_hierarchical_forest(
     ax,
     BASE_GROUPS,
     base,
-    "a",
-    xlim=(0.4, 3.2),
-    xticks=[0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0],
+    xlim=(0.35, 3.2),
+    xticks=[0.4, 0.5, 0.6, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0],
+    group_label_x=-0.02,
 )
-save_fig(fig, "fig3_base_forest")
+fig.subplots_adjust(left=0.22, right=0.78)
+save_fig(fig, "fig2_base_forest")
 
 
-# ═══════════════════════════════════════════════════════════════════════
-# FIGURE 4: SDoH FOREST PLOT
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
+# FIGURE 3: SDoH DOMAIN-BY-DOMAIN FOREST PLOT (was Fig 4 in v1)
+# ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 4: SDoH Forest Plot")
+print("FIGURE 3: SDoH Forest Plot")
 print("=" * 60)
 
 SDOH_GROUPS = [
@@ -341,18 +414,20 @@ plot_hierarchical_forest(
     ax,
     SDOH_GROUPS,
     aou,
-    "b",
-    xlim=(0.55, 4.5),
+    xlim=(0.55, 4.0),
     xticks=[0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 4.0],
+    group_label_x=-0.02,
+    ci_cap_x=4.0,  # cap "Never attended" CI at axis edge with arrow
 )
-save_fig(fig, "fig4_sdoh_forest")
+fig.subplots_adjust(left=0.20, right=0.78)
+save_fig(fig, "fig3_sdoh_forest")
 
 
-# ═══════════════════════════════════════════════════════════════════════
-# FIGURE 5: WAVE-STRATIFIED INCOME FOREST PLOT
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
+# FIGURE 4: WAVE-STRATIFIED INCOME FOREST PLOT (was Fig 5 in v1)
+# ===================================================================
 print("\n" + "=" * 60)
-print("FIGURE 5: Wave-Stratified Income Forest Plot")
+print("FIGURE 4: Wave-Stratified Income Forest Plot")
 print("=" * 60)
 
 wave_path = os.path.join(BASE, "aou_v7", "wave_stratified_income.csv")
@@ -389,7 +464,7 @@ if os.path.exists(wave_path):
         df_w["variable"].isin(INCOMES_ORDER) & df_w["wave"].isin(WAVES_ORDER)
     ].copy()
 
-    # Build hierarchical layout
+    # Build layout
     plot_rows_w, y_labels_w, group_spans_w = [], [], []
     y = 0
     for gi, w in enumerate(WAVES_ORDER):
@@ -409,30 +484,38 @@ if os.path.exists(wave_path):
                     "p": float(r.p_value),
                 }
             )
-            y_labels_w.append("  " + INCOME_LABELS[inc])
+            y_labels_w.append(INCOME_LABELS[inc])
             y += 1
             n_in += 1
         if n_in == 0:
             continue
         label = WAVE_LABELS[w]
         if w in wave_n:
-            label += f" (N={wave_n[w]:,})"
+            label += f"\nN = {wave_n[w]:,}"
         group_spans_w.append((label, y_start, y - 1, gi))
-        y += 0.4
+        y += 0.5
 
-    max_y_w = y - 0.4
+    max_y_w = y - 0.5
     positions_w = [max_y_w - r["y"] for r in plot_rows_w]
 
-    fig, ax = plt.subplots(figsize=(W_DOUBLE, 4.0))
+    fig, ax = plt.subplots(figsize=(W_DOUBLE, 3.8))
 
+    # Group bands
     for grp, ys, ye, gi in group_spans_w:
         if gi % 2 == 0:
             ax.axhspan(
-                max_y_w - ye - 0.45, max_y_w - ys + 0.45, color="#F5F5F5", zorder=0
+                max_y_w - ye - 0.45,
+                max_y_w - ys + 0.45,
+                color=C_BAND_EVEN,
+                zorder=0,
+                linewidth=0,
             )
+
+    # Group labels (use newline for N count to avoid collision)
+    for grp, ys, ye, gi in group_spans_w:
         y_mid = max_y_w - (ys + ye) / 2
         ax.text(
-            -0.14,
+            -0.02,
             y_mid,
             grp,
             fontsize=7,
@@ -441,8 +524,10 @@ if os.path.exists(wave_path):
             va="center",
             transform=ax.get_yaxis_transform(),
             color="#333333",
+            linespacing=1.3,
         )
 
+    # Points + CIs
     for i, r in enumerate(plot_rows_w):
         c = (
             C_RISK
@@ -467,38 +552,44 @@ if os.path.exists(wave_path):
 
     ax.axvline(1.0, color="black", linewidth=0.5, linestyle="-", zorder=1)
     ax.set_yticks(positions_w)
-    ax.set_yticklabels(y_labels_w, fontsize=6)
+    ax.set_yticklabels(y_labels_w, fontsize=6.5)
+    ax.tick_params(axis="y", length=0, pad=4)
     ax.set_xlabel(
-        "Adjusted odds ratio (95% CI), reference $35,000\u201399,999", fontsize=7
+        "Adjusted odds ratio (95% CI), reference: $35,000\u201399,999", fontsize=8
     )
     ax.set_xscale("log")
     ax.set_xlim(0.55, 4.5)
     ax.set_xticks([0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 4.0])
-    ax.get_xaxis().set_major_formatter(ticker.ScalarFormatter())
-    add_panel_label(ax, "c")
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(_decimal_formatter))
+    ax.xaxis.set_minor_formatter(ticker.NullFormatter())
+
+    # AOR annotations
+    from matplotlib.transforms import blended_transform_factory
 
     tt = blended_transform_factory(ax.transAxes, ax.transData)
     for i, r in enumerate(plot_rows_w):
-        sig = "\u2020" if r["p"] < 0.05 else ""
+        sig = "*" if r["p"] < 0.05 else ""
+        txt = f'{r["aor"]:.2f} ({r["lo"]:.2f}\u2013{r["hi"]:.2f}){sig}'
         ax.text(
-            1.02,
+            1.01,
             positions_w[i],
-            f'{r["aor"]:.2f} ({r["lo"]:.2f}\u2013{r["hi"]:.2f}){sig}',
+            txt,
             va="center",
             ha="left",
-            fontsize=5.5,
-            family="monospace",
+            fontsize=6,
+            family="sans-serif",
             transform=tt,
         )
 
-    save_fig(fig, "fig5_wave_income")
+    fig.subplots_adjust(left=0.22, right=0.78)
+    save_fig(fig, "fig4_wave_income")
 else:
-    print(f"  WARNING: {wave_path} not found, skipping Figure 5")
+    print(f"  WARNING: {wave_path} not found, skipping Figure 4")
 
 
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
 # TABLE 3: SDoH AOR SUMMARY (domain-by-domain + joint)
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
 print("\n" + "=" * 60)
 print("TABLE 3: SDoH AOR Summary")
 print("=" * 60)
@@ -544,9 +635,9 @@ print(table3.to_string(index=False))
 print(f"  Saved: {TBL_DIR}/table3_sdoh_summary.csv")
 
 
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
 # eTABLE: AoU vs MS COMPARISON
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
 if has_ms:
     print("\n" + "=" * 60)
     print("eTABLE: Cross-Site Comparison")
@@ -573,18 +664,17 @@ if has_ms:
 
     shared = comp.dropna(subset=["AoU_AOR", "MS_AOR"])
     n_conc = shared.Concordant.sum()
-    print(f"  Concordant: {n_conc}/{len(shared)} ({n_conc/len(shared)*100:.0f}%)")
+    print(f"  Concordant: {n_conc}/{len(shared)} ({n_conc / len(shared) * 100:.0f}%)")
     print(f"  Saved: {TBL_DIR}/etable_ms_comparison.csv")
 
 
-# ═══════════════════════════════════════════════════════════════════════
-# CONSORT COUNTS — read PSM-dependent values from pipeline CSVs
-# ═══════════════════════════════════════════════════════════════════════
+# ===================================================================
+# CONSORT COUNTS (read PSM-dependent values from pipeline CSVs)
+# ===================================================================
 print("\n" + "=" * 60)
 print("CONSORT COUNTS")
 print("=" * 60)
 
-# ETL counts (stable, from 01_aou_etl.py / 01_ms_etl.py)
 consort_rows = [
     {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
     {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
@@ -595,10 +685,7 @@ consort_rows = [
 ]
 
 
-# PSM-dependent counts — read from 07b_control_reuse.csv
 def read_reuse(site_dir):
-    """Read PSM counts from 07b_control_reuse.csv (MatchIt) or
-    06b_control_reuse.csv (legacy sklearn)."""
     for fname in ["07b_control_reuse.csv", "06b_control_reuse.csv"]:
         path = os.path.join(site_dir, fname)
         if os.path.exists(path):
@@ -611,12 +698,11 @@ def read_reuse(site_dir):
     return None
 
 
-# AoU PSM counts
 aou_reuse = read_reuse(os.path.join(BASE, "aou_v7"))
 if aou_reuse:
     n_ctrl_rows = int(aou_reuse.get("n_control_rows", 0))
     n_unique = int(aou_reuse.get("n_unique_controls", 0))
-    n_cases = 4064  # stable from ETL
+    n_cases = 4064
     n_matched = n_cases + n_ctrl_rows
     consort_rows.extend(
         [
@@ -630,7 +716,6 @@ if aou_reuse:
 else:
     print("  WARNING: AoU 07b_control_reuse.csv not found, skipping PSM counts")
 
-# MS counts
 consort_rows.extend(
     [
         {"Site": "MS", "Metric": "covid_positive", "Value": 4423200},
@@ -642,7 +727,7 @@ ms_reuse = read_reuse(os.path.join(BASE, "ms"))
 if ms_reuse:
     ms_ctrl_rows = int(ms_reuse.get("n_control_rows", 0))
     ms_unique = int(ms_reuse.get("n_unique_controls", 0))
-    ms_cases = 139489  # from ETL; some may be dropped by caliper
+    ms_cases = 139489
     ms_dropped = int(ms_reuse.get("n_cases_dropped", 0))
     ms_cases_matched = ms_cases - ms_dropped
     ms_matched = ms_cases_matched + ms_ctrl_rows
@@ -660,6 +745,6 @@ consort = pd.DataFrame(consort_rows)
 consort.to_csv(os.path.join(TBL_DIR, "consort_counts.csv"), index=False)
 print(f"  Saved: {TBL_DIR}/consort_counts.csv")
 
-print(f"\n{'='*60}")
+print(f"\n{'=' * 60}")
 print(f"ALL OUTPUTS: {FIG_DIR}/ and {TBL_DIR}/")
 print("=" * 60)
