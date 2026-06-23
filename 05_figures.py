@@ -407,7 +407,7 @@ if has_race and has_income:
     df_w = pd.read_csv(wave_inc_path)
 
     fig, (ax_a, ax_b) = plt.subplots(
-        1, 2, figsize=(W_DOUBLE, 4.2), gridspec_kw={"width_ratios": [1, 1.2]}
+        2, 1, figsize=(W_DOUBLE, 7.5), gridspec_kw={"height_ratios": [1, 1.3]}
     )
 
     # ── Panel (a): Race attenuation slope plot ─────────────────────
@@ -573,7 +573,7 @@ if has_race and has_income:
         va="bottom",
     )
 
-    fig.subplots_adjust(left=0.10, right=0.90, wspace=0.45)
+    fig.subplots_adjust(left=0.18, right=0.82, hspace=0.35)
     save_fig(fig, "fig5_temporal_shifts")
 
 elif has_income:
