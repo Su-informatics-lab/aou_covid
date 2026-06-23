@@ -159,8 +159,8 @@ make_love_panel <- function(df, panel_title) {
       values = c("Before matching" = 17, "After matching" = 16)  # triangle, circle
     ) +
     scale_x_continuous(
-      limits = c(0, NA),
-      expand = expansion(mult = c(0, 0.08))
+      limits = c(0, 0.65),
+      expand = expansion(mult = c(0, 0))
     ) +
     annotate("text", x = 0.10, y = 0.6, label = "|SMD| = 0.10",
              hjust = -0.1, size = 2.3, color = "#888888") +
