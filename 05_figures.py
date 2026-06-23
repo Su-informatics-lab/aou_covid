@@ -2,13 +2,6 @@
 """
 COVID-19 Severity x SDoH -- Publication Figures & Tables  (v3)
 JAMIA (OUP) submission-ready.
-
-v3 fixes:
-  - Group headers are dedicated y-axis rows (bold, left-aligned, no overlap)
-  - Reference groups shown in header: "Sex (ref: Male)"
-  - Variable labels indented under headers
-  - Comorbidities: single header with footnote "ref: absent"
-
 Usage: python 05_figures.py [results_dir]
 """
 
@@ -21,20 +14,20 @@ import matplotlib.ticker as ticker
 import pandas as pd
 from matplotlib.transforms import blended_transform_factory
 
-# ── rcParams (JAMIA/OUP) ──────────────────────────────────────────────
+# ── rcParams (JAMIA/OUP — larger fonts for readability) ───────────────
 mpl.rcParams.update(
     {
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
         "font.family": "sans-serif",
         "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
-        "font.size": 7,
-        "axes.labelsize": 8,
-        "axes.titlesize": 8,
-        "xtick.labelsize": 7,
-        "ytick.labelsize": 7,
-        "legend.fontsize": 7,
-        "legend.title_fontsize": 7,
+        "font.size": 8,
+        "axes.labelsize": 9,
+        "axes.titlesize": 9,
+        "xtick.labelsize": 8,
+        "ytick.labelsize": 8,
+        "legend.fontsize": 8,
+        "legend.title_fontsize": 8,
         "axes.linewidth": 0.5,
         "xtick.major.width": 0.5,
         "ytick.major.width": 0.5,
@@ -63,7 +56,7 @@ C_RISK = "#D55E00"
 C_PROTECT = "#0072B2"
 C_NS = "#999999"
 C_BAND = "#F5F5F5"
-W_DOUBLE = 7.008  # 178 mm
+W_DOUBLE = 7.008
 
 BASE = sys.argv[1] if len(sys.argv) > 1 else "results"
 FIG_DIR = os.path.join(BASE, "figures")
@@ -94,23 +87,14 @@ def _dec_fmt(x, pos):
 
 
 # ===================================================================
-# FOREST PLOT ENGINE v3 — header rows + reference groups
+# FOREST PLOT ENGINE v3
 # ===================================================================
 def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
-    """
-    groups: list of (header_text, ref_text, items)
-      header_text: "Sex", "Age", etc.
-      ref_text:    "Male", "<45", or None for no ref annotation
-      items:       [(variable, label)] or [(model, variable, label)]
-    """
-    # ── Build row layout: headers + data rows ──────────────────────
-    rows = []  # (type, label, data_or_None, group_index)
+    rows = []
     gi = 0
     for header, ref, items in groups:
-        # Header row
         ref_str = f"  (ref: {ref})" if ref else ""
         rows.append(("header", f"{header}{ref_str}", None, gi))
-        # Data rows
         for item in items:
             if len(item) == 2:
                 var, label = item
@@ -137,15 +121,14 @@ def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
         gi += 1
 
     n = len(rows)
-    positions = list(range(n - 1, -1, -1))  # top to bottom
+    positions = list(range(n - 1, -1, -1))
 
-    # ── Alternating group bands ────────────────────────────────────
+    # Alternating bands
     gi_spans = {}
     for i, (typ, lab, dat, gidx) in enumerate(rows):
         if gidx not in gi_spans:
             gi_spans[gidx] = [i, i]
         gi_spans[gidx][1] = i
-
     for gidx, (start, end) in gi_spans.items():
         if gidx % 2 == 0:
             ax.axhspan(
@@ -156,80 +139,71 @@ def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
                 linewidth=0,
             )
 
-    # ── Render rows ────────────────────────────────────────────────
+    # Render
     y_ticks = []
     y_labels = []
     for i, (typ, lab, dat, gidx) in enumerate(rows):
         y = positions[i]
         y_ticks.append(y)
+        y_labels.append(lab)
+        if typ != "data":
+            continue
+        r = dat
+        c = (
+            C_RISK
+            if (r["p"] < 0.05 and r["aor"] > 1)
+            else (C_PROTECT if (r["p"] < 0.05 and r["aor"] < 1) else C_NS)
+        )
 
-        if typ == "header":
-            y_labels.append(lab)
-            # No data point for headers
-        else:
-            y_labels.append(lab)
-            r = dat
-            c = (
-                C_RISK
-                if (r["p"] < 0.05 and r["aor"] > 1)
-                else (C_PROTECT if (r["p"] < 0.05 and r["aor"] < 1) else C_NS)
+        lo_plot, hi_plot, arrow_hi = r["lo"], r["hi"], False
+        if ci_cap_x is not None and r["hi"] > ci_cap_x:
+            hi_plot = ci_cap_x
+            arrow_hi = True
+
+        ax.errorbar(
+            r["aor"],
+            y,
+            xerr=[[r["aor"] - lo_plot], [hi_plot - r["aor"]]],
+            fmt="o",
+            color=c,
+            ecolor=c,
+            elinewidth=0.8,
+            capsize=2,
+            capthick=0.6,
+            markersize=4.5,
+            markeredgecolor="black",
+            markeredgewidth=0.3,
+            zorder=3,
+        )
+
+        if arrow_hi:
+            arrow_len = 0.07 * (xlim[1] - xlim[0])
+            ax.annotate(
+                "",
+                xy=(hi_plot + arrow_len, y),
+                xytext=(hi_plot, y),
+                arrowprops=dict(arrowstyle="-|>", color=c, lw=1.5, mutation_scale=12),
+                clip_on=False,
+                zorder=5,
             )
 
-            lo_plot, hi_plot = r["lo"], r["hi"]
-            arrow_hi = False
-            if ci_cap_x is not None and r["hi"] > ci_cap_x:
-                hi_plot = ci_cap_x
-                arrow_hi = True
-
-            ax.errorbar(
-                r["aor"],
-                y,
-                xerr=[[r["aor"] - lo_plot], [hi_plot - r["aor"]]],
-                fmt="o",
-                color=c,
-                ecolor=c,
-                elinewidth=0.8,
-                capsize=2,
-                capthick=0.6,
-                markersize=4.5,
-                markeredgecolor="black",
-                markeredgewidth=0.3,
-                zorder=3,
-            )
-
-            if arrow_hi:
-                ax.annotate(
-                    "",
-                    xy=(hi_plot + 0.03 * (xlim[1] - xlim[0]), y),
-                    xytext=(hi_plot, y),
-                    arrowprops=dict(arrowstyle="->", color=c, lw=0.8),
-                    zorder=3,
-                )
-
-    # ── Reference line ─────────────────────────────────────────────
     ax.axvline(1.0, color="black", linewidth=0.5, zorder=1)
-
-    # ── Y-axis: bold headers, regular data labels ──────────────────
     ax.set_yticks(y_ticks)
-    ax.set_yticklabels(y_labels, fontsize=6.5)
+    ax.set_yticklabels(y_labels, fontsize=7.5)
     ax.tick_params(axis="y", length=0, pad=3)
 
-    # Bold the header labels
     for i, (typ, lab, dat, gidx) in enumerate(rows):
         if typ == "header":
-            tick_label = ax.get_yticklabels()[i]
-            tick_label.set_fontweight("bold")
-            tick_label.set_fontsize(7)
+            ax.get_yticklabels()[i].set_fontweight("bold")
+            ax.get_yticklabels()[i].set_fontsize(8)
 
-    # ── X-axis ─────────────────────────────────────────────────────
-    ax.set_xlabel("Adjusted odds ratio (95% CI)", fontsize=8)
+    ax.set_xlabel("Adjusted odds ratio (95% CI)", fontsize=9)
     ax.set_xscale("log")
     ax.set_xlim(*xlim)
     ax.set_xticks(xticks)
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(_dec_fmt))
     ax.xaxis.set_minor_formatter(ticker.NullFormatter())
 
-    # ── AOR annotation column ──────────────────────────────────────
     tt = blended_transform_factory(ax.transAxes, ax.transData)
     for i, (typ, lab, dat, gidx) in enumerate(rows):
         if typ != "data":
@@ -243,30 +217,20 @@ def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
             txt,
             va="center",
             ha="left",
-            fontsize=6,
+            fontsize=6.5,
             family="sans-serif",
             transform=tt,
         )
 
 
 # ===================================================================
-# FIGURE 3: BASE MODEL FOREST PLOT
+# FIGURE 3: BASE MODEL FOREST
 # ===================================================================
-print("\n" + "=" * 60)
-print("FIGURE 3: Base Model Forest Plot")
-print("=" * 60)
-
+print("\n" + "=" * 60 + "\nFIGURE 3: Base Model Forest Plot\n" + "=" * 60)
 base = aou[aou.model == "base"].copy()
 
 BASE_GROUPS = [
-    (
-        "Sex",
-        "Male",
-        [
-            ("f.sexFemale", "Female"),
-            ("f.sexOther", "Other"),
-        ],
-    ),
+    ("Sex", "Male", [("f.sexFemale", "Female"), ("f.sexOther", "Other")]),
     (
         "Age",
         "<45",
@@ -276,38 +240,18 @@ BASE_GROUPS = [
             ("f.age65+", "\u226565"),
         ],
     ),
-    (
-        "Vaccination",
-        "Unvaccinated",
-        [
-            ("f.vaccVaccinated", "Vaccinated"),
-        ],
-    ),
+    ("Vaccination", "Unvaccinated", [("f.vaccVaccinated", "Vaccinated")]),
     (
         "Race",
         "White",
-        [
-            ("f.raceBlack", "Black"),
-            ("f.raceAsian", "Asian"),
-            ("f.raceOther", "Other"),
-        ],
+        [("f.raceBlack", "Black"), ("f.raceAsian", "Asian"), ("f.raceOther", "Other")],
     ),
     (
         "Ethnicity",
         "Not Hispanic",
-        [
-            ("f.ethnicityHispanic", "Hispanic"),
-            ("f.ethnicityOther", "Other"),
-        ],
+        [("f.ethnicityHispanic", "Hispanic"), ("f.ethnicityOther", "Other")],
     ),
-    (
-        "Wave",
-        "Pre-Delta",
-        [
-            ("f.wavedelta", "Delta"),
-            ("f.waveomicron", "Omicron"),
-        ],
-    ),
+    ("Wave", "Pre-Delta", [("f.wavedelta", "Delta"), ("f.waveomicron", "Omicron")]),
     (
         "Comorbidity (ref: absence of condition)",
         None,
@@ -332,7 +276,6 @@ BASE_GROUPS = [
     ),
 ]
 
-# Row count: 7 headers + 30 data rows = 37 rows
 fig, ax = plt.subplots(figsize=(W_DOUBLE, 8.5))
 plot_forest_v3(
     ax,
@@ -341,26 +284,14 @@ plot_forest_v3(
     xlim=(0.35, 3.2),
     xticks=[0.4, 0.5, 0.6, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0],
 )
-# # Footnote for comorbidity reference
-# ax.text(
-#     0.0,
-#     -0.04,
-#     "\u2020 Reference for each comorbidity: absence of that condition.",
-#     fontsize=6,
-#     style="italic",
-#     transform=ax.transAxes,
-#     color="#555555",
-# )
 fig.subplots_adjust(left=0.24, right=0.78)
 save_fig(fig, "fig3_base_forest")
 
 
 # ===================================================================
-# FIGURE 4: SDoH DOMAIN-BY-DOMAIN FOREST PLOT
+# FIGURE 4: SDoH FOREST
 # ===================================================================
-print("\n" + "=" * 60)
-print("FIGURE 4: SDoH Forest Plot")
-print("=" * 60)
+print("\n" + "=" * 60 + "\nFIGURE 4: SDoH Forest Plot\n" + "=" * 60)
 
 SDOH_GROUPS = [
     (
@@ -426,7 +357,6 @@ SDOH_GROUPS = [
     ),
 ]
 
-# Row count: 7 headers + 20 data rows = 27 rows
 fig, ax = plt.subplots(figsize=(W_DOUBLE, 6.5))
 plot_forest_v3(
     ax,
@@ -441,11 +371,9 @@ save_fig(fig, "fig4_sdoh_forest")
 
 
 # ===================================================================
-# FIGURE 5: WAVE-STRATIFIED INCOME FOREST PLOT
+# FIGURE 5: WAVE-STRATIFIED INCOME
 # ===================================================================
-print("\n" + "=" * 60)
-print("FIGURE 5: Wave-Stratified Income Forest Plot")
-print("=" * 60)
+print("\n" + "=" * 60 + "\nFIGURE 5: Wave-Stratified Income\n" + "=" * 60)
 
 wave_path = os.path.join(BASE, "aou_v7", "wave_stratified_income.csv")
 matched_path = os.path.join(BASE, "aou_v7", "07_matched_cohort.csv")
@@ -455,7 +383,6 @@ cohort_path = os.path.join(BASE, "aou_v7", "01_covid_cohort.csv")
 
 if os.path.exists(wave_path):
     df_w = pd.read_csv(wave_path)
-
     wave_n = {}
     if os.path.exists(matched_path) and os.path.exists(cohort_path):
         matched_w = pd.read_csv(matched_path)
@@ -471,30 +398,25 @@ if os.path.exists(wave_path):
     WAVES_ORDER = ["pre_delta", "delta", "omicron"]
     WAVE_NAMES = {"pre_delta": "Pre-Delta", "delta": "Delta", "omicron": "Omicron"}
     INCOMES_ORDER = ["f.incomeless_10k", "f.income10k_25k", "f.income25k_35k"]
-
     df_w = df_w[
         df_w["variable"].isin(INCOMES_ORDER) & df_w["wave"].isin(WAVES_ORDER)
     ].copy()
 
-    # Build groups with N counts
     wave_groups = []
     for w in WAVES_ORDER:
         name = WAVE_NAMES[w]
         n_str = f"N = {wave_n[w]:,}" if w in wave_n else ""
         header = f"{name} ({n_str})" if n_str else name
-        items = []
-        for inc in INCOMES_ORDER:
-            sub = df_w[(df_w["variable"] == inc) & (df_w["wave"] == w)]
-            if len(sub) == 0:
-                continue
-            items.append((w, inc, INCOME_LABELS[inc]))  # wave as model key
+        items = [
+            (w, inc, INCOME_LABELS[inc])
+            for inc in INCOMES_ORDER
+            if len(df_w[(df_w["variable"] == inc) & (df_w["wave"] == w)]) > 0
+        ]
         wave_groups.append((header, "$35,000\u201399,999", items))
 
-    # Map wave column to model so the engine can look up by (model, variable)
     wave_coef = df_w.copy()
     wave_coef["model"] = wave_coef["wave"]
 
-    # Row count: 3 headers + 9 data rows = 12 rows
     fig, ax = plt.subplots(figsize=(W_DOUBLE, 4.0))
     plot_forest_v3(
         ax,
@@ -504,7 +426,7 @@ if os.path.exists(wave_path):
         xticks=[0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 4.0],
     )
     ax.set_xlabel(
-        "Adjusted odds ratio (95% CI), reference: $35,000\u201399,999", fontsize=8
+        "Adjusted odds ratio (95% CI), reference: $35,000\u201399,999", fontsize=9
     )
     fig.subplots_adjust(left=0.24, right=0.78)
     save_fig(fig, "fig5_wave_income")
@@ -513,12 +435,9 @@ else:
 
 
 # ===================================================================
-# TABLE 3: SDoH AOR SUMMARY
+# TABLE 3
 # ===================================================================
-print("\n" + "=" * 60)
-print("TABLE 3: SDoH AOR Summary")
-print("=" * 60)
-
+print("\n" + "=" * 60 + "\nTABLE 3: SDoH AOR Summary\n" + "=" * 60)
 joint = aou[aou.model == "joint_sdoh"].copy()
 table3_rows = []
 for domain, ref, items in SDOH_GROUPS:
@@ -553,19 +472,16 @@ for domain, ref, items in SDOH_GROUPS:
             row["Joint AOR"] = ""
             row["Joint 95% CI"] = ""
         table3_rows.append(row)
-
 table3 = pd.DataFrame(table3_rows)
 table3.to_csv(os.path.join(TBL_DIR, "table3_sdoh_summary.csv"), index=False)
 print(table3.to_string(index=False))
 
 
 # ===================================================================
-# eTABLE: AoU vs MS COMPARISON
+# eTABLE: AoU vs MS
 # ===================================================================
 if has_ms:
-    print("\n" + "=" * 60)
-    print("eTABLE: Cross-Site Comparison")
-    print("=" * 60)
+    print("\n" + "=" * 60 + "\neTABLE: Cross-Site Comparison\n" + "=" * 60)
     aou_base = aou[aou.model == "base"][
         ["variable", "AOR", "CI_lower", "CI_upper", "p_value"]
     ].copy()
@@ -575,26 +491,16 @@ if has_ms:
     ].copy()
     ms_base.columns = ["Variable", "MS_AOR", "MS_CI_lo", "MS_CI_hi", "MS_p"]
     comp = aou_base.merge(ms_base, on="Variable", how="outer")
-    comp["AoU_dir"] = comp.AoU_AOR.apply(
-        lambda x: "Risk" if x > 1 else "Protective" if pd.notna(x) else ""
-    )
-    comp["MS_dir"] = comp.MS_AOR.apply(
-        lambda x: "Risk" if x > 1 else "Protective" if pd.notna(x) else ""
-    )
-    comp["Concordant"] = comp.AoU_dir == comp.MS_dir
+    comp["Concordant"] = (comp.AoU_AOR > 1) == (comp.MS_AOR > 1)
     comp.to_csv(os.path.join(TBL_DIR, "etable_ms_comparison.csv"), index=False)
     shared = comp.dropna(subset=["AoU_AOR", "MS_AOR"])
-    n_conc = shared.Concordant.sum()
-    print(f"  Concordant: {n_conc}/{len(shared)} ({n_conc/len(shared)*100:.0f}%)")
+    print(f"  Concordant: {shared.Concordant.sum()}/{len(shared)}")
 
 
 # ===================================================================
 # CONSORT COUNTS
 # ===================================================================
-print("\n" + "=" * 60)
-print("CONSORT COUNTS")
-print("=" * 60)
-
+print("\n" + "=" * 60 + "\nCONSORT COUNTS\n" + "=" * 60)
 consort_rows = [
     {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
     {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
@@ -621,7 +527,6 @@ if aou_reuse:
             {"Site": "AoU", "Metric": "control_observations", "Value": n_ctrl},
         ]
     )
-
 consort_rows.append({"Site": "MS", "Metric": "covid_positive", "Value": 4423200})
 ms_reuse = read_reuse(os.path.join(BASE, "ms"))
 if ms_reuse:
@@ -638,7 +543,6 @@ if ms_reuse:
             {"Site": "MS", "Metric": "matched_strata", "Value": ms_cases},
         ]
     )
-
 pd.DataFrame(consort_rows).to_csv(
     os.path.join(TBL_DIR, "consort_counts.csv"), index=False
 )
