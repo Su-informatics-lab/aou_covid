@@ -177,12 +177,14 @@ def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
         )
 
         if arrow_hi:
-            arrow_len = 0.07 * (xlim[1] - xlim[0])
-            ax.annotate(
-                "",
-                xy=(hi_plot + arrow_len, y),
-                xytext=(hi_plot, y),
-                arrowprops=dict(arrowstyle="-|>", color=c, lw=1.5, mutation_scale=12),
+            # Draw a filled right-pointing triangle at the cap point
+            ax.plot(
+                hi_plot,
+                y,
+                marker=">",
+                markersize=8,
+                color=c,
+                markeredgecolor=c,
                 clip_on=False,
                 zorder=5,
             )
