@@ -182,7 +182,7 @@ def plot_forest_v3(ax, groups, coef_df, xlim, xticks, ci_cap_x=None):
                 hi_plot,
                 y,
                 marker=">",
-                markersize=8,
+                markersize=5,
                 color=c,
                 markeredgecolor=c,
                 clip_on=False,
@@ -373,32 +373,164 @@ save_fig(fig, "fig4_sdoh_forest")
 
 
 # ===================================================================
-# FIGURE 5: WAVE-STRATIFIED INCOME
+# FIGURE 5: TEMPORAL SHIFTS (two panels)
+#   (a) Black-race disparity narrows; SDoH-attributable share grows
+#   (b) Income gradient persists through Omicron
 # ===================================================================
-print("\n" + "=" * 60 + "\nFIGURE 5: Wave-Stratified Income\n" + "=" * 60)
+print("\n" + "=" * 60 + "\nFIGURE 5: Temporal Shifts\n" + "=" * 60)
 
-wave_path = os.path.join(BASE, "aou_v7", "wave_stratified_income.csv")
+import numpy as np
+
+race_att_path = os.path.join(BASE, "aou_v7", "wave_stratified_race_attenuation.csv")
+wave_inc_path = os.path.join(BASE, "aou_v7", "wave_stratified_income.csv")
 matched_path = os.path.join(BASE, "aou_v7", "07_matched_cohort.csv")
 if not os.path.exists(matched_path):
     matched_path = os.path.join(BASE, "aou_v7", "06_matched_cohort.csv")
 cohort_path = os.path.join(BASE, "aou_v7", "01_covid_cohort.csv")
 
-if os.path.exists(wave_path):
-    df_w = pd.read_csv(wave_path)
-    wave_n = {}
-    if os.path.exists(matched_path) and os.path.exists(cohort_path):
-        matched_w = pd.read_csv(matched_path)
-        cohort_w = pd.read_csv(cohort_path)
-        mw = matched_w.merge(cohort_w[["person_id", "pandemic_wave"]], on="person_id")
-        wave_n = mw[mw.Treatment == 1].pandemic_wave.value_counts().to_dict()
+WAVES_ORDER = ["pre_delta", "delta", "omicron"]
+WAVE_NAMES = {"pre_delta": "Pre-Delta", "delta": "Delta", "omicron": "Omicron"}
 
+# Per-wave case counts
+wave_n = {}
+if os.path.exists(matched_path) and os.path.exists(cohort_path):
+    matched_w = pd.read_csv(matched_path)
+    cohort_w = pd.read_csv(cohort_path)
+    mw = matched_w.merge(cohort_w[["person_id", "pandemic_wave"]], on="person_id")
+    wave_n = mw[mw.Treatment == 1].pandemic_wave.value_counts().to_dict()
+
+has_race = os.path.exists(race_att_path)
+has_income = os.path.exists(wave_inc_path)
+
+if has_race and has_income:
+    att = pd.read_csv(race_att_path)
+    df_w = pd.read_csv(wave_inc_path)
+
+    fig, (ax_a, ax_b) = plt.subplots(
+        1, 2, figsize=(W_DOUBLE, 4.2), gridspec_kw={"width_ratios": [1, 1.2]}
+    )
+
+    # ── Panel (a): Race attenuation slope plot ─────────────────────
+    x_pos = np.arange(len(WAVES_ORDER))
+    x_labels = []
+    base_pts, joint_pts = [], []
+
+    for i, w in enumerate(WAVES_ORDER):
+        base_row = att[(att.wave == w) & (att.model == "Base (no SDoH)")]
+        joint_row = att[(att.wave == w) & (att.model == "Joint SDoH")]
+        if len(base_row) == 0 or len(joint_row) == 0:
+            continue
+
+        b = base_row.iloc[0]
+        j = joint_row.iloc[0]
+        base_pts.append(
+            {"x": i, "aor": b.Black_AOR, "lo": b.CI_lower, "hi": b.CI_upper}
+        )
+        joint_pts.append(
+            {
+                "x": i,
+                "aor": j.Black_AOR,
+                "lo": j.CI_lower,
+                "hi": j.CI_upper,
+                "pct": j.pct_attenuation if pd.notna(j.pct_attenuation) else None,
+            }
+        )
+
+        n_str = f"\nN = {wave_n[w]:,}" if w in wave_n else ""
+        x_labels.append(f"{WAVE_NAMES[w]}{n_str}")
+
+    # Vertical gap segments (SDoH-attributable portion)
+    for bp, jp in zip(base_pts, joint_pts):
+        ax_a.plot(
+            [bp["x"], bp["x"]],
+            [jp["aor"], bp["aor"]],
+            color="#E0E0E0",
+            linewidth=6,
+            solid_capstyle="butt",
+            zorder=1,
+        )
+
+    # Base AOR series (vermillion, filled circles)
+    for bp in base_pts:
+        ax_a.errorbar(
+            bp["x"],
+            bp["aor"],
+            yerr=[[bp["aor"] - bp["lo"]], [bp["hi"] - bp["aor"]]],
+            fmt="o",
+            color=C_RISK,
+            ecolor=C_RISK,
+            markersize=7,
+            markeredgecolor="black",
+            markeredgewidth=0.4,
+            elinewidth=0.8,
+            capsize=3,
+            capthick=0.6,
+            zorder=3,
+            label="Before SDoH adjustment" if bp["x"] == 0 else None,
+        )
+
+    # Joint AOR series (blue, filled squares)
+    for jp in joint_pts:
+        ax_a.errorbar(
+            jp["x"],
+            jp["aor"],
+            yerr=[[jp["aor"] - jp["lo"]], [jp["hi"] - jp["aor"]]],
+            fmt="s",
+            color=C_PROTECT,
+            ecolor=C_PROTECT,
+            markersize=6,
+            markeredgecolor="black",
+            markeredgewidth=0.4,
+            elinewidth=0.8,
+            capsize=3,
+            capthick=0.6,
+            zorder=3,
+            label="After SDoH adjustment" if jp["x"] == 0 else None,
+        )
+
+    # Attenuation % annotations
+    for bp, jp in zip(base_pts, joint_pts):
+        if jp["pct"] is not None:
+            mid_y = (bp["aor"] + jp["aor"]) / 2
+            ax_a.annotate(
+                f'{jp["pct"]:.0f}%',
+                xy=(bp["x"] + 0.15, mid_y),
+                fontsize=7,
+                fontweight="bold",
+                color="#555555",
+                ha="left",
+                va="center",
+            )
+
+    ax_a.axhline(1.0, color="black", linewidth=0.5, linestyle="-", zorder=0)
+    ax_a.set_xticks(x_pos)
+    ax_a.set_xticklabels(x_labels, fontsize=7.5, linespacing=1.2)
+    ax_a.set_ylabel("Black-race adjusted odds ratio (95% CI)", fontsize=8)
+    ax_a.set_yscale("log")
+    ax_a.set_ylim(0.9, 4.0)
+    ax_a.set_yticks([1.0, 1.5, 2.0, 2.5, 3.0, 3.5])
+    ax_a.yaxis.set_major_formatter(ticker.FuncFormatter(_dec_fmt))
+    ax_a.yaxis.set_minor_formatter(ticker.NullFormatter())
+    ax_a.set_xlim(-0.5, len(WAVES_ORDER) - 0.5)
+    ax_a.legend(fontsize=6.5, loc="upper right", handlelength=1.5)
+
+    # Panel label
+    ax_a.text(
+        -0.08,
+        1.03,
+        "a",
+        transform=ax_a.transAxes,
+        fontsize=9,
+        fontweight="bold",
+        va="bottom",
+    )
+
+    # ── Panel (b): Income forest plot ──────────────────────────────
     INCOME_LABELS = {
         "f.incomeless_10k": "<$10,000",
         "f.income10k_25k": "$10,000\u201324,999",
         "f.income25k_35k": "$25,000\u201334,999",
     }
-    WAVES_ORDER = ["pre_delta", "delta", "omicron"]
-    WAVE_NAMES = {"pre_delta": "Pre-Delta", "delta": "Delta", "omicron": "Omicron"}
     INCOMES_ORDER = ["f.incomeless_10k", "f.income10k_25k", "f.income25k_35k"]
     df_w = df_w[
         df_w["variable"].isin(INCOMES_ORDER) & df_w["wave"].isin(WAVES_ORDER)
@@ -414,11 +546,62 @@ if os.path.exists(wave_path):
             for inc in INCOMES_ORDER
             if len(df_w[(df_w["variable"] == inc) & (df_w["wave"] == w)]) > 0
         ]
-        wave_groups.append((header, "$35,000\u201399,999", items))
+        wave_groups.append((header, "$35K\u201399K", items))
 
     wave_coef = df_w.copy()
     wave_coef["model"] = wave_coef["wave"]
 
+    plot_forest_v3(
+        ax_b,
+        wave_groups,
+        wave_coef,
+        xlim=(0.55, 4.5),
+        xticks=[0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 4.0],
+    )
+    ax_b.set_xlabel(
+        "Adjusted odds ratio (95% CI)\nreference: $35,000\u201399,999", fontsize=8
+    )
+
+    # Panel label
+    ax_b.text(
+        -0.08,
+        1.03,
+        "b",
+        transform=ax_b.transAxes,
+        fontsize=9,
+        fontweight="bold",
+        va="bottom",
+    )
+
+    fig.subplots_adjust(left=0.10, right=0.90, wspace=0.45)
+    save_fig(fig, "fig5_temporal_shifts")
+
+elif has_income:
+    # Fallback: income-only figure if race attenuation CSV is missing
+    print("  WARNING: race attenuation CSV not found, falling back to income-only")
+    df_w = pd.read_csv(wave_inc_path)
+    INCOME_LABELS = {
+        "f.incomeless_10k": "<$10,000",
+        "f.income10k_25k": "$10,000\u201324,999",
+        "f.income25k_35k": "$25,000\u201334,999",
+    }
+    INCOMES_ORDER = ["f.incomeless_10k", "f.income10k_25k", "f.income25k_35k"]
+    df_w = df_w[
+        df_w["variable"].isin(INCOMES_ORDER) & df_w["wave"].isin(WAVES_ORDER)
+    ].copy()
+    wave_groups = []
+    for w in WAVES_ORDER:
+        name = WAVE_NAMES[w]
+        n_str = f"N = {wave_n[w]:,}" if w in wave_n else ""
+        header = f"{name} ({n_str})" if n_str else name
+        items = [
+            (w, inc, INCOME_LABELS[inc])
+            for inc in INCOMES_ORDER
+            if len(df_w[(df_w["variable"] == inc) & (df_w["wave"] == w)]) > 0
+        ]
+        wave_groups.append((header, "$35,000\u201399,999", items))
+    wave_coef = df_w.copy()
+    wave_coef["model"] = wave_coef["wave"]
     fig, ax = plt.subplots(figsize=(W_DOUBLE, 4.0))
     plot_forest_v3(
         ax,
@@ -433,7 +616,7 @@ if os.path.exists(wave_path):
     fig.subplots_adjust(left=0.24, right=0.78)
     save_fig(fig, "fig5_wave_income")
 else:
-    print(f"  WARNING: {wave_path} not found, skipping Figure 5")
+    print(f"  WARNING: wave CSV files not found, skipping Figure 5")
 
 
 # ===================================================================
