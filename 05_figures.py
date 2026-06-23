@@ -309,7 +309,7 @@ BASE_GROUPS = [
         ],
     ),
     (
-        "Comorbidity\u2020",
+        "Comorbidity (ref: absence of condition)",
         None,
         [
             ("Cerebrovascular_Disease", "Cerebrovascular"),
@@ -341,16 +341,16 @@ plot_forest_v3(
     xlim=(0.35, 3.2),
     xticks=[0.4, 0.5, 0.6, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0],
 )
-# Footnote for comorbidity reference
-ax.text(
-    0.0,
-    -0.04,
-    "\u2020 Reference for each comorbidity: absence of that condition.",
-    fontsize=6,
-    style="italic",
-    transform=ax.transAxes,
-    color="#555555",
-)
+# # Footnote for comorbidity reference
+# ax.text(
+#     0.0,
+#     -0.04,
+#     "\u2020 Reference for each comorbidity: absence of that condition.",
+#     fontsize=6,
+#     style="italic",
+#     transform=ax.transAxes,
+#     color="#555555",
+# )
 fig.subplots_adjust(left=0.24, right=0.78)
 save_fig(fig, "fig3_base_forest")
 
