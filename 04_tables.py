@@ -271,8 +271,10 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
     print(f"{'='*70}")
 
     sdoh = pd.read_csv(sdoh_path)
-    matched = pd.read_csv(matched_path)
-    sdoh_matched = matched.merge(sdoh, on="person_id", how="left")
+    matched = pd.read_csv(reg_path)  # fixme: use post-trim 08_regression_base.csv
+    sdoh_matched = matched[["person_id", "Treatment"]].merge(
+        sdoh, on="person_id", how="left"
+    )
     s_cases = sdoh_matched[sdoh_matched.Treatment == 1]
     s_ctrls = sdoh_matched[sdoh_matched.Treatment == 0]
     snc, snk = len(s_cases), len(s_ctrls)
