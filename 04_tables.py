@@ -23,10 +23,26 @@ if len(sys.argv) < 2 or sys.argv[1] not in ("aou_v7", "aou_v8", "ms"):
 COHORT = sys.argv[1]
 RESULTS = f"results/{COHORT}"
 
-# ── Auto-detect old vs new pipeline ──────────────────────────────────
+# ── Resolve the analytic file ────────────────────────────────────────
+# 08_regression_base.csv is the POST-trim file (controls whose index date fell
+# within 14 days of the CDR cutoff removed). 07_regression_base.csv is PRE-trim.
+# Falling back silently produces descriptive tables whose column sums disagree
+# with Figure 1 and with the model tables, so the fallback now warns loudly and
+# must be opted into with --allow-pretrim.
+ALLOW_PRETRIM = "--allow-pretrim" in sys.argv
+
 reg_path = os.path.join(RESULTS, "08_regression_base.csv")
 if not os.path.exists(reg_path):
-    reg_path = os.path.join(RESULTS, "07_regression_base.csv")
+    pre = os.path.join(RESULTS, "07_regression_base.csv")
+    if os.path.exists(pre) and ALLOW_PRETRIM:
+        print(f"  !! WARNING: 08_regression_base.csv missing; using PRE-TRIM {pre}")
+        print(f"  !! Counts will NOT match Figure 1 or the model tables.")
+        reg_path = pre
+    elif os.path.exists(pre):
+        print(f"  ERROR: {reg_path} not found, and {pre} is PRE-trim data.")
+        print(f"         Re-run the trim step, or pass --allow-pretrim to accept")
+        print(f"         pre-trim counts deliberately.")
+        sys.exit(1)
 if not os.path.exists(reg_path):
     print(f"  ERROR: No regression base found in {RESULTS}/")
     sys.exit(1)
