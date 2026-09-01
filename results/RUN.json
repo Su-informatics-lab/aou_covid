@@ -1,0 +1,25 @@
+{
+  "run_id": "aou_covid_v18.7",
+  "frozen": true,
+  "frozen_at": "2026-09-01",
+  "branch": "review/v18.7-reconcile",
+  "base_commit": "17f3d00",
+  "data": {
+    "aou": "All of Us Controlled Tier CDR v7 C2022Q4R13, cutoff 2022-07-01",
+    "marketscan": "MarketScan Commercial Claims 2020-2023"
+  },
+  "analytic_file": "results/aou_v7/08_regression_base.csv (post-trim)",
+  "cohort": {
+    "aou_cases": 4064, "aou_control_observations": 15856,
+    "aou_unique_controls": 9691, "aou_effective_control_n": 6952,
+    "ms_cases": 139468, "ms_control_observations": 554214,
+    "ms_unique_controls": 465670, "ms_effective_control_n": 379100
+  },
+  "gate": {
+    "command": "bash analysis/gate.sh check",
+    "assertions": 117, "frozen_sources": 8, "status": "passing"
+  },
+  "unverified": [
+    "eTable 12b and 12c: wave_stratified_race_attenuation.csv, wave_stratified_race.csv and wave_stratified_insurance.csv are not in the repository; values trace only to constants in make_figures.py. Re-run 02c."
+  ]
+}

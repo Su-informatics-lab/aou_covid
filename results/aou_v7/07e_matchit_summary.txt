@@ -1,12 +1,12 @@
-MatchIt Summary for AOU_V7 
-Date: 2026-05-11 14:36:23.610832 
-R: R version 4.5.0 (2025-04-11) 
-MatchIt: 4.7.2 
+MatchIt Summary for AOU_V7
+Date: 2026-05-11 14:36:23.610832
+R: R version 4.5.0 (2025-04-11)
+MatchIt: 4.7.2
 
 
 Call:
-matchit(formula = ps_formula, data = match_df, method = "nearest", 
-    distance = "glm", replace = TRUE, caliper = 0.2, std.caliper = TRUE, 
+matchit(formula = ps_formula, data = match_df, method = "nearest",
+    distance = "glm", replace = TRUE, caliper = 0.2, std.caliper = TRUE,
     ratio = 4)
 
 Summary of Balance for All Data:
@@ -40,4 +40,3 @@ Matched (ESS)  6952.4    4064
 Matched        9928.     4064
 Unmatched     11168.        0
 Discarded         0.        0
-

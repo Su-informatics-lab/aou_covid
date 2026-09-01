@@ -287,7 +287,7 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
     print(f"{'='*70}")
 
     sdoh = pd.read_csv(sdoh_path)
-    matched = pd.read_csv(reg_path)  # fixme: use post-trim 08_regression_base.csv
+    matched = pd.read_csv(reg_path)  # post-trim; guarded at module load
     sdoh_matched = matched[["person_id", "Treatment"]].merge(
         sdoh, on="person_id", how="left"
     )
@@ -298,6 +298,19 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
     rows2 = []
 
     def sdoh_section(df_c, df_k, col, values, section_label):
+        """Emit one SDoH block. Every participant lands in exactly one row.
+
+        `values` are the modelled levels. Everything else is pooled into a single
+        Missing row: NaN (a Skip / Prefer-not-to-answer filtered out upstream) and
+        any answer concept that did not map to a modelled level and therefore
+        arrived as the literal string "Missing".
+
+        Until 2026-09-01 this counted NaN alone and so silently dropped the
+        unmapped rows -- housing tenure lost 1 case and 5 controls -- while
+        insurance, which passed "Missing" inside `values`, emitted the row twice.
+        `.isin()` is False for NaN, so `~isin(levels)` captures both cases.
+        """
+        levels = [v for v in values if v != "Missing"]  # never a modelled level
         rows2.append(
             {
                 "Variable": section_label,
@@ -307,13 +320,26 @@ if os.path.exists(sdoh_path) and COHORT.startswith("aou"):
                 "Controls_pct": "",
             }
         )
-        for val in values:
+        seen_c = seen_k = 0
+        for val in levels:
             cn = (df_c[col] == val).sum() if col in df_c.columns else 0
             kn = (df_k[col] == val).sum() if col in df_k.columns else 0
+            seen_c += int(cn)
+            seen_k += int(kn)
             rows2.append(table_row(f"  {val}", int(cn), snc, int(kn), snk))
-        cn = df_c[col].isna().sum() if col in df_c.columns else snc
-        kn = df_k[col].isna().sum() if col in df_k.columns else snk
+        cn = (~df_c[col].isin(levels)).sum() if col in df_c.columns else snc
+        kn = (~df_k[col].isin(levels)).sum() if col in df_k.columns else snk
         rows2.append(table_row("  Missing", int(cn), snc, int(kn), snk))
+
+        # the block must partition the cohort; a shortfall is the leak above
+        for label, got, want in (("cases", seen_c + int(cn), snc),
+                                 ("controls", seen_k + int(kn), snk)):
+            if got != want:
+                raise AssertionError(
+                    f"Table 2 block {section_label!r} ({col}) does not partition "
+                    f"the {label}: rows sum to {got:,}, N is {want:,}. "
+                    f"Levels counted: {levels}"
+                )
 
     sdoh_section(
         s_cases,

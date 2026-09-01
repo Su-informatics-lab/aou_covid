@@ -364,40 +364,58 @@ if (IS_AOU && has_sdoh) {
       }
 
 
-      # ── Predicted probability contrast (P0.4) ─────────────────────
+      # ── Profile odds-ratio contrast (P0.4) ────────────────────────
+      # Conditional logistic regression conditions the stratum intercepts out of
+      # the likelihood, so absolute hospitalization probabilities are NOT
+      # identified.  predict(type = "lp") returns a linear predictor centred on
+      # the covariate means and carrying no intercept; applying the inverse logit
+      # to it -- which this block did until 2026-09-01 -- yields a number on
+      # (0, 1) that looks like a risk and is not one.  The 43.8% "baseline
+      # probability" it produced was an artefact of that centring, and the 1.31
+      # "probability ratio" was compressed because the logistic curve is flattest
+      # near 0.5.
+      #
+      # The quantity the model does identify is the odds ratio for the profile
+      # contrast.  It is a linear combination of fitted coefficients, so it also
+      # carries an exact delta-method standard error.
       cat("\n", strrep("=", 60),
-          "\nPREDICTED PROBABILITY CONTRAST\n", strrep("=", 60), "\n")
+          "\nPROFILE ODDS-RATIO CONTRAST\n", strrep("=", 60), "\n")
 
-      template <- df_j
-      # Profile A: employer, $35-100K, own
-      pa <- template
-      pa$f.insurance <- factor("Employer", levels = levels(df_j$f.insurance))
-      pa$f.income    <- factor("35k_100k", levels = levels(df_j$f.income))
-      pa$f.housing   <- factor("Own", levels = levels(df_j$f.housing))
+      # Profile A (reference): employer insurance, $35-100K, owns home
+      # Profile B           : Medicaid, $10-25K, renting
+      # A sits at the reference level of all three domains, so the contrast
+      # vector is just the three profile-B indicators.
+      contrast_terms <- c("f.insuranceMedicaid", "f.income10k_25k", "f.housingRent")
+      bb <- coef(joint_fit)
+      VV <- vcov(joint_fit)
+      absent <- setdiff(contrast_terms, names(bb))
+      if (length(absent) > 0) {
+        cat("  SKIPPED - coefficient(s) absent from the joint model:",
+            paste(absent, collapse = ", "), "\n")
+      } else {
+        cvec <- rep(0, length(bb)); names(cvec) <- names(bb)
+        cvec[contrast_terms] <- 1
+        log_or <- sum(cvec * bb)
+        se_or  <- sqrt(drop(t(cvec) %*% VV %*% cvec))
+        or     <- exp(log_or)
+        lo     <- exp(log_or - qnorm(0.975) * se_or)
+        hi     <- exp(log_or + qnorm(0.975) * se_or)
+        pv     <- 2 * pnorm(-abs(log_or / se_or))
 
-      # Profile B: Medicaid, <$25K, rent
-      pb <- template
-      pb$f.insurance <- factor("Medicaid", levels = levels(df_j$f.insurance))
-      pb$f.income    <- factor("10k_25k", levels = levels(df_j$f.income))
-      pb$f.housing   <- factor("Rent", levels = levels(df_j$f.housing))
+        cat(sprintf("\n  Profile B vs A: OR %.3f (%.3f-%.3f), P = %.3g\n",
+                    or, lo, hi, pv))
+        cat("  = product of the three mutually adjusted AORs\n")
+        cat("  Reported as a within-stratum odds ratio. The matched case-control\n")
+        cat("  design does not identify an absolute hospitalization probability.\n")
 
-      lp_a <- predict(joint_fit, newdata = pa, type = "lp")
-      lp_b <- predict(joint_fit, newdata = pb, type = "lp")
-
-      prob_a <- mean(1 / (1 + exp(-lp_a)), na.rm = TRUE)
-      prob_b <- mean(1 / (1 + exp(-lp_b)), na.rm = TRUE)
-      ratio  <- prob_b / prob_a
-
-      cat(sprintf("\n  Profile A (employer, $35-100K, own):  %.3f%%\n", prob_a*100))
-      cat(sprintf("  Profile B (Medicaid, <$25K, rent):    %.3f%%\n", prob_b*100))
-      cat(sprintf("  Ratio B/A: %.2f\n", ratio))
-
-      write_csv(
-        data.frame(profile = c("A_employer_midIncome_own",
-                                "B_medicaid_lowIncome_rent"),
-                   predicted_prob = c(prob_a, prob_b),
-                   ratio = c(NA, ratio)),
-        file.path(RESULTS, "predicted_probability_contrast.csv"))
+        write_csv(
+          data.frame(
+            contrast   = "B_medicaid_10to25k_rent__vs__A_employer_35to100k_own",
+            terms      = paste(contrast_terms, collapse = " + "),
+            odds_ratio = or, ci_lower = lo, ci_upper = hi, p_value = pv,
+            scale      = "within-stratum odds ratio"),
+          file.path(RESULTS, "profile_odds_ratio_contrast.csv"))
+      }
 
     }, error = function(e) {
       cat("  Joint Model C ERROR:", e$message, "\n")

@@ -352,10 +352,29 @@ cat("  Outputs:\n")
 cat("    wave_stratified_race.csv               — Black AOR per wave\n")
 cat("    wave_stratified_insurance.csv           — Medicaid AOR per wave\n")
 cat("    wave_stratified_race_attenuation.csv    — within-wave attenuation\n")
+
 cat("    wave_joint_sdoh_{wave}_coefficients.csv — full joint model per wave\n")
 cat("\n  Usage: Rscript 02c_wave_stratified_race_insurance.R", COHORT, "\n")
 cat("\n--- Session Info ---\n")
 cat("R:", R.version$version.string, "\n")
 for (p in c("survival", "sandwich", "lmtest"))
   cat(p, ":", as.character(packageVersion(p)), "\n")
+# ── Verify every declared output actually landed ─────────────────────────
+# eTable 12b and 12c are built from these files. They were absent from the
+# repository at the v18.5 audit, so those tables could not be reproduced from
+# any committed model output and survived only as constants inside a figure
+# script. Fail loudly rather than leave that gap open again.
+expected <- c("wave_stratified_race.csv",
+              "wave_stratified_insurance.csv",
+              "wave_stratified_race_attenuation.csv",
+              "wave_stratified_income.csv")
+missing <- expected[!file.exists(file.path(RESULTS, expected))]
+if (length(missing) > 0) {
+  stop(sprintf(paste0("02c did not write: %s\n",
+                      "  eTable 12b/12c depend on these. Do not build tables ",
+                      "or figures from this run."),
+               paste(missing, collapse = ", ")))
+}
+cat("\n  All four wave-stratified outputs written and verified.\n")
+
 cat("\nDone.\n")
