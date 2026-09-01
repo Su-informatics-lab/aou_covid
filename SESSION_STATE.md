@@ -71,3 +71,55 @@ It proves the manuscript still says what the artifact says. It does **not** prov
 the artifact is right. The direction check between Table 1 crude rates and
 eTable 10 odds ratios is the one coherence test written so far; more are worth
 adding, especially for any statistic derived from other reported statistics.
+
+---
+
+# 2026-09-01 追加：Zhang 内审 — 匹配变量存在 pre-index 泄漏（BLOCKING）
+
+内审第一条成立，而且比本轮之前发现的任何问题都严重。**结论：这个分支不能投，必须重跑。**
+
+`01_aou_etl.py` STEP 6 的匹配变量在 2026-09-01 之前没有任何 index-date 限制：
+
+- `num_diagnosis` = `COUNT(DISTINCT condition_concept_id)`，含 index 之后的诊断
+- `ehr_length_days` = `MAX(condition_start_date) − MIN(...)`，跨越 index
+- `enrollment_ord` 实为首次 Basics Survey 日期，稿子却写成 "All of Us enrollment date"
+
+决定性对照：**同一文件第 1019 行，Charlson 写着 `co.condition_start_date < e.covid_index_date`。**
+团队知道要做 pre-index 限制，匹配变量这里漏了。这是 bug，不是设计选择。
+
+后果不是抽象的。`num_diagnosis` 是倾向评分里最强的变量（pre-match SMD 0.489）。
+住院病例在住院期间产生大量诊断码，所以匹配部分地匹配在结局的产物上 —— 正是
+encounter-density 设计要防的那个偏倚。对照被选成"诊断码一样多但没住院"的人，
+也就是本身病得更重的人。这很可能就是 chronic pulmonary 0.85、mild liver 0.76
+这些反向估计的真正来源；稿子目前把它们解释为匹配策略的正常后果，那个解释可能是错的。
+
+## 逐条核实（不是全部成立）
+
+| 指控 | 结论 | 处理 |
+|---|---|---|
+| AoU `num_diagnosis` 含 post-index | **成立** | 已加 `CASE WHEN condition_start_date < covid_index_date` |
+| AoU `ehr_length_days` 含 post-index | **成立** | 同上 |
+| AoU `enrollment_ord` 命名错误 | **成立** | 改名 `survey_ord`；稿子措辞待改 |
+| MS `num_diagnosis` 含 post-index | **不成立** | `dx_long` 建表时已 `WHERE dx_date < covid_index_date`，未改动 |
+| MS `coverage_span_days` 含 post-index | 技术成立 | 已截断至 index；保险覆盖结束日受住院影响小，预计影响轻微 |
+
+## 这些改动没有被执行过
+
+BigQuery 和 MarketScan 都不在这台机器上。SQL 改成了复用 `charlson_sql` 里
+已验证的 `covid_idx` CTE，Python 语法通过，但**整段没有跑过**。
+在 Workbench 上先单独验证 `match_vars` 查询返回的行数与 `covid_cohort` 一致，
+再往下走。
+
+## 重跑顺序
+
+1. `python 01_aou_etl.py <version>` 并核对 `06_matching_variables.csv` 的
+   `num_diagnosis` 分布是否明显下降（应该会）
+2. `python 01_ms_etl.py`
+3. `Rscript 01b_psm.R aou_<version>` — 匹配集会变，SMD 会变
+4. `Rscript 02_models.R` / `02b` / `02c` / `03_sensitivity.R`
+5. `python 04_tables.py` / `06_supplement.py`
+6. `python make_figures.py`
+7. `bash analysis/gate.sh check` — **会大面积失败，这是预期的**。逐条把
+   `validate_numbers.py` 里的期望值更新为新结果，不要反过来改结果去迁就断言。
+
+重跑之前，稿子里所有效应量都应视为过时。

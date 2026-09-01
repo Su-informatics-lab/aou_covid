@@ -914,6 +914,9 @@ print("STEP 5: Matching Variable Extraction  (for 01b_psm.R)")
 print("=" * 70)
 
 # Diagnosis count (already in dx_long table)
+# Checked 2026-09-01 against Zhang review item 1: this one is already correct.
+# dx_long is built with `WHERE d.dx_date < c.covid_index_date` (see the CREATE
+# TABLE above), so the count is pre-index by construction. Left unchanged.
 dx_counts = con.sql("""
 SELECT person_id, COUNT(DISTINCT dx_code) AS num_diagnosis
 FROM dx_long GROUP BY person_id
@@ -929,12 +932,16 @@ for y in YEARS:
             f"SELECT ENROLID AS person_id, DTSTART, DTEND FROM read_parquet('{f}')"
         )
 
+# coverage_span_days previously ran to MAX(DTEND), i.e. past the index date and
+# past the hospitalization. Truncated at the index date so it measures only
+# observable history before time zero.
 enroll_dates = con.sql(f"""
 SELECT e.person_id,
        MIN(e.DTSTART) AS first_enrollment,
-       DATEDIFF('day', MIN(e.DTSTART), MAX(e.DTEND)) AS coverage_span_days
+       DATEDIFF('day', MIN(e.DTSTART),
+                LEAST(MAX(e.DTEND), MIN(c.covid_index_date))) AS coverage_span_days
 FROM ({' UNION ALL '.join(enroll_date_unions)}) e
-WHERE e.person_id IN (SELECT person_id FROM covid_pids)
+JOIN covid_dates c ON e.person_id = c.person_id
 GROUP BY e.person_id
 """).df()
 enroll_dates["enrollment_ord"] = pd.to_datetime(enroll_dates["first_enrollment"]).apply(

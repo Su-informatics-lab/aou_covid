@@ -1340,37 +1340,86 @@ print("\n" + "=" * 70)
 print("STEP 6: Matching Variable Extraction  (for 01b_psm.R)")
 print("=" * 70)
 
+# NOTE 2026-09-01 (Zhang review, item 1). These three variables previously used
+# every condition record a participant had, with no index-date restriction, so a
+# hospitalized case's post-admission diagnosis codes entered the propensity score.
+# num_diagnosis is the strongest term in that model (pre-match SMD 0.489), which
+# means the design was matching partly on a consequence of the outcome -- the
+# exact bias the encounter-density strategy exists to prevent. Charlson
+# ascertainment in this same file was already restricted (see the
+# `co.condition_start_date < e.covid_index_date` clause in STEP 4), so the
+# omission here was an oversight, not a design choice.
+#
+# Every term is now strictly pre-index. `basics_survey_date` is also renamed:
+# it is the first Basics Survey observation, NOT an All of Us enrollment date,
+# and the manuscript described it incorrectly.
+#
+# RERUN REQUIRED: this changes the matched cohort. Every table, figure and
+# model downstream must be regenerated before anything is submitted.
 match_vars = query(
     f"""
+WITH covid_idx AS (
+  SELECT
+    COALESCE(u.person_id, l.person_id) AS person_id,
+    LEAST(
+      IFNULL(u.u07_date, DATE '9999-12-31'),
+      IFNULL(l.lab_date,  DATE '9999-12-31')
+    ) AS covid_index_date
+  FROM (
+    SELECT person_id, MIN(condition_start_date) AS u07_date
+    FROM `{CDR}`.condition_occurrence
+    WHERE condition_concept_id = 37311061
+    GROUP BY person_id
+  ) u
+  FULL OUTER JOIN (
+    SELECT person_id, MIN(measurement_date) AS lab_date
+    FROM `{CDR}`.measurement
+    WHERE measurement_concept_id IN ({COVID_LAB_CONCEPTS})
+      AND value_as_concept_id IN ({POSITIVE_RESULT_CONCEPTS})
+    GROUP BY person_id
+  ) l ON u.person_id = l.person_id
+),
+idx AS (
+  SELECT person_id, covid_index_date
+  FROM covid_idx
+  WHERE covid_index_date < DATE '9999-12-31'
+)
 SELECT p.person_id,
   MIN(o.observation_date) AS basics_survey_date,
-  COUNT(DISTINCT co.condition_concept_id) AS num_diagnosis,
-  DATE_DIFF(MAX(co.condition_start_date),
-            MIN(co.condition_start_date), DAY) AS ehr_length_days
+  COUNT(DISTINCT CASE WHEN co.condition_start_date < i.covid_index_date
+                      THEN co.condition_concept_id END) AS num_diagnosis,
+  DATE_DIFF(
+    MAX(CASE WHEN co.condition_start_date < i.covid_index_date
+             THEN co.condition_start_date END),
+    MIN(CASE WHEN co.condition_start_date < i.covid_index_date
+             THEN co.condition_start_date END), DAY) AS ehr_length_days
 FROM `{CDR}`.person p
+JOIN idx i
+  ON p.person_id = i.person_id
 JOIN `{CDR}`.observation o
   ON p.person_id=o.person_id
   AND o.observation_source_concept_id=1585845
 JOIN `{CDR}`.condition_occurrence co
   ON p.person_id=co.person_id
 GROUP BY p.person_id""",
-    "Matching variables",
+    "Matching variables (strictly pre-index)",
 )
 
 match_df = match_vars[match_vars.person_id.isin(covid_cohort.person_id)].copy()
 
 # Convert survey date to ordinal (days since epoch) for MatchIt
-match_df["enrollment_ord"] = pd.to_datetime(match_df["basics_survey_date"]).apply(
+# Named survey_ord, not enrollment_ord: this is the first Basics Survey date.
+match_df["survey_ord"] = pd.to_datetime(match_df["basics_survey_date"]).apply(
     lambda x: x.toordinal() if pd.notna(x) else np.nan
 )
 
 n_complete = match_df.dropna(
-    subset=["enrollment_ord", "num_diagnosis", "ehr_length_days"]
+    subset=["survey_ord", "num_diagnosis", "ehr_length_days"]
 ).shape[0]
 print(f"  Complete matching variables: {n_complete:,} / {len(match_df):,}")
 print(
     f"  Cases with matching vars: "
-    f"{match_df[match_df.person_id.isin(covid_cohort[covid_cohort.severity==1].person_id)].dropna(subset=['enrollment_ord','num_diagnosis','ehr_length_days']).shape[0]:,}"
+    f"{match_df[match_df.person_id.isin(covid_cohort[covid_cohort.severity==1].person_id)].dropna(subset=['survey_ord','num_diagnosis','ehr_length_days']).shape[0]:,}"
 )
 
 save(
