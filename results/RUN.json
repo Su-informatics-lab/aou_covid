@@ -20,6 +20,6 @@
     "assertions": 117, "frozen_sources": 8, "status": "passing"
   },
   "unverified": [
-    "eTable 12b and 12c: wave_stratified_race_attenuation.csv, wave_stratified_race.csv and wave_stratified_insurance.csv are not in the repository; values trace only to constants in make_figures.py. Re-run 02c."
+    "eTable 12b and 12c: the three wave_stratified_*.csv files were never committed and 02c does not gsutil-sync them, so they exist nowhere. 06_supplement.py has no code that builds 12b or 12c at all: the tables are hand-made and their numbers survive only as constants in make_figures.py. Forensics (reviews/2026-09-01_eTable12_forensics.md) show the values are genuine model output but unverifiable. Re-run 02c on the Workbench."
   ]
 }

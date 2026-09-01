@@ -1,103 +1,103 @@
 value,checked_as,source,status,sentence
-"4,064","All of Us matched cases, Table 1 N row",results/ms/table1_demographics.csv,asserted,Cases (4064 hospitalized within 14 days of COVID-19 diagnosis or positive test) were matched 1:4 to controls on encounter-density proxies.
-"15,856","All of Us matched controls, Table 1 N row",results/ms/table1_demographics.csv,asserted,RESULTS Participant characteristics Our cohort comprised 4064 hospitalized cases and 15856 matched controls (Figure 1).
-"139,468","MarketScan matched cases, Table 1 N row",results/ms/table1_demographics.csv,asserted,"Cross-cohort clinical-model comparison In the MarketScan cohort (N = 693682 matched observations; 139468 cases; Table 1), female sex, recorded vaccination, and "
+"4,064","All of Us matched cases, Table 1 N row",results/ms/table1_demographics.csv,asserted,The 4064 cases hospitalized within 14 days of diagnosis were matched to controls on encounter-density proxies.
+"15,856","All of Us matched controls, Table 1 N row",results/ms/table1_demographics.csv,asserted,"Matching achieved 3.90 controls per case, giving 19920 observations in 4064 strata; the 15856 control observations came from 9691 unique individuals (maximum re"
+"139,468","MarketScan matched cases, Table 1 N row",results/ms/table1_demographics.csv,asserted,"Cross-cohort clinical-model comparison In MarketScan (693682 matched observations; 139468 cases; Table 1), female sex, recorded vaccination, and the age gradien"
 "554,214","MarketScan matched controls, Table 1 N row",results/ms/table1_demographics.csv,asserted,"(b) MarketScan: 4423200 COVID-positive narrowing to 139472 hospitalized, matched 1:4 (693682 observations in 139468 strata; 554214 control observations from 465"
-1.59,"Medicaid, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.43,"Medicaid, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Medicaid-insured participants were at higher odds than those with employer-provided insurance (AOR 1.59, 1.43-1.77), and those with no insurance or other covera"
-1.77,"Medicaid, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Medicaid-insured participants were at higher odds than those with employer-provided insurance (AOR 1.59, 1.43-1.77), and those with no insurance or other covera"
-1.33,"Medicaid, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.16,"Medicaid, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-1.51,"Medicaid, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), and non-employment (retired/other: 1.36, 1.22-1.51) were associated with higher odds of hospit"
-1.46,"income below $10,000, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.29,"income below $10,000, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.65,"income below $10,000, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-1.18,"income below $10,000, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.02,"income below $10,000, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-1.36,"income below $10,000, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), and non-employment (retired/other: 1.36, 1.22-1.51) were associated with higher odds of hospit"
-1.37,"income $10,000–24,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.21,"income $10,000–24,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-1.55,"income $10,000–24,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-1.18,"income $10,000–24,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.04,"income $10,000–24,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-1.35,"income $10,000–24,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED was associated with increased odds (AOR 1.35, 1.18-1.53); the ""never attended school"" estimate (AOR 3.35, 1.66-6.78) is imprecise given the "
-1.41,"unemployment, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.28,"unemployment, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,homeownership (1.28; 1.13) persisted in both domain-specific and joint models.
-1.56,"unemployment, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), and non-employment (retired/other: 1.36, 1.22-1.51) were associated with higher odds of hospit"
-1.23,"unemployment, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.09,"unemployment, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-1.38,"unemployment, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-1.28,"renting, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,homeownership (1.28; 1.13) persisted in both domain-specific and joint models.
-1.17,"renting, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Black race was associated with substantially elevated odds (AOR 2.30, 2.10-2.52), as was Other race (1.41, 1.17-1.70)."
-1.39,"renting, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Renters had elevated odds compared with homeowners (1.28, 1.17-1.39)."
-1.13,"renting, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,homeownership (1.28; 1.13) persisted in both domain-specific and joint models.
-1.03,"renting, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.25,"renting, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-1.20,"income $100,000–149,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.03,"income $100,000–149,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.41,"income $100,000–149,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.24,"income $100,000–149,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-1.06,"income $100,000–149,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
-1.46,"income $100,000–149,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-1.19,"income $150,000–199,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-0.96,"income $150,000–199,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-1.48,"income $150,000–199,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.26,"income $150,000–199,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-1.01,"income $150,000–199,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,Housing instability (1.01) and disability (0.94) were not significant.
-1.57,"income $150,000–199,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
-2.30,"Black-race AOR, base model (estimate)",results/tables/table3_sdoh_summary.csv,asserted,Six-domain adjustment attenuated the Black-race AOR from 2.30 to 2.00 (1.81-2.20).
-2.10,"Black-race AOR, base model (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Black race was associated with substantially elevated odds (AOR 2.30, 2.10-2.52), as was Other race (1.41, 1.17-1.70)."
-2.52,"Black-race AOR, base model (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Black race was associated with substantially elevated odds (AOR 2.30, 2.10-2.52), as was Other race (1.41, 1.17-1.70)."
-2.00,"Black-race AOR, joint SDoH model (estimate)",results/tables/table3_sdoh_summary.csv,asserted,Six-domain adjustment attenuated the Black-race AOR from 2.30 to 2.00 (1.81-2.20).
-1.81,"Black-race AOR, joint SDoH model (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,Six-domain adjustment attenuated the Black-race AOR from 2.30 to 2.00 (1.81-2.20).
-2.20,"Black-race AOR, joint SDoH model (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,Six-domain adjustment attenuated the Black-race AOR from 2.30 to 2.00 (1.81-2.20).
+1.59,"Medicaid, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.43,"Medicaid, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Medicaid coverage carried the largest insurance estimate (AOR 1.59, 1.43-1.77) and other or no coverage was also elevated."
+1.77,"Medicaid, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Medicaid coverage carried the largest insurance estimate (AOR 1.59, 1.43-1.77) and other or no coverage was also elevated."
+1.33,"Medicaid, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.16,"Medicaid, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.51,"Medicaid, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.46,"income below $10,000, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.29,"income below $10,000, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
+1.65,"income below $10,000, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+1.18,"income below $10,000, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.02,"income below $10,000, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.36,"income below $10,000, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.37,"income $10,000–24,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"In All of Us, Black race is highest (2.30), followed by age 65 plus (1.61), moderate/severe liver disease (1.37), severe renal disease (1.29), metastatic tumor "
+1.21,"income $10,000–24,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.55,"income $10,000–24,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.18,"income $10,000–24,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.04,"income $10,000–24,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+1.35,"income $10,000–24,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.41,"unemployment, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.28,"unemployment, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.56,"unemployment, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.23,"unemployment, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.09,"unemployment, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.38,"unemployment, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+1.28,"renting, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.17,"renting, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.39,"renting, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.13,"renting, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.03,"renting, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
+1.25,"renting, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.20,"income $100,000–149,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
+1.03,"income $100,000–149,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
+1.41,"income $100,000–149,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.24,"income $100,000–149,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+1.06,"income $100,000–149,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The two upper-middle income strata instead strengthened and became significant (100000-149999, 1.24, 1.06-1.46; 150000-199999, 1.26, 1.01-1.57), so the income p"
+1.46,"income $100,000–149,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+1.19,"income $150,000–199,999, domain-specific (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"In All of Us, Black race is highest (2.30), followed by age 65 plus (1.61), moderate/severe liver disease (1.37), severe renal disease (1.29), metastatic tumor "
+0.96,"income $150,000–199,999, domain-specific (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+1.48,"income $150,000–199,999, domain-specific (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.26,"income $150,000–199,999, joint (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+1.01,"income $150,000–199,999, joint (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The two upper-middle income strata instead strengthened and became significant (100000-149999, 1.24, 1.06-1.46; 150000-199999, 1.26, 1.01-1.57), so the income p"
+1.57,"income $150,000–199,999, joint (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"The two upper-middle income strata instead strengthened and became significant (100000-149999, 1.24, 1.06-1.46; 150000-199999, 1.26, 1.01-1.57), so the income p"
+2.30,"Black-race AOR, base model (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+2.10,"Black-race AOR, base model (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+2.52,"Black-race AOR, base model (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+2.00,"Black-race AOR, joint SDoH model (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+1.81,"Black-race AOR, joint SDoH model (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+2.20,"Black-race AOR, joint SDoH model (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
 16.9,"joint SDoH attenuation of the Black-race coefficient, %",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
-0.74,"female sex, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce health disparities observed during COVID-19 unless preparedness planni"
-0.68,"female sex, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Female sex was associated with lower odds (AOR 0.74, 95% CI 0.68-0.80), as was recorded vaccination before the index date (AOR 0.45, 0.40-0.51)."
-0.80,"female sex, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Female sex was associated with lower odds (AOR 0.74, 95% CI 0.68-0.80), as was recorded vaccination before the index date (AOR 0.45, 0.40-0.51)."
+0.74,"female sex, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+0.68,"female sex, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+0.80,"female sex, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
 0.50,"female sex, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 0.49,"female sex, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 0.50,"female sex, MarketScan (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
-1.04,"Omicron wave, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-0.96,"Omicron wave, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-1.13,"Omicron wave, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,homeownership (1.28; 1.13) persisted in both domain-specific and joint models.
-0.47,"Omicron wave, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (AoU 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, diabetes"
-0.47,"Omicron wave, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (AoU 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, diabetes"
-0.48,"Omicron wave, MarketScan (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (AoU 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, diabetes"
-1.20,"cerebrovascular disease, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.08,"cerebrovascular disease, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.33,"cerebrovascular disease, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-0.86,"cerebrovascular disease, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Housing tenure recorded as “other” moved from null in the domain-specific model (0.99, 0.86-1.13) to a borderline inverse estimate under mutual adjustment (0.86"
-0.83,"cerebrovascular disease, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
+1.04,"Omicron wave, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+0.96,"Omicron wave, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+1.13,"Omicron wave, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+0.47,"Omicron wave, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (All of Us 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, di"
+0.47,"Omicron wave, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (All of Us 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, di"
+0.48,"Omicron wave, MarketScan (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Five of 25 comparable estimates were directionally discordant: Omicron wave (All of Us 1.04, 0.96-1.13; MarketScan 0.47, 0.47-0.48), cerebrovascular disease, di"
+1.20,"cerebrovascular disease, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
+1.08,"cerebrovascular disease, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
+1.33,"cerebrovascular disease, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+0.86,"cerebrovascular disease, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Disability was inverse (0.86, 0.76-0.98) and housing tenure recorded as ""other"" moved from null to a borderline inverse estimate (0.86, 0.74-1.00); both should "
+0.83,"cerebrovascular disease, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
 0.89,"cerebrovascular disease, MarketScan (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
-0.76,"AIDS, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
+0.76,"AIDS, All of Us (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
 0.57,"AIDS, All of Us (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
-1.02,"AIDS, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
+1.02,"AIDS, All of Us (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1.27,"AIDS, MarketScan (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"It produced a non-significant inverse point estimate in AoU (AOR 0.76, P = 0.068) and a significant risk association in MarketScan (AOR 1.27)."
-1.03,"AIDS, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
+1.03,"AIDS, MarketScan (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The income pattern was not monotonic: the three lowest strata were elevated (<10000, 1.46, 1.29-1.65) but so was 100000-149999 (1.20, 1.03-1.41), which may refl"
 1.58,"AIDS, MarketScan (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
-1.49,"pre-Delta income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"In the pre-Delta period (N = 2087 cases), income below 10000 was associated with AOR 1.49 (1.21-1.82)."
-1.21,"pre-Delta income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-1.82,"pre-Delta income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"In the pre-Delta period (N = 2087 cases), income below 10000 was associated with AOR 1.49 (1.21-1.82)."
-2.11,"Delta income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"The Delta period (N = 644 cases) showed consistent direction (AOR 2.11, 1.10-4.03) but wide confidence intervals from the smaller stratum."
-1.10,"Delta income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"The Delta period (N = 644 cases) showed consistent direction (AOR 2.11, 1.10-4.03) but wide confidence intervals from the smaller stratum."
-4.03,"Delta income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"The Delta period (N = 644 cases) showed consistent direction (AOR 2.11, 1.10-4.03) but wide confidence intervals from the smaller stratum."
-1.64,"Omicron income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,The income association persisted through Omicron (AOR 1.64).
-1.23,"Omicron income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-2.18,"Omicron income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"During Omicron (N = 1333 cases), when vaccines were available, income below 10000 carried AOR 1.64 (1.23-2.18, P < 0.001)."
-1.41,"pre-Delta income $100,000–149,999 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
+1.49,"pre-Delta income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.21,"pre-Delta income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.82,"pre-Delta income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+2.11,"Delta income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.10,"Delta income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+4.03,"Delta income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.64,"Omicron income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,The income association persisted through Omicron (1.64).
+1.23,"Omicron income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+2.18,"Omicron income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
+1.41,"pre-Delta income $100,000–149,999 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
 1.07,"pre-Delta income $100,000–149,999 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1.86,"pre-Delta income $100,000–149,999 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
-0.76,"AoU AIDS, two-step phenotype (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
+0.76,"AoU AIDS, two-step phenotype (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
 0.57,"AoU AIDS, two-step phenotype (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
-1.02,"AoU AIDS, two-step phenotype (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
+1.02,"AoU AIDS, two-step phenotype (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 0.74 (0.56,"banned: eTable 14 printed a significant AIDS estimate for a result the pipeline returns as 0.76 (0.57-1.02), P = 0.068",-,asserted,
-1.13,"S3 income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,homeownership (1.28; 1.13) persisted in both domain-specific and joint models.
+1.13,"S3 income below $10,000 (estimate)",results/tables/table3_sdoh_summary.csv,asserted,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
 0.97,"S3 income below $10,000 (lower bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
-1.32,"S3 income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.09,S3 renting (estimate),results/tables/table3_sdoh_summary.csv,asserted,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-0.98,S3 renting (lower bound),results/tables/table3_sdoh_summary.csv,asserted,"Education below GED lost significance (AOR 1.13, 0.98-1.30), suggesting its domain-specific association was shared with income and employment rather than reflec"
-1.21,S3 renting (upper bound),results/tables/table3_sdoh_summary.csv,asserted,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
+1.32,"S3 income below $10,000 (upper bound)",results/tables/table3_sdoh_summary.csv,asserted,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
+1.09,S3 renting (estimate),results/tables/table3_sdoh_summary.csv,asserted,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+0.98,S3 renting (lower bound),results/tables/table3_sdoh_summary.csv,asserted,"Education below GED lost significance (1.13, 0.98-1.30), as did other or no insurance and income 25000-34999, indicating signal shared with income and employmen"
+1.21,S3 renting (upper bound),results/tables/table3_sdoh_summary.csv,asserted,"Income below 10000 carried AOR 1.49 (1.21-1.82) pre-Delta, 2.11 (1.10-4.03) during Delta, and 1.64 (1.23-2.18) during Omicron, when vaccines were available."
 "38,472","banned: pre-trim MarketScan chronic pulmonary, cases",-,asserted,
 "140,660","banned: pre-trim MarketScan chronic pulmonary, controls",-,asserted,
 "377,888",banned: pre-trim MarketScan female controls,-,asserted,
@@ -127,174 +127,150 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 95192,*not asserted*,-,unchecked,"Survey-derived social determinants of COVID-19 hospitalization: lessons for respiratory-pandemic preparedness from the All of Us Research Program Haining Wang, "
 6,*not asserted*,-,unchecked,"Survey-derived social determinants of COVID-19 hospitalization: lessons for respiratory-pandemic preparedness from the All of Us Research Program Haining Wang, "
 12226,*not asserted*,-,unchecked,"Survey-derived social determinants of COVID-19 hospitalization: lessons for respiratory-pandemic preparedness from the All of Us Research Program Haining Wang, "
-25160,*not asserted*,-,unchecked,Materials and Methods: We conducted a propensity score-matched case-control study in NIH All of Us (n = 25160 COVID-positive).
-14,*not asserted*,-,unchecked,Cases (4064 hospitalized within 14 days of COVID-19 diagnosis or positive test) were matched 1:4 to controls on encounter-density proxies.
-95,*not asserted*,-,unchecked,"Conditional logistic models estimated adjusted odds ratios (AORs) with 95% CIs for 19 pre-existing Charlson comorbidities and six survey-derived SDoH domains, s"
-10000,*not asserted*,-,unchecked,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting vs."
-100000,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-149999,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-150000,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-199999,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated in the joint model (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
-3.00,*not asserted*,-,unchecked,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-2.98,*not asserted*,-,unchecked,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-11.5,*not asserted*,-,unchecked,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-29.1,*not asserted*,-,unchecked,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-30.1,*not asserted*,-,unchecked,"The Black-race AOR was 3.00 (pre-Delta), 2.98 (Delta), and 1.65 (Omicron), with coefficient attenuation by SDoH of 11.5%, 29.1%, and 30.1%."
-20,*not asserted*,-,unchecked,Clinical and demographic associations were directionally similar in MarketScan for 20 of 25 comparable estimates.
-25,*not asserted*,-,unchecked,Clinical and demographic associations were directionally similar in MarketScan for 20 of 25 comparable estimates.
-0,*not asserted*,-,unchecked,Survey-linked OMOP-standardized EHR data enabled domain-specific measurement unavailable from structured fields (0-2% capture) or area-level indices.
-1.9,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce health disparities observed during COVID-19 unless preparedness planni"
-1.87,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce health disparities observed during COVID-19 unless preparedness planni"
-1.69,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce health disparities observed during COVID-19 unless preparedness planni"
-2.04,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce health disparities observed during COVID-19 unless preparedness planni"
-7,*not asserted*,-,unchecked,"County-level analyses have linked composite deprivation indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case r"
-8,*not asserted*,-,unchecked,"County-level analyses have linked composite deprivation indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case r"
-9,*not asserted*,-,unchecked,"County-level analyses have linked composite deprivation indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case r"
-1.3,*not asserted*,-,unchecked,"County-level analyses have linked composite deprivation indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case r"
-10,*not asserted*,-,unchecked,"County-level analyses have linked composite deprivation indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case r"
-11,*not asserted*,-,unchecked,"found an income gradient for COVID-19 hospitalization and no association with education, entering income, education, and an area-level deprivation index simulta"
-12,*not asserted*,-,unchecked,"The National COVID Cohort Collaborative (N3C) has supported detailed characterization of clinical risk for COVID-19 severity, including comorbidity burden, mali"
-13,*not asserted*,-,unchecked,"The National COVID Cohort Collaborative (N3C) has supported detailed characterization of clinical risk for COVID-19 severity, including comorbidity burden, mali"
-2030,*not asserted*,-,unchecked,"evaluated individual-level SDoH across three Healthy People 2030 domains and found all three associated with hospitalization, but drew exposures from sparsely c"
-16,*not asserted*,-,unchecked,"evaluated individual-level SDoH across three Healthy People 2030 domains and found all three associated with hospitalization, but drew exposures from sparsely c"
-17,*not asserted*,-,unchecked,"evaluated individual-level SDoH across three Healthy People 2030 domains and found all three associated with hospitalization, but drew exposures from sparsely c"
-18,*not asserted*,-,unchecked,"evaluated individual-level SDoH across three Healthy People 2030 domains and found all three associated with hospitalization, but drew exposures from sparsely c"
+25160,*not asserted*,-,unchecked,Materials and Methods: Propensity score-matched case-control study in NIH All of Us (n = 25160 COVID-positive).
+14,*not asserted*,-,unchecked,The 4064 cases hospitalized within 14 days of diagnosis were matched to controls on encounter-density proxies.
+10000,*not asserted*,-,unchecked,"Results: Medicaid (AOR 1.59; 1.33 jointly), income <10000 (1.46; 1.18), unemployment (1.41; 1.23), and renting (1.28; 1.13) persisted in both models."
+100000,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+149999,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+150000,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+199999,*not asserted*,-,unchecked,"Two upper-middle income strata were also elevated jointly (100000-149999, 1.24; 150000-199999, 1.26), so the income pattern was not monotonic."
+3.00,*not asserted*,-,unchecked,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+2.98,*not asserted*,-,unchecked,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+11.5,*not asserted*,-,unchecked,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+29.1,*not asserted*,-,unchecked,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+30.1,*not asserted*,-,unchecked,"Six-domain adjustment moved the Black-race AOR from 2.30 to 2.00 (1.81-2.20); across waves it was 3.00, 2.98, and 1.65, with SDoH attenuation of 11.5%, 29.1%, a"
+25,*not asserted*,-,unchecked,Twenty of 25 comparable estimates were directionally similar in MarketScan.
+0,*not asserted*,-,unchecked,Survey linkage enabled measurement unavailable from structured EHR fields (0-2% capture) or area-level indices.
+1.9,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+1.87,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+95,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+1.69,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+2.04,*not asserted*,-,unchecked,"INTRODUCTION Respiratory viral pandemics will continue to emerge, and each will reproduce the health disparities observed during COVID-19 unless preparedness pl"
+7,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+8,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+9,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+1.3,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+10,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+16,*not asserted*,-,unchecked,"County-level analyses have linked composite indices to higher incidence and mortality,[7] and the Social Deprivation Index predicted COVID-19 case rates but did"
+11,*not asserted*,-,unchecked,"found an income gradient and no association with education, entering income, education, and an area-level index simultaneously in a single multivariable model.["
+12,*not asserted*,-,unchecked,"found an income gradient and no association with education, entering income, education, and an area-level index simultaneously in a single multivariable model.["
+13,*not asserted*,-,unchecked,"found an income gradient and no association with education, entering income, education, and an area-level index simultaneously in a single multivariable model.["
+2030,*not asserted*,-,unchecked,"evaluated individual-level social determinants of health (SDoH) across three Healthy People 2030 domains and found all three associated with hospitalization, bu"
+17,*not asserted*,-,unchecked,"evaluated individual-level social determinants of health (SDoH) across three Healthy People 2030 domains and found all three associated with hospitalization, bu"
+18,*not asserted*,-,unchecked,"Here we evaluate six survey-derived social domains (insurance, income, education, employment, housing tenure and stability, and disability) in 25160 COVID-posit"
 4.4,*not asserted*,-,unchecked,We compare clinical and demographic associations with MarketScan Commercial Claims (n = 4.4 million) as a cross-cohort check.
 21,*not asserted*,-,unchecked,METHODS We conducted a propensity score-matched case-control study using All of Us Research Program data.[19-21] Conditional logistic regression estimates assoc
-0.2,*not asserted*,-,unchecked,"Case-control propensity matching at a 1:4 ratio used All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies,"
-22,*not asserted*,-,unchecked,"Case-control propensity matching at a 1:4 ratio used All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies,"
-23,*not asserted*,-,unchecked,"Case-control propensity matching at a 1:4 ratio used All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies,"
-24,*not asserted*,-,unchecked,"Case-control propensity matching at a 1:4 ratio used All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies,"
-6952,*not asserted*,-,unchecked,"Because matching was with replacement, the effective control sample size is smaller than the number of control observations (All of Us 6952; MarketScan 379100)."
-379100,*not asserted*,-,unchecked,"Because matching was with replacement, the effective control sample size is smaller than the number of control observations (All of Us 6952; MarketScan 379100)."
-26,*not asserted*,-,unchecked,"Outcome The primary outcome was COVID-19 hospitalization or extended emergency department care within 14 days of the index date, aligned with the Centers for Di"
-65,*not asserted*,-,unchecked,"Outcome The primary outcome was COVID-19 hospitalization or extended emergency department care within 14 days of the index date, aligned with the Centers for Di"
-9201,*not asserted*,-,unchecked,"Hospitalization was defined as inpatient visits (9201, 32037), emergency-to-inpatient visits (262, 8717), or emergency visits with recorded stay duration of one"
-32037,*not asserted*,-,unchecked,"Hospitalization was defined as inpatient visits (9201, 32037), emergency-to-inpatient visits (262, 8717), or emergency visits with recorded stay duration of one"
-262,*not asserted*,-,unchecked,"Hospitalization was defined as inpatient visits (9201, 32037), emergency-to-inpatient visits (262, 8717), or emergency visits with recorded stay duration of one"
-8717,*not asserted*,-,unchecked,"Hospitalization was defined as inpatient visits (9201, 32037), emergency-to-inpatient visits (262, 8717), or emergency visits with recorded stay duration of one"
-9203,*not asserted*,-,unchecked,"Hospitalization was defined as inpatient visits (9201, 32037), emergency-to-inpatient visits (262, 8717), or emergency visits with recorded stay duration of one"
-27,*not asserted*,-,unchecked,"Exposure and covariates We extracted demographic features (sex at birth, race, ethnicity, age), vaccination status (eTable 3), and Charlson comorbidities (eTabl"
-692,*not asserted*,-,unchecked,"Six SDoH domains (i.e., insurance, income, education, employment, housing tenure and stability, and disability; eTable 5) were derived from the Basics Survey, c"
-286,*not asserted*,-,unchecked,"Six SDoH domains (i.e., insurance, income, education, employment, housing tenure and stability, and disability; eTable 5) were derived from the Basics Survey, c"
-985,*not asserted*,-,unchecked,"Six SDoH domains (i.e., insurance, income, education, employment, housing tenure and stability, and disability; eTable 5) were derived from the Basics Survey, c"
-86.4,*not asserted*,-,unchecked,"Six SDoH domains (i.e., insurance, income, education, employment, housing tenure and stability, and disability; eTable 5) were derived from the Basics Survey, c"
-28,*not asserted*,-,unchecked,"In AoU, standard errors were clustered on person identifier to account for control reuse from matching with replacement.[28] Under an alternative variance estim"
-15,*not asserted*,-,unchecked,"Pandemic wave (pre-Delta: before June 15, 2021; Delta: June 15-December 14, 2021; Omicron: December 15, 2021 onward) was included as a covariate to adjust for t"
-2021,*not asserted*,-,unchecked,"Pandemic wave (pre-Delta: before June 15, 2021; Delta: June 15-December 14, 2021; Omicron: December 15, 2021 onward) was included as a covariate to adjust for t"
-35000,*not asserted*,-,unchecked,"From the joint model, we contrasted two socioeconomic profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the"
-99999,*not asserted*,-,unchecked,"From the joint model, we contrasted two socioeconomic profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the"
-24999,*not asserted*,-,unchecked,"From the joint model, we contrasted two socioeconomic profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the"
-29,*not asserted*,-,unchecked,"Analyses stratified by pandemic wave (pre-Delta, Delta, Omicron) evaluated whether lower-income, racial, and insurance associations persisted or evolved across "
-30,*not asserted*,-,unchecked,"Analyses stratified by pandemic wave (pre-Delta, Delta, Omicron) evaluated whether lower-income, racial, and insurance associations persisted or evolved across "
-31,*not asserted*,-,unchecked,We summarized the degree to which the six social domains accounted for the Black-race association as the proportional reduction in its log adjusted odds ratio o
-2020,*not asserted*,-,unchecked,We summarized the degree to which the six social domains accounted for the Black-race association as the proportional reduction in its log adjusted odds ratio o
-2023,*not asserted*,-,unchecked,We summarized the degree to which the six social domains accounted for the Black-race association as the proportional reduction in its log adjusted odds ratio o
-32,*not asserted*,-,unchecked,We summarized the degree to which the six social domains accounted for the Black-race association as the proportional reduction in its log adjusted odds ratio o
-413457,*not asserted*,-,unchecked,"Among 413457 All of Us participants, 25160 had confirmed COVID-19 with both EHR data and Basics Survey completion."
-16.2,*not asserted*,-,unchecked,"Using the hospitalization phenotype (14-day window, ED visits requiring stay ≥1 day; Figure 2), 4064 (16.2%) were classified as cases."
-3.90,*not asserted*,-,unchecked,Matching sought four controls per case and achieved 3.90 on average; the matched cohort comprised 19920 observations in 4064 strata.
-19920,*not asserted*,-,unchecked,Matching sought four controls per case and achieved 3.90 on average; the matched cohort comprised 19920 observations in 4064 strata.
-9691,*not asserted*,-,unchecked,"Among 15856 control observations, 9691 were unique individuals (median reuse 1, IQR 1-2, maximum 13; eTable 11)."
-0.489,*not asserted*,-,unchecked,Pre-matching imbalance was largest for diagnosis count (SMD = 0.489; eTable 6).
-0.03,*not asserted*,-,unchecked,Post-matching balance achieved standardized mean differences below 0.03 for all three matching variables (eTable 7); full-covariate balance is shown in eFigure 
-39.0,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-30.6,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-29.9,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-17.9,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-35.7,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-30.5,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-34.7,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-26.2,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), older adults aged ≥65 (35.7% vs 30.5%), and Medicaid-insured partic"
-0.45,*not asserted*,-,unchecked,"Female sex was associated with lower odds (AOR 0.74, 95% CI 0.68-0.80), as was recorded vaccination before the index date (AOR 0.45, 0.40-0.51)."
-0.40,*not asserted*,-,unchecked,"Female sex was associated with lower odds (AOR 0.74, 95% CI 0.68-0.80), as was recorded vaccination before the index date (AOR 0.45, 0.40-0.51)."
-0.51,*not asserted*,-,unchecked,"Female sex was associated with lower odds (AOR 0.74, 95% CI 0.68-0.80), as was recorded vaccination before the index date (AOR 0.45, 0.40-0.51)."
-55,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-64,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.45,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.30,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.61,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.44,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.79,*not asserted*,-,unchecked,"Age showed a gradient with elevated odds at 55-64 (AOR 1.45, 1.30-1.61) and ≥65 (AOR 1.61, 1.44-1.79) relative to <45."
-1.70,*not asserted*,-,unchecked,"Black race was associated with substantially elevated odds (AOR 2.30, 2.10-2.52), as was Other race (1.41, 1.17-1.70)."
-1.00,*not asserted*,-,unchecked,"Asian race was elevated but not statistically significant (1.33, 1.00-1.78)."
-1.78,*not asserted*,-,unchecked,"Asian race was elevated but not statistically significant (1.33, 1.00-1.78)."
-1.12,*not asserted*,-,unchecked,"Delta-wave infection carried elevated odds (AOR 1.24, 1.12-1.38) relative to pre-Delta, while Omicron did not differ significantly (1.04, 0.96-1.13)."
-1.68,*not asserted*,-,unchecked,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.22,*not asserted*,-,unchecked,"Among comorbidities, severe renal disease (AOR 1.29, 1.12-1.48), moderate/severe liver disease (1.37, 1.12-1.68), metastatic solid tumor (1.22, 1.03-1.46), cere"
-1.11,*not asserted*,-,unchecked,"Dementia was not significant after restricting comorbidities to pre-index records (1.11, 0.94-1.30)."
-0.94,*not asserted*,-,unchecked,"Dementia was not significant after restricting comorbidities to pre-index records (1.11, 0.94-1.30)."
-0.85,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
-0.79,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
-0.92,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
-0.69,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) showed inverse associations in this cohort; because matching balanced encou"
-25000,*not asserted*,-,unchecked,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-34999,*not asserted*,-,unchecked,"Compared with the 35000-99999 reference, lower-income strata were associated with elevated odds: <10000 AOR 1.46 (1.29-1.65), 10000-24999 1.37 (1.21-1.55), 2500"
-1.31,*not asserted*,-,unchecked,"Medicaid-insured participants were at higher odds than those with employer-provided insurance (AOR 1.59, 1.43-1.77), and those with no insurance or other covera"
-1.52,*not asserted*,-,unchecked,"Medicaid-insured participants were at higher odds than those with employer-provided insurance (AOR 1.59, 1.43-1.77), and those with no insurance or other covera"
-1.53,*not asserted*,-,unchecked,"Education below GED was associated with increased odds (AOR 1.35, 1.18-1.53); the ""never attended school"" estimate (AOR 3.35, 1.66-6.78) is imprecise given the "
-3.35,*not asserted*,-,unchecked,"Education below GED was associated with increased odds (AOR 1.35, 1.18-1.53); the ""never attended school"" estimate (AOR 3.35, 1.66-6.78) is imprecise given the "
-1.66,*not asserted*,-,unchecked,"Education below GED was associated with increased odds (AOR 1.35, 1.18-1.53); the ""never attended school"" estimate (AOR 3.35, 1.66-6.78) is imprecise given the "
-6.78,*not asserted*,-,unchecked,"Education below GED was associated with increased odds (AOR 1.35, 1.18-1.53); the ""never attended school"" estimate (AOR 3.35, 1.66-6.78) is imprecise given the "
-2.09,*not asserted*,-,unchecked,"Unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), and non-employment (retired/other: 1.36, 1.22-1.51) were associated with higher odds of hospit"
+0.2,*not asserted*,-,unchecked,"Matching sought four controls per case on All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies, implemente"
+22,*not asserted*,-,unchecked,"Matching sought four controls per case on All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies, implemente"
+23,*not asserted*,-,unchecked,"Matching sought four controls per case on All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies, implemente"
+24,*not asserted*,-,unchecked,"Matching sought four controls per case on All of Us enrollment date, number of diagnoses, and length of medical history as encounter-density proxies, implemente"
+26,*not asserted*,-,unchecked,"Outcome The primary outcome was COVID-19 hospitalization or extended emergency department care within 14 days of the index date, aligned with the CDC COVID-NET "
+65,*not asserted*,-,unchecked,"Outcome The primary outcome was COVID-19 hospitalization or extended emergency department care within 14 days of the index date, aligned with the CDC COVID-NET "
+27,*not asserted*,-,unchecked,"Exposure and covariates We extracted demographic features, vaccination status (eTable 3), and Charlson comorbidities (eTable 4),[27] both ascertained only from "
+692,*not asserted*,-,unchecked,"Six SDoH domains (eTable 5) were derived from the Basics Survey, completed a median of 692 days (IQR 286-985) before the index date, with 86.4% preceding infect"
+286,*not asserted*,-,unchecked,"Six SDoH domains (eTable 5) were derived from the Basics Survey, completed a median of 692 days (IQR 286-985) before the index date, with 86.4% preceding infect"
+985,*not asserted*,-,unchecked,"Six SDoH domains (eTable 5) were derived from the Basics Survey, completed a median of 692 days (IQR 286-985) before the index date, with 86.4% preceding infect"
+86.4,*not asserted*,-,unchecked,"Six SDoH domains (eTable 5) were derived from the Basics Survey, completed a median of 692 days (IQR 286-985) before the index date, with 86.4% preceding infect"
+28,*not asserted*,-,unchecked,Statistical analysis Matched data were analyzed by conditional logistic regression with standard errors clustered on person identifier to account for control re
+15,*not asserted*,-,unchecked,"Pandemic wave (pre-Delta, before June 15, 2021; Delta, to December 14, 2021; Omicron, thereafter) entered as a covariate."
+2021,*not asserted*,-,unchecked,"Pandemic wave (pre-Delta, before June 15, 2021; Delta, to December 14, 2021; Omicron, thereafter) entered as a covariate."
+35000,*not asserted*,-,unchecked,From the joint model we contrasted two profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the three mutually
+99999,*not asserted*,-,unchecked,From the joint model we contrasted two profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the three mutually
+24999,*not asserted*,-,unchecked,From the joint model we contrasted two profiles (employer-insured/35000-99999/homeowner versus Medicaid/10000-24999/renter) as the product of the three mutually
+29,*not asserted*,-,unchecked,"Wave-stratified models were fitted within strata whose index dates fell in that wave, using base-model covariates minus the wave indicator.[29, 30] For race we "
+30,*not asserted*,-,unchecked,"Wave-stratified models were fitted within strata whose index dates fell in that wave, using base-model covariates minus the wave indicator.[29, 30] For race we "
+31,*not asserted*,-,unchecked,"Wave-stratified models were fitted within strata whose index dates fell in that wave, using base-model covariates minus the wave indicator.[29, 30] For race we "
+2020,*not asserted*,-,unchecked,"The MarketScan comparison used the same Charlson code sets and regression framework in Commercial Claims (2020-2023), with insurance plan type and geographic re"
+2023,*not asserted*,-,unchecked,"The MarketScan comparison used the same Charlson code sets and regression framework in Commercial Claims (2020-2023), with insurance plan type and geographic re"
+32,*not asserted*,-,unchecked,"The MarketScan comparison used the same Charlson code sets and regression framework in Commercial Claims (2020-2023), with insurance plan type and geographic re"
+413457,*not asserted*,-,unchecked,"RESULTS Participant characteristics Among 413457 All of Us participants, 25160 had confirmed COVID-19 with both EHR and Basics Survey data, of whom 4064 (16.2%)"
+16.2,*not asserted*,-,unchecked,"RESULTS Participant characteristics Among 413457 All of Us participants, 25160 had confirmed COVID-19 with both EHR and Basics Survey data, of whom 4064 (16.2%)"
+3.90,*not asserted*,-,unchecked,"Matching achieved 3.90 controls per case, giving 19920 observations in 4064 strata; the 15856 control observations came from 9691 unique individuals (maximum re"
+19920,*not asserted*,-,unchecked,"Matching achieved 3.90 controls per case, giving 19920 observations in 4064 strata; the 15856 control observations came from 9691 unique individuals (maximum re"
+9691,*not asserted*,-,unchecked,"Matching achieved 3.90 controls per case, giving 19920 observations in 4064 strata; the 15856 control observations came from 9691 unique individuals (maximum re"
+0.489,*not asserted*,-,unchecked,"Pre-matching imbalance was largest for diagnosis count (SMD = 0.489), and all three matching variables fell below 0.03 after matching (eTables 6, 7; eFigure 1)."
+0.03,*not asserted*,-,unchecked,"Pre-matching imbalance was largest for diagnosis count (SMD = 0.489), and all three matching variables fell below 0.03 after matching (eTables 6, 7; eFigure 1)."
+39.0,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+30.6,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+29.9,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+17.9,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+35.7,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+30.5,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+34.7,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+26.2,*not asserted*,-,unchecked,"Cases had higher proportions of males (39.0% vs 30.6%), Black participants (29.9% vs 17.9%), adults aged 65 or over (35.7% vs 30.5%), and Medicaid-insured parti"
+0.45,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+0.40,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+0.51,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+1.61,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+1.44,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+1.79,*not asserted*,-,unchecked,"Demographics, vaccination, pandemic wave, and comorbidities In the base model, female sex (AOR 0.74, 95% CI 0.68-0.80) and recorded vaccination (0.45, 0.40-0.51"
+1.12,*not asserted*,-,unchecked,"Delta-wave infection was elevated (1.24, 1.12-1.38) while Omicron was not (1.04, 0.96-1.13)."
+0.85,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
+0.79,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
+0.92,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
+0.69,*not asserted*,-,unchecked,"Chronic pulmonary disease (0.85, 0.79-0.92) and mild liver disease (0.76, 0.69-0.83) were inverse."
+20,*not asserted*,-,unchecked,Cell counts <20 are suppressed.
+1.53,*not asserted*,-,unchecked,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+2.09,*not asserted*,-,unchecked,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+1.22,*not asserted*,-,unchecked,"Education below GED (1.35, 1.18-1.53), unemployment (1.41, 1.28-1.56), student status (1.61, 1.24-2.09), non-employment (1.36, 1.22-1.51), and renting (1.28, 1."
+3.35,*not asserted*,-,unchecked,"The ""never attended school"" estimate (3.35, 1.66-6.78) rests on fewer than 20 participants."
+1.66,*not asserted*,-,unchecked,"The ""never attended school"" estimate (3.35, 1.66-6.78) rests on fewer than 20 participants."
+6.78,*not asserted*,-,unchecked,"The ""never attended school"" estimate (3.35, 1.66-6.78) rests on fewer than 20 participants."
 0.05,*not asserted*,-,unchecked,*P < 0.05; **P < 0.01; ***P < 0.001.
 0.01,*not asserted*,-,unchecked,*P < 0.05; **P < 0.01; ***P < 0.001.
-1.42,*not asserted*,-,unchecked,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-1.98,*not asserted*,-,unchecked,"In the joint model, Medicaid insurance (AOR 1.33, 1.16-1.51), unemployment (1.23, 1.09-1.38), non-employment (1.26, 1.12-1.42), household income below 10000 (1."
-1.15,*not asserted*,-,unchecked,"Other or no insurance coverage (1.15, 0.98-1.35) and income 25000-34999 (1.12, 0.96-1.31) likewise lost significance under mutual adjustment."
-0.99,*not asserted*,-,unchecked,"Housing tenure recorded as “other” moved from null in the domain-specific model (0.99, 0.86-1.13) to a borderline inverse estimate under mutual adjustment (0.86"
-65.4,*not asserted*,-,unchecked,"Disability showed an inverse association (0.86, 0.76-0.98), which should be interpreted cautiously given 65.4% missingness and the collapse of heterogeneous fun"
-33,*not asserted*,-,unchecked,This is consistent with UK Biobank and integrated-care studies reporting similarly modest attenuation of the Black-race hospitalization coefficient when socioec
-34,*not asserted*,-,unchecked,This is consistent with UK Biobank and integrated-care studies reporting similarly modest attenuation of the Black-race hospitalization coefficient when socioec
+1.42,*not asserted*,-,unchecked,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.52,*not asserted*,-,unchecked,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.98,*not asserted*,-,unchecked,"Mutually adjusted SDoH associations and Black-race coefficient attenuation Under mutual adjustment (Table 3), Medicaid (1.33, 1.16-1.51), unemployment (1.23, 1."
+1.30,*not asserted*,-,unchecked,"Education below GED lost significance (1.13, 0.98-1.30), as did other or no insurance and income 25000-34999, indicating signal shared with income and employmen"
+25000,*not asserted*,-,unchecked,"Education below GED lost significance (1.13, 0.98-1.30), as did other or no insurance and income 25000-34999, indicating signal shared with income and employmen"
+34999,*not asserted*,-,unchecked,"Education below GED lost significance (1.13, 0.98-1.30), as did other or no insurance and income 25000-34999, indicating signal shared with income and employmen"
+1.00,*not asserted*,-,unchecked,"Disability was inverse (0.86, 0.76-0.98) and housing tenure recorded as ""other"" moved from null to a borderline inverse estimate (0.86, 0.74-1.00); both should "
+65.4,*not asserted*,-,unchecked,"Disability was inverse (0.86, 0.76-0.98) and housing tenure recorded as ""other"" moved from null to a borderline inverse estimate (0.86, 0.74-1.00); both should "
+33,*not asserted*,-,unchecked,"Individual-level socioeconomic factors, as measured by self-report, therefore capture only a fraction of the racial association, consistent with UK Biobank and "
+34,*not asserted*,-,unchecked,"Individual-level socioeconomic factors, as measured by self-report, therefore capture only a fraction of the racial association, consistent with UK Biobank and "
+1.78,*not asserted*,-,unchecked,"Individual-level socioeconomic factors, as measured by self-report, therefore capture only a fraction of the racial association, consistent with UK Biobank and "
 2.79,*not asserted*,-,unchecked,"The equivalent product of the domain-specific AORs is 2.79, so mutual adjustment reduces the combined contrast by roughly a third."
-2087,*not asserted*,-,unchecked,"In the pre-Delta period (N = 2087 cases), income below 10000 was associated with AOR 1.49 (1.21-1.82)."
-1333,*not asserted*,-,unchecked,"During Omicron (N = 1333 cases), when vaccines were available, income below 10000 carried AOR 1.64 (1.23-2.18, P < 0.001)."
-0.001,*not asserted*,-,unchecked,"During Omicron (N = 1333 cases), when vaccines were available, income below 10000 carried AOR 1.64 (1.23-2.18, P < 0.001)."
-644,*not asserted*,-,unchecked,"The Delta period (N = 644 cases) showed consistent direction (AOR 2.11, 1.10-4.03) but wide confidence intervals from the smaller stratum."
-2.56,*not asserted*,-,unchecked,Period-based mediation work has reported income-related disparities persisting across variant transitions and treatment-landscape changes.[29] The Black-race as
-3.51,*not asserted*,-,unchecked,Period-based mediation work has reported income-related disparities persisting across variant transitions and treatment-landscape changes.[29] The Black-race as
-4.96,*not asserted*,-,unchecked,Period-based mediation work has reported income-related disparities persisting across variant transitions and treatment-landscape changes.[29] The Black-race as
-1.34,*not asserted*,-,unchecked,Period-based mediation work has reported income-related disparities persisting across variant transitions and treatment-landscape changes.[29] The Black-race as
-2.03,*not asserted*,-,unchecked,Period-based mediation work has reported income-related disparities persisting across variant transitions and treatment-landscape changes.[29] The Black-race as
-2.64,*not asserted*,-,unchecked,"When all six SDoH domains were included in within-wave joint models, coefficient attenuation by individual socioeconomic factors was 11.5% during pre-Delta (AOR"
-2.17,*not asserted*,-,unchecked,"When all six SDoH domains were included in within-wave joint models, coefficient attenuation by individual socioeconomic factors was 11.5% during pre-Delta (AOR"
-1.71,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-2.24,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-0.78,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-3.45,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-0.196,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-0.84,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-0.420,*not asserted*,-,unchecked,"Medicaid was significantly associated with hospitalization in all three waves in domain-specific models (pre-Delta AOR 1.71; Delta 2.24; Omicron 1.46), but its "
-1913,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three wave models rest on 1913, 301, and 1105 strata rather than "
-301,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three wave models rest on 1913, 301, and 1105 strata rather than "
-1105,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three wave models rest on 1913, 301, and 1105 strata rather than "
-693682,*not asserted*,-,unchecked,"Cross-cohort clinical-model comparison In the MarketScan cohort (N = 693682 matched observations; 139468 cases; Table 1), female sex, recorded vaccination, and "
+2.56,*not asserted*,-,unchecked,"Period-based work has reported income-related disparities persisting across variant transitions.[29] The Black-race association was large pre-Delta (AOR 3.00, 2"
+3.51,*not asserted*,-,unchecked,"Period-based work has reported income-related disparities persisting across variant transitions.[29] The Black-race association was large pre-Delta (AOR 3.00, 2"
+4.96,*not asserted*,-,unchecked,"Period-based work has reported income-related disparities persisting across variant transitions.[29] The Black-race association was large pre-Delta (AOR 3.00, 2"
+1.34,*not asserted*,-,unchecked,"Period-based work has reported income-related disparities persisting across variant transitions.[29] The Black-race association was large pre-Delta (AOR 3.00, 2"
+2.03,*not asserted*,-,unchecked,"Period-based work has reported income-related disparities persisting across variant transitions.[29] The Black-race association was large pre-Delta (AOR 3.00, 2"
+2.64,*not asserted*,-,unchecked,"Coefficient attenuation by socioeconomic factors was 11.5% pre-Delta (3.00 to 2.64), 29.1% during Delta (2.98 to 2.17), and 30.1% during Omicron (1.65 to 1.42; "
+2.17,*not asserted*,-,unchecked,"Coefficient attenuation by socioeconomic factors was 11.5% pre-Delta (3.00 to 2.64), 29.1% during Delta (2.98 to 2.17), and 30.1% during Omicron (1.65 to 1.42; "
+0.78,*not asserted*,-,unchecked,"Medicaid was significant in all three waves in domain-specific models, but its joint estimate was not significant in either Delta (1.64, 0.78-3.45) or Omicron ("
+3.45,*not asserted*,-,unchecked,"Medicaid was significant in all three waves in domain-specific models, but its joint estimate was not significant in either Delta (1.64, 0.78-3.45) or Omicron ("
+0.84,*not asserted*,-,unchecked,"Medicaid was significant in all three waves in domain-specific models, but its joint estimate was not significant in either Delta (1.64, 0.78-3.45) or Omicron ("
+1913,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+301,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+1105,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+2087,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+644,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+1333,*not asserted*,-,unchecked,"Within-wave models retain only strata whose control index dates also fall in that wave, so the three models rest on 1913, 301, and 1105 strata rather than 2087,"
+693682,*not asserted*,-,unchecked,"Cross-cohort clinical-model comparison In MarketScan (693682 matched observations; 139468 cases; Table 1), female sex, recorded vaccination, and the age gradien"
 35,*not asserted*,-,unchecked,"found Black race and obesity independently associated with clinical severity,[35] and Vaidya et al."
-36,*not asserted*,-,unchecked,"First, it decomposes domain-specific signals that composite indices and separate-variable models cannot isolate: Choi et al.'s three-variable design11 did not i"
-37,*not asserted*,-,unchecked,Patient-reported SDoH have been consistently associated with hospitalization in prior scoping reviews;[37] our contribution is identifying which domains remain 
-38,*not asserted*,-,unchecked,The Medicaid finding (AOR 1.33) is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health cond
-39,*not asserted*,-,unchecked,The Medicaid finding (AOR 1.33) is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health cond
-40,*not asserted*,-,unchecked,The Medicaid finding (AOR 1.33) is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health cond
-41,*not asserted*,-,unchecked,This is consistent with UK Biobank evidence that socioeconomic deprivation and comorbidity adjustment attenuated only a modest portion of the excess COVID-19 ho
-42,*not asserted*,-,unchecked,This is consistent with UK Biobank evidence that socioeconomic deprivation and comorbidity adjustment attenuated only a modest portion of the excess COVID-19 ho
-43,*not asserted*,-,unchecked,This is consistent with UK Biobank evidence that socioeconomic deprivation and comorbidity adjustment attenuated only a modest portion of the excess COVID-19 ho
-11.2,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted across the pandemic period; inequality in vaccination coverag"
-56.9,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted across the pandemic period; inequality in vaccination coverag"
-22.5,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted across the pandemic period; inequality in vaccination coverag"
-91.3,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted across the pandemic period; inequality in vaccination coverag"
-2.7,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-0.5,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-2.4,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-44,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-24.4,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-2017,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-45,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, compared with 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-"
-205,*not asserted*,-,unchecked,"The AIDS directional discordance (AoU inverse, MarketScan risk) may reflect the strict two-step AoU phenotype and small sample (N = 205 unique participants)."
-46,*not asserted*,-,unchecked,Limitations All of Us is a volunteer cohort with higher health literacy and digital access than the general population.[46] The program deliberately oversampled
-75,*not asserted*,-,unchecked,Limitations All of Us is a volunteer cohort with higher health literacy and digital access than the general population.[46] The program deliberately oversampled
-26.7,*not asserted*,-,unchecked,"Income missingness was differential (26.7% cases vs 19.8% controls), and the missing-income category itself carried elevated odds (Table 3)."
-19.8,*not asserted*,-,unchecked,"Income missingness was differential (26.7% cases vs 19.8% controls), and the missing-income category itself carried elevated odds (Table 3)."
-2.6,*not asserted*,-,unchecked,Our hospitalization rate (16.2%) exceeds the 2.6% reported by Choi et al.
+36,*not asserted*,-,unchecked,"First, it separates domain-specific signals that composite indices and few-variable models cannot isolate: Choi et al.'s three-variable design did not include e"
+38,*not asserted*,-,unchecked,"The Medicaid finding is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health conditions,[38]"
+39,*not asserted*,-,unchecked,"The Medicaid finding is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health conditions,[38]"
+40,*not asserted*,-,unchecked,"The Medicaid finding is consistent with cohort evidence that insurance type is associated with COVID-19 hospitalization beyond underlying health conditions,[38]"
+41,*not asserted*,-,unchecked,"Interpreting a residual race coefficient requires care: the socioeconomic variables adjusted for are themselves shaped by structural disadvantage, and residual "
+42,*not asserted*,-,unchecked,"Interpreting a residual race coefficient requires care: the socioeconomic variables adjusted for are themselves shaped by structural disadvantage, and residual "
+43,*not asserted*,-,unchecked,"Interpreting a residual race coefficient requires care: the socioeconomic variables adjusted for are themselves shaped by structural disadvantage, and residual "
+11.2,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted, and inequality in vaccination coverage accounted for 56.9% ("
+56.9,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted, and inequality in vaccination coverage accounted for 56.9% ("
+22.5,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted, and inequality in vaccination coverage accounted for 56.9% ("
+91.3,*not asserted*,-,unchecked,"In an 11.2-million-person Ontario cohort, income inequalities in COVID-19 death likewise persisted, and inequality in vaccination coverage accounted for 56.9% ("
+2.7,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+0.5,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+2.4,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+44,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+24.4,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+2017,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+45,*not asserted*,-,unchecked,"Patient surveys detect socioeconomic risk in 8-41% of patients, against 0-2% in EHR-coded fields.[15] Across 2.7 billion US healthcare encounters, SDoH Z-code d"
+46,*not asserted*,-,unchecked,"Limitations All of Us is a volunteer cohort with higher health literacy and digital access than the general population,[46] and it oversampled populations under"
+26.7,*not asserted*,-,unchecked,"SDoH were measured a median of 692 days before infection, so pandemic-era changes in income or employment are not captured, and income missingness was different"
+19.8,*not asserted*,-,unchecked,"SDoH were measured a median of 692 days before infection, so pandemic-era changes in income or employment are not captured, and income missingness was different"
+2.6,*not asserted*,-,unchecked,Our hospitalization rate (16.2%) exceeds the 2.6% Choi et al.
+6952,*not asserted*,-,unchecked,"Because matching used replacement, the effective control sample size (6952) is smaller than the 15856 control observations, so nominal precision overstates the "
 16037,*not asserted*,-,unchecked,"ACKNOWLEDGMENTS The All of Us Research Program was supported by the National Institutes of Health, Office of the Director: Regional Medical Centers: 1 OT2 OD026"
 2022,*not asserted*,-,unchecked,Int J Public Health 2022;67:1604542 doi: 10.3389/ijph.2022.1604542 [published Online First: 20220405].
 67,*not asserted*,-,unchecked,Int J Public Health 2022;67:1604542 doi: 10.3389/ijph.2022.1604542 [published Online First: 20220405].
@@ -358,6 +334,7 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 10.1002,*not asserted*,-,unchecked,Pharm Stat 2011;10(2):150-61 doi: 10.1002/pst.433.
 184,*not asserted*,-,unchecked,Am J Epidemiol 2016;184(11):847-55 doi: 10.1093/aje/kww112 [published Online First: 20161116].
 847,*not asserted*,-,unchecked,Am J Epidemiol 2016;184(11):847-55 doi: 10.1093/aje/kww112 [published Online First: 20161116].
+55,*not asserted*,-,unchecked,Am J Epidemiol 2016;184(11):847-55 doi: 10.1093/aje/kww112 [published Online First: 20161116].
 20161116,*not asserted*,-,unchecked,Am J Epidemiol 2016;184(11):847-55 doi: 10.1093/aje/kww112 [published Online First: 20161116].
 1191,*not asserted*,-,unchecked,J Am Med Inform Assoc 2022;29(7):1191-99 doi: 10.1093/jamia/ocac050.
 99,*not asserted*,-,unchecked,J Am Med Inform Assoc 2022;29(7):1191-99 doi: 10.1093/jamia/ocac050.
@@ -400,6 +377,7 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 1997,*not asserted*,-,unchecked,Epidemiology 1997;8(6):621-8.
 621,*not asserted*,-,unchecked,Epidemiology 1997;8(6):621-8.
 1925,*not asserted*,-,unchecked,Stat Methods Med Res 2016;25(5):1925-37 doi: 10.1177/0962280213505804.
+37,*not asserted*,-,unchecked,Stat Methods Med Res 2016;25(5):1925-37 doi: 10.1177/0962280213505804.
 10.1177,*not asserted*,-,unchecked,Stat Methods Med Res 2016;25(5):1925-37 doi: 10.1177/0962280213505804.
 20240412,*not asserted*,-,unchecked,Health Aff Sch 2024;2(4):qxae046 doi: 10.1093/haschl/qxae046 [published Online First: 20240412].
 20190904,*not asserted*,-,unchecked,JAMA Netw Open 2019;2(9):e1911514 doi: 10.1001/jamanetworkopen.2019.11514 [published Online First: 20190904].
@@ -410,6 +388,11 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 139472,*not asserted*,-,unchecked,"(b) MarketScan: 4423200 COVID-positive narrowing to 139472 hospitalized, matched 1:4 (693682 observations in 139468 strata; 554214 control observations from 465"
 465670,*not asserted*,-,unchecked,"(b) MarketScan: 4423200 COVID-positive narrowing to 139472 hospitalized, matched 1:4 (693682 observations in 139468 strata; 554214 control observations from 465"
 4283728,*not asserted*,-,unchecked,"Panel (b) shows MarketScan: 4423200 COVID-positive narrowing to 139472 hospitalized cases and 4283728 outpatient controls, matched to 693682 observations in 139"
+9201,*not asserted*,-,unchecked,"The strict 14-day phenotype counts inpatient visits (OMOP concepts 9201, 32037), emergency-to-inpatient visits (262, 8717), and emergency visits with recorded s"
+32037,*not asserted*,-,unchecked,"The strict 14-day phenotype counts inpatient visits (OMOP concepts 9201, 32037), emergency-to-inpatient visits (262, 8717), and emergency visits with recorded s"
+262,*not asserted*,-,unchecked,"The strict 14-day phenotype counts inpatient visits (OMOP concepts 9201, 32037), emergency-to-inpatient visits (262, 8717), and emergency visits with recorded s"
+8717,*not asserted*,-,unchecked,"The strict 14-day phenotype counts inpatient visits (OMOP concepts 9201, 32037), emergency-to-inpatient visits (262, 8717), and emergency visits with recorded s"
+9203,*not asserted*,-,unchecked,"The strict 14-day phenotype counts inpatient visits (OMOP concepts 9201, 32037), emergency-to-inpatient visits (262, 8717), and emergency visits with recorded s"
 2.85,*not asserted*,-,unchecked,"Estimates and 95% CIs are listed at right and in Table 3; missing-indicator categories are modeled but omitted for clarity, and the “never attended school” educ"
 15856139468554214,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 2441,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
@@ -470,6 +453,7 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 27.1,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 130590,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 23.6,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+64,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1055,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 3492,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 22.0,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
@@ -710,6 +694,7 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 2684,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 73,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1.8,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+205,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 557,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 815,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 20.1,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
@@ -730,13 +715,18 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 9.1,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1316,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 558,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.31,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 200000,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 0.90,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.15,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 0.93,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1.84,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 0.95,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 1.40,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 5.82,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+1.11,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+0.99,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
+0.94,*not asserted*,-,unchecked,All of Us All of Us MarketScanᶜ MarketScanᶜ Characteristic Cases Controls Cases Controls N 4064 15856139468554214 Sex Female 2441 (60.1) 10834 (68.3) 67914 (48.
 3278,*not asserted*,-,unchecked,The same-day-ED count (n = 3278) is non-exclusive within the 30-day window and includes both strict-phenotype cases (1063) who also had a same-day ED visit and 
 1063,*not asserted*,-,unchecked,The same-day-ED count (n = 3278) is non-exclusive within the 30-day window and includes both strict-phenotype cases (1063) who also had a same-day ED visit and 
 2031,*not asserted*,-,unchecked,The same-day-ED count (n = 3278) is non-exclusive within the 30-day window and includes both strict-phenotype cases (1063) who also had a same-day ED visit and 
@@ -753,7 +743,9 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 0.10,*not asserted*,-,unchecked,(a) Matching variables (b) Full-covariate balance (the 23 variables with the largest |SMD|) Note: 21 of the 23 variables listed have |SMD| > 0.10; the two lowes
 4283335,*not asserted*,-,unchecked,Pre-matching counts reflect participants with complete matching variables (139472 cases and 4283335 controls); 17 cases and 376 controls from the raw cohort wer
 376,*not asserted*,-,unchecked,Pre-matching counts reflect participants with complete matching variables (139472 cases and 4283335 controls); 17 cases and 376 controls from the raw cohort wer
+379100,*not asserted*,-,unchecked,Effective control sample sizes were 6952 (AoU) and 379100 (MarketScan).
 1.75,*not asserted*,-,unchecked,"Median CI ratio 1.00 across all 32 model terms; one inference changed at P = 0.05 (Asian race, exact 1.00-1.78 versus cluster-robust 1.01-1.75)."
+0.420,*not asserted*,-,unchecked,"The Medicaid association lost joint-model significance during Omicron (P = 0.420), consistent with overlap between the Medicaid, income, and housing signals in "
 0.068,*not asserted*,-,unchecked,"It produced a non-significant inverse point estimate in AoU (AOR 0.76, P = 0.068) and a significant risk association in MarketScan (AOR 1.27)."
 0.613,*not asserted*,-,unchecked,"As shown in eTables 6-8, there were significant differences in the number of diagnoses between cases and controls before matching (AoU SMD = 0.489; MarketScan S"
 0.006,*not asserted*,-,unchecked,"In AoU, the pre-matching SMD for number of diagnoses was reduced from 0.489 to 0.006 after matching (99% reduction)."
@@ -1112,7 +1104,9 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 329,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 1051,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 54,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
+1.45,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 1.73,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
+1.70,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 0.81,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 1.47,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 1.05,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
@@ -1120,7 +1114,9 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 0.91,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 0.82,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 0.73,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
+1.68,*not asserted*,-,unchecked,"eReferences Phenotype Code Type Code / Concept ID U07.1 condition OMOP Concept 37311061 Positive SARS-CoV-2 lab OMOP Measurement 586520, 586523, 586525, 586526,"
 1.50,*not asserted*,-,unchecked,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
+1.71,*not asserted*,-,unchecked,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
 1.83,*not asserted*,-,unchecked,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
 2.45,*not asserted*,-,unchecked,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
 2.31,*not asserted*,-,unchecked,0.96 (0.86-1.06) 1.46 (1.42-1.50)* No Hemiplegia/paraplegia 1.02 (0.86-1.21) 1.71 (1.59-1.83)* Yes Renal mild/mod 1.05 (0.94-1.18) 1.29 (1.25-1.34)* Yes Renal s
@@ -1156,7 +1152,10 @@ fce7de10,figure submission/03_figures/pdf/Figure5.pdf,results/figures/Figure5.pd
 3.89,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 2.05,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 1.90,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
+0.001,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
+2.24,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 4.12,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
+0.196,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 0.04,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 0.02,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H
 0.16,*not asserted*,-,unchecked,1.46 1.42-1.50 1.43-1.50 0.88 Hemiplegia 1.71 1.59-1.83 1.59-1.83 1.00 Renal mild/mod 1.29 1.25-1.34 1.25-1.33 0.89 Renal severe 2.45 2.31-2.59 2.31-2.59 1.00 H

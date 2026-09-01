@@ -191,7 +191,13 @@ def assertions(v: Validator, text: str) -> None:
 # NOT ASSERTED, and why. The ledger prints unasserted numbers; these are the
 # ones we know about and have decided about, so they are recorded here too.
 #
-#   eTable 12b, eTable 12c  -- no committed artifact. 02c writes
+#   eTable 12b, eTable 12c  -- no committed artifact. Forensics in
+#       reviews/2026-09-01_eTable12_forensics.md: the values pass three
+#       independent self-consistency tests (attenuation formula reproduces to
+#       within 0.14 pp; CIs are symmetric on the log scale to within 0.003;
+#       SE scales as 1/sqrt(N strata) with ratio 1.00 for pre-Delta and
+#       Omicron), so they are real model output, but nothing in this repository
+#       supports them. 02c writes
 #       wave_stratified_race_attenuation.csv, wave_stratified_race.csv and
 #       wave_stratified_insurance.csv, none of which is in the repository. The
 #       values survive only as constants in make_figures.py. 02c now fails
