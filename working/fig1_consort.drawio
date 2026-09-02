@@ -4,157 +4,262 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="a_label" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;a&lt;/font&gt;&lt;/b&gt;" vertex="1">
-          <mxGeometry height="25" width="30" x="91" y="15" as="geometry" />
+        <mxCell id="a_lab" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;a&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="20" y="2" width="30" height="25" as="geometry" />
         </mxCell>
-        <mxCell id="a1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;413,457&amp;nbsp;&lt;/b&gt;All of Us (v7) participants&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="200.5" y="50" as="geometry" />
+        <mxCell id="a_r1" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;413,457&lt;/b&gt; All of Us participants (v7)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="26" width="280" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="a_arr1" edge="1" parent="1" source="a1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" target="a2">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="a_r2" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;252,047&lt;/b&gt; Included&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="76" width="280" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="a_ex" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=default;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;161,410&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; No diagnosis data&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; No Basics Survey&lt;/font&gt;" vertex="1">
-          <mxGeometry height="50" width="150" x="410" y="75" as="geometry" />
+        <mxCell id="a_r3" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;25,160&lt;/b&gt; COVID-19 positive&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="126" width="280" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="a2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;252,047 &lt;/b&gt;Included&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="200" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="a_arr2" edge="1" parent="1" source="a2" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" target="a3">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="a3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;25,160&amp;nbsp;&lt;/b&gt;COVID-19 positive&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="200" y="197" as="geometry" />
-        </mxCell>
-        <mxCell id="a_arr3l" edge="1" parent="1" source="a3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" target="a4">
+        <mxCell id="a_e_r1_r2" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="300" y="250" />
-              <mxPoint x="200" y="250" />
-            </Array>
+            <mxPoint x="780.0" y="54" as="sourcePoint" />
+            <mxPoint x="780.0" y="76" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="a_arr3r" edge="1" parent="1" source="a3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" target="a5">
+        <mxCell id="a_e_r2_r3" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="300" y="250" />
-              <mxPoint x="400" y="250" />
-            </Array>
+            <mxPoint x="780.0" y="104" as="sourcePoint" />
+            <mxPoint x="780.0" y="126" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="a4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b style=&quot;&quot;&gt;21,096 &lt;/b&gt;Outpatient only&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="94" y="280" as="geometry" />
+        <mxCell id="a_ex_top" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;161,410&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No diagnosis data&lt;br&gt;&amp;nbsp; &amp;nbsp; No Basics Survey&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="26" width="290" height="62" as="geometry" />
         </mxCell>
-        <mxCell id="a5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;4,064 &lt;/b&gt;Hospitalized ≤14 days&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="308" y="280" as="geometry" />
-        </mxCell>
-        <mxCell id="a6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;Propensity Score Matching&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; - Survey date&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Number of diagnoses&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Length of medical history&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="75" width="240" x="180" y="330" as="geometry" />
-        </mxCell>
-        <mxCell id="b_label" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;b&lt;/font&gt;&lt;/b&gt;" vertex="1">
-          <mxGeometry height="25" width="30" x="563" y="15" as="geometry" />
-        </mxCell>
-        <mxCell id="b1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;MarketScan (2020–2023)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="668.5" y="50" as="geometry" />
-        </mxCell>
-        <mxCell id="b_arr1" edge="1" parent="1" source="b1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" target="b3">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="b3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,423,200&amp;nbsp;&lt;/b&gt;COVID-19 positive&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="668.5" y="197" as="geometry" />
-        </mxCell>
-        <mxCell id="b_arr3l" edge="1" parent="1" source="b3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" target="b4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="b_arr3r" edge="1" parent="1" source="b3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" target="b5">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="b4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b style=&quot;&quot;&gt;4,283,711 &lt;/b&gt;Outpatient only&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="564" y="280" as="geometry" />
-        </mxCell>
-        <mxCell id="b5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;139,489 &lt;/b&gt;Hospitalized ≤14 days&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="779" y="280" as="geometry" />
-        </mxCell>
-        <mxCell id="b_arr4" edge="1" parent="1" source="b4" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.065;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="b6">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="b_arr5" edge="1" parent="1" source="b5" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.963;entryY=-0.006;entryDx=0;entryDy=0;entryPerimeter=0;" target="b6">
+        <mxCell id="a_e_extop" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="879" y="350" as="targetPoint" />
+            <mxPoint x="920" y="40.0" as="sourcePoint" />
+            <mxPoint x="1270" y="40.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="b6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=center;" value="&lt;font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;Propensity Score Matching&lt;/b&gt;&lt;br&gt;&lt;/font&gt;&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; padding: 0px;&quot;&gt;&lt;font&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-family: Arial; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Enrollment date&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;&lt;div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-family: Arial; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font&gt;- Number of diagnoses&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;font face=&quot;Arial&quot;&gt;- Length of insurance coverage&amp;nbsp;&amp;nbsp;&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/blockquote&gt;" vertex="1">
-          <mxGeometry height="75" width="240" x="648.5" y="330" as="geometry" />
-        </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-1" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="a_e_split_larm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="300" y="100" as="sourcePoint" />
-            <mxPoint x="410" y="100" as="targetPoint" />
+            <mxPoint x="780.0" y="154" as="sourcePoint" />
+            <mxPoint x="470.0" y="176" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-2" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.081;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="a6">
+        <mxCell id="a_e_split_rarm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="199.23000000000002" y="305" as="sourcePoint" />
-            <mxPoint x="199" y="320" as="targetPoint" />
+            <mxPoint x="780.0" y="154" as="sourcePoint" />
+            <mxPoint x="1090.0" y="176" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-3" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.081;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;">
+        <mxCell id="a_r4L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;21,096&lt;/b&gt; Outpatient only&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="176" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="a_r4R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,064&lt;/b&gt; Hospitalized &amp;#8804;14 days&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="176" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="a_r5L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;20,812&lt;/b&gt; Eligible controls&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="232" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="a_r5R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;3,997&lt;/b&gt; Eligible cases&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="232" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e_larm45" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400.73" y="305" as="sourcePoint" />
-            <mxPoint x="400.5" y="330" as="targetPoint" />
+            <mxPoint x="470.0" y="204" as="sourcePoint" />
+            <mxPoint x="470.0" y="232" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b&gt;15,523&lt;/b&gt;&lt;b style=&quot;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot; style=&quot;&quot;&gt;Control observations&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="94" y="449" as="geometry" />
-        </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;3,997 &lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="308" y="449" as="geometry" />
-        </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-6" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.53;entryY=-0.041;entryDx=0;entryDy=0;entryPerimeter=0;" target="nRkSxXJCHbZH1W-pIcQt-4">
+        <mxCell id="a_e_rarm45" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="199.90000000000003" y="405" as="sourcePoint" />
-            <mxPoint x="200" y="440" as="targetPoint" />
+            <mxPoint x="1090.0" y="204" as="sourcePoint" />
+            <mxPoint x="1090.0" y="232" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-7" edge="1" parent="1" source="a6" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.461;entryY=-0.088;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.917;exitY=1.005;exitDx=0;exitDy=0;exitPerimeter=0;">
+        <mxCell id="a_ex_larm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;284&lt;/b&gt; Controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="187.0" width="250" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e_exlarm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="399.90000000000003" y="407" as="sourcePoint" />
-            <mxPoint x="400.20000000000005" y="448.80000000000007" as="targetPoint" />
+            <mxPoint x="470.0" y="218.0" as="sourcePoint" />
+            <mxPoint x="290" y="218.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;509,983&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot;&gt;Control observations&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="561.5" y="449" as="geometry" />
+        <mxCell id="a_ex_rarm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;67&lt;/b&gt; Cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="187.0" width="290" height="62" as="geometry" />
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;127,696&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="25" width="200" x="775.5" y="449" as="geometry" />
-        </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-10" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.529;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="nRkSxXJCHbZH1W-pIcQt-8">
+        <mxCell id="a_e_exrarm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="667.4000000000001" y="405" as="sourcePoint" />
-            <mxPoint x="667" y="440" as="targetPoint" />
+            <mxPoint x="1090.0" y="218.0" as="sourcePoint" />
+            <mxPoint x="1270" y="218.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-11" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.46;entryY=-0.035;entryDx=0;entryDy=0;entryPerimeter=0;" target="nRkSxXJCHbZH1W-pIcQt-9">
+        <mxCell id="a_psm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;Propensity score matching &amp;#8212; 1:4 nearest neighbour, with replacement, 0.2 SD caliper&lt;br&gt;Survey date &amp;#183; Number of diagnoses &amp;#183; Length of medical history&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="284" width="900" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e_larmpsm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="867.4000000000001" y="405" as="sourcePoint" />
-            <mxPoint x="867.1700000000001" y="430" as="targetPoint" />
+            <mxPoint x="470.0" y="260" as="sourcePoint" />
+            <mxPoint x="470.0" y="284" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b&gt;11,588&lt;/b&gt; Cases and &lt;b&gt;401,984&lt;/b&gt; controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Incomplete pre-index matching variables&lt;br&gt;&lt;b&gt;1,598&lt;/b&gt; Control observations and &lt;b&gt;204&lt;/b&gt; cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Follow-up near study cutoff&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="190" x="951" y="389" as="geometry" />
-        </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-13" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
+        <mxCell id="a_e_rarmpsm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="868.5" y="415" as="sourcePoint" />
-            <mxPoint x="951" y="415" as="targetPoint" />
+            <mxPoint x="1090.0" y="260" as="sourcePoint" />
+            <mxPoint x="1090.0" y="284" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="a_ex2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b&gt;67&lt;/b&gt; Cases and &lt;b&gt;284&lt;/b&gt; controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Incomplete pre-index matching variables&lt;br&gt;&lt;b&gt;437&lt;/b&gt; Control observations excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Follow-up near study cutoff&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="190" x="430" y="389" as="geometry" />
+        <mxCell id="a_r7" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;19,520&lt;/b&gt; Observations in &lt;b&gt;3,997&lt;/b&gt; strata&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="356" width="280" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="a_ex2_edge" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
+        <mxCell id="a_e_psm7" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="420" y="415" as="sourcePoint" />
-            <mxPoint x="430" y="415" as="targetPoint" />
+            <mxPoint x="780.0" y="330" as="sourcePoint" />
+            <mxPoint x="780.0" y="356" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_ex_trim" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;437&lt;/b&gt; Control observations excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete follow-up near data cutoff&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="325.0" width="290" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e_extrim" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="343.0" as="sourcePoint" />
+            <mxPoint x="1270" y="343.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_r8L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;15,523&lt;/b&gt; Control observations&lt;br&gt;9,784 individuals, with replacement&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="406" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="a_r8R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;3,997&lt;/b&gt; Cases&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="406" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="a_e_78larm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="384" as="sourcePoint" />
+            <mxPoint x="470.0" y="406" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_e_78rarm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="384" as="sourcePoint" />
+            <mxPoint x="1090.0" y="406" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_lab" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;b&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="20" y="492" width="30" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r2" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;MarketScan Commercial Claims, 2020&amp;#8211;2023&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="516" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r3" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,423,200&lt;/b&gt; COVID-19 positive&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="566" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_r2_r3" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="544" as="sourcePoint" />
+            <mxPoint x="780.0" y="566" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_e_split_larm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="594" as="sourcePoint" />
+            <mxPoint x="470.0" y="616" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_e_split_rarm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="594" as="sourcePoint" />
+            <mxPoint x="1090.0" y="616" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_r4L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,283,711&lt;/b&gt; Outpatient only&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="616" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r4R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;139,489&lt;/b&gt; Hospitalized &amp;#8804;14 days&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="616" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r5L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;3,881,727&lt;/b&gt; Eligible controls&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="672" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r5R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;127,901&lt;/b&gt; Eligible cases&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="672" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_larm45" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470.0" y="644" as="sourcePoint" />
+            <mxPoint x="470.0" y="672" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_e_rarm45" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090.0" y="644" as="sourcePoint" />
+            <mxPoint x="1090.0" y="672" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_ex_larm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;401,984&lt;/b&gt; Controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="627.0" width="250" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_exlarm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470.0" y="658.0" as="sourcePoint" />
+            <mxPoint x="290" y="658.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_ex_rarm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;11,588&lt;/b&gt; Cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="627.0" width="290" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_exrarm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090.0" y="658.0" as="sourcePoint" />
+            <mxPoint x="1270" y="658.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_psm" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;Propensity score matching &amp;#8212; 1:4 nearest neighbour, with replacement, 0.2 SD caliper&lt;br&gt;Enrollment date &amp;#183; Number of diagnoses &amp;#183; Length of insurance coverage&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="724" width="900" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_larmpsm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470.0" y="700" as="sourcePoint" />
+            <mxPoint x="470.0" y="724" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_e_rarmpsm" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090.0" y="700" as="sourcePoint" />
+            <mxPoint x="1090.0" y="724" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_r7" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;637,679&lt;/b&gt; Observations in &lt;b&gt;127,696&lt;/b&gt; strata&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="796" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_psm7" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="770" as="sourcePoint" />
+            <mxPoint x="780.0" y="796" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_ex_trim" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;1&lt;/b&gt; Case excluded &amp;#8212; no match in caliper&lt;br&gt;&lt;b&gt;1,802&lt;/b&gt; Excluded near data cutoff&lt;br&gt;&amp;nbsp; &amp;nbsp; 1,598 control observations, 204 cases&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="758.0" width="290" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_extrim" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="783.0" as="sourcePoint" />
+            <mxPoint x="1270" y="783.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_r8L" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;509,983&lt;/b&gt; Control observations&lt;br&gt;443,061 individuals, with replacement&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="330" y="846" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="b_r8R" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;127,696&lt;/b&gt; Cases&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="950" y="846" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="b_e_78larm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="824" as="sourcePoint" />
+            <mxPoint x="470.0" y="846" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_e_78rarm" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780.0" y="824" as="sourcePoint" />
+            <mxPoint x="1090.0" y="846" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>

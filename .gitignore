@@ -45,3 +45,6 @@ results/*/*.fst
 # `git add -f`, one file at a time, with the screen recorded.
 # ---------------------------------------------------------------------------
 results/
+
+# Word lock files
+~$*
