@@ -47,7 +47,7 @@
         <mxCell id="a5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;4,064 &lt;/b&gt;Hospitalized ≤14 days&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="308" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="a6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;Propensity Score Matching&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; - Enrollment date&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Number of diagnoses&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Length of medical history&lt;/font&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="a6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;Propensity Score Matching&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; - Survey date&lt;/span&gt;&lt;/div&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Number of diagnoses&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp; &amp;nbsp; - Length of medical history&lt;/font&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="75" width="240" x="180" y="330" as="geometry" />
         </mxCell>
         <mxCell id="b_label" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;b&lt;/font&gt;&lt;/b&gt;" vertex="1">
@@ -68,10 +68,10 @@
         <mxCell id="b_arr3r" edge="1" parent="1" source="b3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" target="b5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="b4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b style=&quot;&quot;&gt;4,283,728 &lt;/b&gt;Outpatient only&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="b4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b style=&quot;&quot;&gt;4,283,711 &lt;/b&gt;Outpatient only&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="564" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="b5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;139,472 &lt;/b&gt;Hospitalized ≤14 days&lt;/font&gt;" vertex="1">
+        <mxCell id="b5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;139,489 &lt;/b&gt;Hospitalized ≤14 days&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="779" y="280" as="geometry" />
         </mxCell>
         <mxCell id="b_arr4" edge="1" parent="1" source="b4" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.065;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="b6">
@@ -103,10 +103,10 @@
             <mxPoint x="400.5" y="330" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b&gt;15,856&lt;/b&gt;&lt;b style=&quot;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot; style=&quot;&quot;&gt;Controls&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="nRkSxXJCHbZH1W-pIcQt-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;font&gt;&lt;b&gt;15,523&lt;/b&gt;&lt;b style=&quot;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot; style=&quot;&quot;&gt;Control observations&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="94" y="449" as="geometry" />
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;4,064 &lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="nRkSxXJCHbZH1W-pIcQt-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;3,997 &lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="308" y="449" as="geometry" />
         </mxCell>
         <mxCell id="nRkSxXJCHbZH1W-pIcQt-6" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.53;entryY=-0.041;entryDx=0;entryDy=0;entryPerimeter=0;" target="nRkSxXJCHbZH1W-pIcQt-4">
@@ -121,10 +121,10 @@
             <mxPoint x="400.20000000000005" y="448.80000000000007" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;554,214&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot;&gt;Controls&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="nRkSxXJCHbZH1W-pIcQt-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;509,983&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;font face=&quot;Arial&quot;&gt;Control observations&lt;/font&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="561.5" y="449" as="geometry" />
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;139,468&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="nRkSxXJCHbZH1W-pIcQt-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;&quot;&gt;&lt;font&gt;&lt;font face=&quot;Arial&quot;&gt;&lt;b style=&quot;&quot;&gt;127,696&lt;/b&gt;&lt;/font&gt;&lt;b style=&quot;font-family: Arial;&quot;&gt;&amp;nbsp;&lt;/b&gt;&lt;span style=&quot;font-family: Arial;&quot;&gt;Cases&lt;/span&gt;&lt;/font&gt;&lt;br&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="25" width="200" x="775.5" y="449" as="geometry" />
         </mxCell>
         <mxCell id="nRkSxXJCHbZH1W-pIcQt-10" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;entryX=0.529;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="nRkSxXJCHbZH1W-pIcQt-8">
@@ -139,13 +139,22 @@
             <mxPoint x="867.1700000000001" y="430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nRkSxXJCHbZH1W-pIcQt-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font&gt;&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b style=&quot;&quot;&gt;4&lt;/b&gt;&amp;nbsp;Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/font&gt;&lt;font face=&quot;Arial&quot;&gt;Incomplete follow-up near study cutoff&lt;/font&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="50" width="150" x="951" y="394" as="geometry" />
+        <mxCell id="nRkSxXJCHbZH1W-pIcQt-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b&gt;11,588&lt;/b&gt; Cases and &lt;b&gt;401,984&lt;/b&gt; controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Incomplete pre-index matching variables&lt;br&gt;&lt;b&gt;1,598&lt;/b&gt; Control observations and &lt;b&gt;204&lt;/b&gt; cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Follow-up near study cutoff&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="190" x="951" y="389" as="geometry" />
         </mxCell>
         <mxCell id="nRkSxXJCHbZH1W-pIcQt-13" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="868.5" y="415" as="sourcePoint" />
             <mxPoint x="951" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_ex2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-family: Arial;&quot;&gt;&lt;b&gt;67&lt;/b&gt; Cases and &lt;b&gt;284&lt;/b&gt; controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Incomplete pre-index matching variables&lt;br&gt;&lt;b&gt;437&lt;/b&gt; Control observations excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Follow-up near study cutoff&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="190" x="430" y="389" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ex2_edge" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="415" as="sourcePoint" />
+            <mxPoint x="430" y="415" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
