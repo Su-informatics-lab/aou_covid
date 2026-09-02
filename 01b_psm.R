@@ -6,7 +6,7 @@
 #   - 1:4 nearest-neighbor matching with replacement
 #   - Logistic regression propensity score (distance = "glm")
 #   - 0.2 SD caliper on the logit propensity score
-#   - AoU covariates: enrollment_ord, num_diagnosis, ehr_length_days
+#   - AoU covariates: survey_ord, num_diagnosis, ehr_length_days
 #   - MS  covariates: enrollment_ord, num_diagnosis, coverage_span_days
 #   - Post-matching: trims controls whose index date falls within
 #     14 days of the CDR cutoff (incomplete follow-up, Dr. Li C4)
@@ -85,7 +85,7 @@ cat("BUILDING MATCHING DATA FRAME\n")
 cat(strrep("=", 60), "\n")
 
 if (IS_AOU) {
-  MATCH_COVS <- c("enrollment_ord", "num_diagnosis", "ehr_length_days")
+  MATCH_COVS <- c("survey_ord", "num_diagnosis", "ehr_length_days")
 } else {
   MATCH_COVS <- c("enrollment_ord", "num_diagnosis", "coverage_span_days")
 }

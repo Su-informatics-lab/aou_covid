@@ -1427,7 +1427,7 @@ save(
         [
             "person_id",
             "basics_survey_date",
-            "enrollment_ord",
+            "survey_ord",
             "num_diagnosis",
             "ehr_length_days",
         ]

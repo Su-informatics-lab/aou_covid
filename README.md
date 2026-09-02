@@ -65,7 +65,7 @@ python 06_supplement.py              # All supplementary eTables (S2b–S16)
 | `04_sdoh.csv` | 6 SDoH domains + insurance type |
 | `04b_sdoh_timing.csv` | basics_survey_date, sdoh_days_before_covid, sdoh_pre_index |
 | `05_vaccination.csv` | person_id, vaccination |
-| `06_matching_variables.csv` | enrollment_ord, num_diagnosis, ehr_length_days |
+| `06_matching_variables.csv` | survey_ord, num_diagnosis, ehr_length_days |
 
 ### 01_ms_etl.py → results/ms/
 | Output | Description |

@@ -48,6 +48,7 @@ cat(strrep("=", 60), "\n")
 
 # ── Human-readable variable labels ───────────────────────────────────
 VAR_LABELS <- c(
+  survey_ord        = "Basics Survey date (ordinal)",
   enrollment_ord    = "Enrollment date (ordinal)",
   num_diagnosis     = "Number of diagnoses",
   ehr_length_days   = "EHR length (days)",

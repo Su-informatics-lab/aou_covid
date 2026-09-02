@@ -14,9 +14,39 @@
 | `wave_joint_sdoh_*_coefficients.csv` | **0** |
 | 本地磁盘上是否存在 | 否，`results/aou_v7/` 下只有 `wave_stratified_income.csv` |
 | 是否有 R 运行日志（`.Rout` / `.log` / `nohup.out` / `.Rhistory`） | 无 |
-| `02c` 是否把输出同步到 Workspace bucket | **否**。`gsutil` 只出现在 `01b_psm.R` 和 `02_models.R`，`02c` 没有 |
+| `02c` 是否把输出同步到 Workspace bucket | **是**（见下方更正） |
 
-第三条是致命的一条。`01b` 和 `02` 都会 `gsutil cp` 到 `WORKSPACE_BUCKET`，`02c` 不会。Workbench 的虚拟机是临时的，所以这四个文件只在当时那台机器的本地磁盘上活过一次。
+### 更正（2026-09-01 晚，比原判断乐观）
+
+**本文件先前写的「`02c` 不做 `gsutil` 同步」是错的，我核错了。** 源码第 330–341 行：
+
+```r
+# -- Upload to bucket -------------------------------------------------
+if (nchar(bucket) > 0) {
+  bdir <- paste0(bucket, "/data/covid_sdoh/", COHORT, "/")
+  system(paste0("gsutil -m cp ", RESULTS, "/wave_stratified_race*.csv ", bdir), ...)
+  system(paste0("gsutil -m cp ", RESULTS, "/wave_stratified_insurance.csv ", bdir), ...)
+  system(paste0("gsutil -m cp ", RESULTS, "/wave_joint_sdoh_*_coefficients.csv ", bdir), ...)
+```
+
+`git log -L 330,342` 显示这个块是建文件那一版（`e6bcad6 feat: add wave-race`）就有的，
+不是后来补的。所以 `02c` 和 `01b`、`02` 一样会同步到 bucket。
+
+**这意味着那四个 CSV 很可能还在 `$WORKSPACE_BUCKET/data/covid_sdoh/aou_v7/` 里。**
+上 Workbench 第一件事应该是
+
+```bash
+gsutil ls $WORKSPACE_BUCKET/data/covid_sdoh/aou_v7/wave_stratified_*
+```
+
+在就直接拉下来提交，不用重跑 `02c`。
+
+**为什么还是缺。** 缺口不在 bucket，在 git：bucket 里的东西没有人拉回本地 `git add`。
+同步是「上传到 bucket」，不是「进仓库」。所以 Data Availability 指的那个仓库里仍然
+复现不出这两张表——这一条结论不变。
+
+另外 `if (nchar(bucket) > 0)` 是有条件的：当时那次运行如果 `WORKSPACE_BUCKET` 没设，
+上传会被静默跳过。所以 `gsutil ls` 的结果才是答案，不能靠读代码推。
 
 ## 二、更严重的一层：eTable 12b/12c 根本没有生成脚本
 
@@ -97,4 +127,4 @@ strata_ok <- df_w %>% group_by(stratum) %>%
 2. 提交四个 `wave_stratified_*.csv`
 3. 把断言补进 `validate_numbers.py` —— 文件末尾的注释标了位置
 
-顺带把 `02c` 加进 `gsutil` 同步列表，和 `01b`、`02` 一致，否则下次仍然只活在临时机器上。
+（原先这里写着「顺带把 02c 加进 gsutil 同步列表」——不需要，它本来就有。真正缺的是把 bucket 里的产物拉回本地提交进 git。）
