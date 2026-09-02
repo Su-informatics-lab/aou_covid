@@ -350,6 +350,12 @@ if (IS_AOU && has_sdoh) {
       joint_aor <- extract_aor(joint_fit, "joint_sdoh", df_j)
       write_csv(joint_aor, file.path(RESULTS, "joint_sdoh_coefficients.csv"))
       save(joint_fit, file = file.path(RESULTS, "joint_sdoh_clogit.RData"))
+
+      # Freeze the exact rows and factor levels the joint model used, so
+      # 02d_wave_interaction.R tests interactions on the same data instead
+      # of rebuilding the factors and quietly drifting from this fit.
+      saveRDS(list(df = df_j, base_rhs = base_rhs, joint_sdoh = joint_sdoh),
+              file.path(RESULTS, "joint_model_inputs.rds"))
       results_all[[length(results_all)+1]] <- joint_aor
 
       # Print SDoH from joint model
