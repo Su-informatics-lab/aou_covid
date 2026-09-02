@@ -123,3 +123,63 @@ BigQuery 和 MarketScan 都不在这台机器上。SQL 改成了复用 `charlson
    `validate_numbers.py` 里的期望值更新为新结果，不要反过来改结果去迁就断言。
 
 重跑之前，稿子里所有效应量都应视为过时。
+
+---
+
+## 2026-09-02 — Workbench 2.0 上的重跑（进行中）
+
+### 环境
+
+| | |
+|---|---|
+| Workspace | `AUD_MH_Genomics_v7_v2` / `aou-rw-46c7ae9e`（COVID 分析当年就跑在这里，不是独立 workspace） |
+| GCP 项目 | `wb-gleaming-coffee-3314` |
+| CDR | `C2022Q4R13`（cdrv7，version-bound）— 与 `STUDY_DESIGN.md` 一致，`COHORT=aou_v7` |
+| App | `AoU_Jupyter_ComputeEngine_20260901`，n1-highmem-4，100 GB 盘，$0.24/hr，闲置 4h 自动停 |
+| 代码 | `~/covid/repo`，分支 `review/v18.7-reconcile` |
+| 日志 | `~/covid/run.log` |
+| 旧产物 | `gs://rw-migration-aou-rw-46c7ae9e/data/covid_sdoh/aou_v7/` |
+| **备份** | `gs://rw-migration-aou-rw-46c7ae9e/backup_20260902/`（86 文件 / 31 MB，重跑前所有产物） |
+
+### 已完成
+
+- **eTable 12b/12c 核实完毕**，12 个值逐位对上，D8 关闭。见
+  `reviews/2026-09-02_eTable12_VERIFIED.md`。
+- 备份完成，重跑可逆。
+- 管线已启动（`nohup`，后台）：
+  `01_aou_etl` → `01b_psm` → `02_models` → `02b` → `02c` → `02d` → `01c` → `03` → `04_tables`
+- `01_aou_etl.py` 已跑完；`01b_psm.R` 正在装 MatchIt（从源码编译）。
+
+### 下一个人（或下一次会话）要看的三件事
+
+按顺序，任一不过就停下：
+
+1. **队列规模**
+   `grep -E "Complete matching|Cases with matching" ~/covid/run.log`
+   修复后 `ehr_length_days` 会出现 NA（index 之前没有诊断记录的人），`dropna` 会剔掉他们。
+   剔了多少必须记下来 —— Figure 1 的流程图和 Table 1 的 N 都要跟着改。旧值：cases 4,064。
+
+2. **泄漏是否真的修好了**（最关键）
+   `head -5 ~/covid/repo/results/aou_v7/07c_smd_pre_matching.csv`
+   `num_diagnosis` 的 pre-match SMD **旧值 0.489，必须明显变小**。没变 = `CASE WHEN` 没生效，
+   后面全部作废。
+
+3. **反向估计是否翻转**
+   `grep -E "Pulmonary|Liver_Disease_Mild" ~/covid/repo/results/aou_v7/base_model_coefficients.csv`
+   旧值 chronic pulmonary 0.85、mild liver 0.76。若转向 1 或转正，Discussion 里把它们解释成
+   "encounter-density 匹配的正常后果" 那一段**必须删掉** —— 泄漏才是原因。
+
+### 跑完之后
+
+- `wave_interaction_tests.csv` / `wave_interaction_contrasts.csv`（D11 的交互检验，新增）
+- `profile_odds_ratio_contrast.csv` —— 正文里 1.78 至今没有区间
+- 把 `results/` 拉回本地 `git add`。**桶不是仓库**，这正是 eTable 12b 当初丢失的机制。
+- `bash analysis/gate.sh check` 会大面积失败，这是对的：逐条把断言更新为新产物，
+  绝不反过来改结果迁就断言。
+
+### 已知的环境坑（见 D12）
+
+- `WORKSPACE_BUCKET` 在新 app 里默认为空，会让所有 `gsutil` 上传静默跳过。本次已显式
+  `export WORKSPACE_BUCKET=gs://rw-migration-aou-rw-46c7ae9e`。
+- perimeter 不挡 github / PyPI / CRAN（均 200）。
+- 新 clone 落在默认分支，`notebooks/` 只在 `review/v18.7-reconcile` 上。
