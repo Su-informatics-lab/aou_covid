@@ -48,3 +48,24 @@ results/
 
 # Word lock files
 ~$*
+
+# ---------------------------------------------------------------------------
+# 2026-09-02: what is internal stays internal.
+#
+# The public surface of this repository is the numbered pipeline, the figure
+# and check scripts, the README and the licence. Three directories are local
+# only:
+#
+#   results/      model output; nothing person-level ever leaves the platform
+#   submission/   the manuscript package, unpublished
+#   archive/      project record, superseded code, and old drafts
+#
+# They are untracked, not deleted. Anything already in the history stays there.
+# ---------------------------------------------------------------------------
+submission/
+archive/
+working/
+_to_delete/
+__pycache__/
+.DS_Store
+.idea/

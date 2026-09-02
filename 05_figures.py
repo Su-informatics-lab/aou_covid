@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """
 COVID-19 Severity x SDoH -- Publication Figures & Tables  (v3)
+
+SUPERSEDED FOR FIGURES. Figures 3-5 in the current manuscript are drawn by
+figures/fig3_base_forest.py, figures/fig4_sdoh_forest.py and
+figures/fig5_wave.py. This script is kept for its table outputs
+(table3_sdoh_summary.csv, etable_ms_comparison.csv, the CONSORT counts);
+do not use its figure output.
 JAMIA (OUP) submission-ready.
 Usage: python 05_figures.py [results_dir]
 """
@@ -754,8 +760,16 @@ consort_rows.extend(
     [
         {"Site": "AoU", "Metric": "cases_with_matching_vars", "Value": _m_case},
         {"Site": "AoU", "Metric": "matched_strata", "Value": _m_strata},
-        {"Site": "AoU", "Metric": "control_observations_prematched", "Value": _pre_ctrl},
-        {"Site": "AoU", "Metric": "controls_dropped_followup", "Value": _pre_ctrl - _m_ctrl},
+        {
+            "Site": "AoU",
+            "Metric": "control_observations_prematched",
+            "Value": _pre_ctrl,
+        },
+        {
+            "Site": "AoU",
+            "Metric": "controls_dropped_followup",
+            "Value": _pre_ctrl - _m_ctrl,
+        },
         {"Site": "AoU", "Metric": "control_observations", "Value": _m_ctrl},
         {"Site": "AoU", "Metric": "matched_observations", "Value": _m_case + _m_ctrl},
     ]

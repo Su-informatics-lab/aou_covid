@@ -28,6 +28,21 @@ they will pass a stale file without complaint.
 Headline results are deliberately not repeated here — they go stale, and a stale
 number in a repository is read as a current one. The manuscript is the source.
 
+## Repository layout
+
+Everything in this repository is production code. The manuscript package, the
+project record and superseded code are local-only and untracked; see
+`.gitignore` for what and why.
+
+```
+01-08*                  the pipeline, in run order
+analysis/               number checks: validate_numbers.py, ledger.py, gate.sh
+figures/                figure code and the diagram guard
+results/                model output           (local only)
+submission/             the manuscript package (local only)
+archive/                project record, drafts, superseded code (local only)
+```
+
 ## Pipeline
 
 ```
@@ -44,15 +59,27 @@ MODELS (02*, 03)                      on-platform, reads CSV
   02d_wave_interaction.R              Pooled exposure-by-wave interaction tests
   03_sensitivity.R                    Reviewer sensitivity S1-S5 (AoU only)
 
-OUTPUT (04-08)                        04 on-platform; 05-08 off-platform
+TABLES (04, 06-08)                    04 on-platform; the rest off-platform
   04_tables.py                        Table 1 (demographics), Table 2 (SDoH)
-  05_figures.py                       Figures 3-5, Table 3, cross-site eTable
-  05b_love.R                          eFigure 1 (PSM balance, both cohorts)
+  05_figures.py                       table3_sdoh_summary.csv, the cross-site
+                                      comparison, CONSORT counts.  Its figure
+                                      output is superseded -- see below
   06_supplement.py                    Supplementary eTables
-  07_build_tables_docx.py             Table 1 and MarketScan eTable as .docx
+  07_build_tables_docx.py             Table 1 and the MarketScan eTable as .docx
   08_build_maintext_tables.py         Tables 1-3 in one house style
 
+FIGURES                               off-platform, from aggregate values
+  figures/fig3_base_forest.py         Figure 3
+  figures/fig4_sdoh_forest.py         Figure 4
+  figures/fig5_wave.py                Figure 5
+  figures/jamia_forest.py             shared style and forest helper
+  05b_love.R                          eFigure 1 (PSM balance, both cohorts)
+  Figures 1 and 2 are draw.io diagrams; their sources live with the submission
+  package and their counts are guarded by figures/fig1_consort_check.py
+
 CHECKS                                off-platform
+  figures/fig1_consort_check.py       asserts both CONSORT chains close
+  figures/drawio_preview.py           renders a .drawio, reports overflow/overlap
   analysis/validate_numbers.py        assert manuscript values against outputs
   analysis/ledger.py                  generate the claim ledger from those asserts
   analysis/gate.sh                    run the chain
@@ -76,11 +103,15 @@ python  04_tables.py aou_v7                   # Tables 1, 2
 sbatch ms_resume_from_psm.sbatch               # ETL -> PSM -> models -> Table 1
 sbatch ms_variance_sensitivity.sbatch          # eTable 10b Panel B
 
-# -- Figures, tables, supplement (anywhere, from aggregate CSVs) -----
-python  05_figures.py
+# -- Figures, tables, supplement (anywhere, from aggregate values) ---
+python  figures/fig3_base_forest.py results/figures
+python  figures/fig4_sdoh_forest.py results/figures
+python  figures/fig5_wave.py        results/figures
 Rscript 05b_love.R
+python  05_figures.py                          # tables and CONSORT counts only
 python  06_supplement.py
 python  08_build_maintext_tables.py
+python  figures/fig1_consort_check.py submission/04_figures/src/fig1_consort.drawio
 ```
 
 Quartz jobs carry their own module and library-path preamble; `r/4.5.1` is only
