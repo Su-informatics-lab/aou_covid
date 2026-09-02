@@ -299,3 +299,42 @@ matched_observations / matched_strata 必须与 Table 1 相符，不符即 fail�
 
 **待你手改：Figure 1（draw.io）的排除框**从 388 改成 **437**，AoU 侧全部计数按新的
 consort_counts 更新，`Enrollment date` 改成 `Survey date`。
+
+## D17 — 2026-09-02 — 能在平台做的分析就在平台做；产物不下来，稿子上去
+
+重跑之后我提议把 `results/` 打包下载到本机再跑 gate。**这条路线被否掉了，理由不止一条。**
+
+**1. VPC Service Controls 直接挡住了 `gsutil`。**
+
+    AccessDeniedException: 403 Request is prohibited by organization's policy
+
+perimeter 在桶这一层不区分聚合与个体级，一律拒绝。这是策略在正常工作，不是配置问题。
+
+**2. 退而求其次的「打 tar 走 JupyterLab 下载」同样不该做。** 下载确认框写着：
+
+> prohibited from publishing or otherwise distributing any data or aggregate
+> statistics corresponding to **fewer than 20 participants**
+
+我的 leak check 只按**文件名**排除个体级文件——那是我写的规则，不是对内容的审查。
+归档里 97 个系数文件**没有一个做过 <20 单元格审查**，而我们明知至少有一处：
+`education_coefficients.csv` 里 "never attended school" 一档不足 20 人，稿子里专门标注过。
+Table 2 有抑制逻辑，原始系数表没有。**leak check = 0 并不等于可以导出。**
+
+而且那个确认框要求本人键入 "affirm" 作政策担保。那是研究者的签名，助手不代签。
+
+**3. 方向本来就是反的。** `gate.sh` 需要产物 + manuscript/supplement 的 docx。产物在平台上，
+docx 在本机且**不含任何参与者数据**。把 4 MB 的稿子传上去，比把 97 个产物搬下来正确得多。
+
+### 规则
+
+- **计算在平台上做。** gate、表、图、模型，凡是需要产物的，都在 Workbench 里跑。
+- **出平台的只有"读出来的聚合结果"**——断言失败清单、单个 AOR 及其区间这类我们在屏幕上
+  逐条读的东西，且每一个都要过 <20 检查。
+- **进平台的是稿子。** docx、代码、断言文件走 upload 或 git。
+- **`.gitignore` 已加 person-level 规则**（含 `*.rds`：`joint_model_inputs.rds` 里是完整的
+  `df_j`）。此前那些文件只是"碰巧没被 add 过"，一个 `git add results/` 就会推上公开仓库。
+
+### 由此产生的待办
+
+`results/` 里被 git 跟踪的 81 个聚合文件，**在提交新版本之前需要逐个过一遍 <20 规则**。
+它们此前进过仓库，不代表进得对。这件事没有做过，现在记下来。

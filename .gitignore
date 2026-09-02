@@ -3,3 +3,27 @@
 .venv/
 __pycache__/
 _to_delete/
+
+# ---------------------------------------------------------------------------
+# Person-level All of Us Controlled Tier data. These must never reach a public
+# repository. They were untracked by care rather than by rule until 2026-09-02,
+# which is one `git add results/` away from a disclosure.
+#
+# The rule for this repository: results/ holds aggregate model output --
+# coefficients, standard errors, balance tables, counts -- and nothing with one
+# row per participant. When adding a new output, ask which it is.
+# ---------------------------------------------------------------------------
+results/*/01_covid_cohort.csv
+results/*/01b_phenotype_components_personlevel.csv
+results/*/02_demographics.csv
+results/*/03_charlson.csv
+results/*/04_sdoh.csv
+results/*/04b_sdoh_timing.csv
+results/*/05_vaccination.csv
+results/*/06_matching_variables.csv
+results/*/07_matched_cohort.csv
+results/*/08_regression_base.csv
+results/*/09_sensitivity_flags.csv
+results/*/*.rds
+results/*/*.RData
+results/*/*.fst
