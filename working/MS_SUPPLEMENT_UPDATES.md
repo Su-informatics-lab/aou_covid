@@ -166,3 +166,121 @@ the `Survey date` rename applies to panel (a) only.
 The MarketScan series must be re-plotted from `results/ms/base_model_coefficients.csv`.
 Blocked on the AoU series, which is re-plotted from the Workbench in the same script.
 Legend already says n = 637,679.
+
+---
+---
+
+# All of Us extraction, 2026-09-02 (added after the Workbench session)
+
+Source: `gs://rw-migration-aou-rw-46c7ae9e/data/covid_sdoh/aou_v7/`, read through the
+Workbench terminal. **The copy in `~/covid/repo/results/aou_v7/` on the VM is the
+v18.6 output, not the re-run** — it was checked against three marker values and does
+not match. Do not read from it. The bucket also holds an `aou_v8/` tree and a loose
+copy at the `data/covid_sdoh/` root, both from a CDR v8 run that this manuscript does
+not use.
+
+Every value below was printed twice in different formats and checked for log-scale
+interval symmetry. Four screen-reading errors were caught that way and corrected:
+HIV lower bound 0.7783→**0.7703**, domain-specific `f.income10k_25k`
+1.489→**1.4091**, joint `f.insuranceOther_None` 1.180→**1.1078**, joint
+`f.employmentStudent` lower bound 1.0583→**1.0503**.
+
+## eTable 10 — cross-site comparison, both columns final
+
+26 estimates are comparable (sex, vaccination, 3 age strata, 2 wave indicators,
+19 Charlson). **21 concordant, 5 discordant**: peripheral vascular disease, chronic
+pulmonary disease, peptic ulcer disease, mild liver disease, AIDS. The caption's old
+sentence ("Twenty of the 25 comparable estimates were concordant") is replaced by
+twenty-one of 26.
+
+The full table is in `etable10_full.md` next to this file.
+
+Note for the caption: the Omicron row counts as concordant only because the All of Us
+point estimate is 0.9998. Say so, or the criterion looks stronger than it is.
+
+## Control reuse — eTable 11
+
+Post-trim (the number the text should use): **15,523 control observations from 9,784
+unique individuals, maximum reuse 10**. Pre-trim, from `07b_control_reuse.csv`:
+15,960 rows, 10,032 unique, median 1 (IQR 1–2), max 10, 0 cases dropped.
+v18.6 printed 9,691 unique and max reuse 13 — both wrong now.
+
+## Table 3 — domain-specific column (all from `all_model_coefficients.csv`)
+
+insurance: Medicare 1.152 (1.014–1.309) · Medicaid 1.536 (1.380–1.710) · other/none
+1.328 (1.146–1.538) · missing 0.981 (0.864–1.114)
+income: <10k 1.505 (1.326–1.708) · 10–25k **1.4091 (1.2439–1.5962)** · 25–35k 1.176
+(1.012–1.367) · 100–150k 1.170 (1.002–1.368) · 150–200k 1.206 (0.971–1.498) · >200k
+1.088 (0.887–1.336) · missing 1.710 (1.529–1.912)
+employment: student 1.4779 (1.1395–1.9168) · unemployed 1.547 (1.398–1.711) · others
+1.398 (1.254–1.557) · missing 1.340 (1.069–1.682)
+housing: rent 1.282 (1.175–1.400) · other 1.129 (0.980–1.300) · missing 1.252
+(1.032–1.520) · unstable 1.002 (0.908–1.105) · stability missing 1.328 (0.999–1.764)
+education: below GED 1.290 (1.130–1.474) · GED/college 1.107 (1.015–1.206) · missing
+1.564 (1.223–2.000)
+
+Product of the three profile domains (Medicaid × 10–25k × rent) = **2.77** (was 2.79).
+
+## Table 3 — joint column
+
+income: <10k 1.211 (1.046–1.402) · 10–25k 1.205 (1.053–1.380) · 25–35k 1.096
+(0.939–1.280) · 100–150k 1.213 (1.035–1.421) · 150–200k 1.258 (1.008–1.569) · >200k
+1.147 (0.930–1.415) · missing 1.489 (1.318–1.681)
+insurance: Medicare 0.982 (0.855–1.128) · Medicaid 1.193 (1.047–1.360) · other/none
+**1.1078 (0.9455–1.2980)** · missing 0.833 (0.725–0.956)
+education: below GED 1.0602 (0.9191–1.2229) · GED/college 1.0110 (0.9200–1.1100) ·
+missing 1.2825 (0.9950–1.6533)
+employment: student **1.368043 (1.050294–1.781921)** · unemployed 1.3501
+(1.1984–1.5211) · others 1.2837 (1.1422–1.4427) · missing 1.1030 (0.8694–1.4015)
+housing: rent 1.1613 (1.0542–1.2792) · other 0.9785 (0.8410–1.1384) · missing 1.0169
+(0.8262–1.2517) · unstable 0.9085 (0.8191–1.0076) · stability missing 1.1832
+(0.8819–1.5875)
+disability: any 0.9235 (0.8077–1.0560) · missing 1.0015 (0.9071–1.1058)
+
+## eTable 15 — sensitivity, partial
+
+S2 clean controls: unemployed 1.2114 (1.0743–1.3659) · rent 1.1573 (1.0497–1.2760)
+S3 pre-index surveys: income<10k 1.1293 (0.9665–1.3195) · 10–25k 1.1862
+(1.0270–1.3700) · Medicaid 1.4353 (1.2435–1.6567) · rent 1.0895 (0.9809–1.2102)
+S4 no vaccination: income<10k 1.1995 (1.0398–1.3838) · 10–25k 1.1975 (1.0454–1.3717)
+· Medicaid 1.3005 (1.1427–1.4802) · unemployed 1.2539 (1.1158–1.4092) · rent 1.1333
+(1.0302–1.2468)
+S5 income collapsed: Medicaid 1.3302 (1.1686–1.5141) · unemployed 1.2384
+(1.1036–1.3897)
+
+**Not captured, must be re-read:** all of S1 (inpatient-only cases); the S5 collapsed
+income level (its variable name is not `f.incomeless_35k`, so the filter missed it);
+S3 unemployed and S5 renting, which failed the symmetry check and are therefore
+unsafe as read.
+
+---
+
+# Education: the below-20 category (decided 2026-09-02)
+
+**Not merged.** The model keeps `Never_Attended` as its own level. Merging it into
+`Below_GED` would have meant rerunning `02_models.R`, which overwrites the bucket
+prefix every number in this manuscript was read from and verified against — a full
+re-verification, to relocate 34 participants out of 19,520 observations. Keeping the
+category separate also keeps the 2,208-participant `Below_GED` estimate from
+absorbing 34 extreme cases.
+
+The factor as it stands, from `02_models.R`:
+`levels = c("Advanced","Never_Attended","Below_GED","GED_or_College","Missing")`,
+reference `Advanced`.
+
+**Rules to apply when the artefacts are rebuilt:**
+
+1. **Table 2, education block.** Do not print a `Never attended school` row. Count
+   those participants inside the `Below high school or GED` row so the block sums to
+   N. The caption already says this. Reason: the policy forbids a count under 20 *and*
+   any count from which one could be derived — with the row simply removed, the
+   residual against the column total is the suppressed count. In the v18.6 table it
+   comes out as exactly 16 cases and 18 controls by subtraction, so the current
+   submission copy is already non-compliant.
+2. **Table 3 and Figure 4.** Do not show the `Never_Attended` estimate. Filter
+   `f.educationNever_Attended` out of the plotting frame in `05_figures.py`.
+3. **Main text.** One sentence in the domain-specific paragraph says the category was
+   carried in the models and is not reported. No estimate, no count. Already written.
+4. **eTable.** If the estimate is wanted anywhere, an eTable may carry the AOR and
+   interval — the policy governs participant counts, not coefficients — but never the
+   count, and never a total from which the count follows. Default is to omit it.
