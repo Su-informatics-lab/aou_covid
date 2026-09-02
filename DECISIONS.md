@@ -188,3 +188,78 @@ true: the workspace perimeter does **not** block github.com, pypi.org or
 cloud.r-project.org (all returned 200), so `git clone` and CRAN installs work;
 and a fresh clone lands on the default branch, where `notebooks/` does not
 exist, so `git checkout review/v18.7-reconcile` is required.
+
+## D13 — 2026-09-02 — 波次问题的报告方式：omnibus 与预先指定对比都要写
+
+重跑后 `02d_wave_interaction.R` 的结果推翻了 D11 里我给的功效估计，也改变了波次故事该怎么讲。
+
+| 交互 | df | Wald p |
+|---|---|---|
+| race × wave | 6 | 0.074 |
+| income × wave | 14 | 0.218 |
+| **insurance × wave** | 8 | **0.0027** |
+
+**D11 的功效估计是错的。** 那里写的是 race × wave z≈4.5、p≈7e-06。错因：把三个**分别拟合**
+的波次模型估计当独立样本做了 1 自由度差值检验，而实际跑的是 6 项联合 Wald；而且用的是
+修复前的有泄漏估计。算术没错，算的不是那个检验。
+
+**但那个 1 自由度对比本身是对的。** 合并模型给出的分波次 Black-race AOR 是
+2.304 (2.011–2.641) / 2.239 (1.774–2.825) / 1.784 (1.520–2.093)，对比检验：
+
+    pre-Delta vs Delta     AOR 之比 1.029   z=0.21   p=0.83
+    pre-Delta vs Omicron   AOR 之比 1.292   z=2.39   p=0.017
+    Delta     vs Omicron   AOR 之比 1.255   z=1.58   p=0.11
+
+（保守：把两个估计当独立处理，真实 SE 更小。）
+
+**这恰好就是稿子一直在说的那句话**——pre-Delta 到 Delta 没变，到 Omicron 收窄——
+只是现在有检验了。6 自由度的 omnibus 不显著，是被 Asian 稀释的：Asian 的分波次估计
+1.70 / 0.48 / 1.03，Delta 的 CI 宽到 0.14–1.65。
+
+**决定。** 两个都报，不许挑：
+1. omnibus race × wave，p = 0.074，不显著；
+2. 预先指定的 Black-race pre-Delta vs Omicron 对比，p = 0.017，显著。
+Introduction 问的本来就是第 2 个。只报其中一个都是选择性报告。
+
+**收入。** income × wave p = 0.218。这不是"低收入关联消失了"，恰恰相反：稿子的说法是
+"persisted"，而 persisted 的意思就是**没有**随波次变化。措辞要精确到位——不是"每一波都
+显著"，而是"波次之间检不出差异"。
+
+**保险。** insurance × wave p = 0.0027，是唯一通过检验的波次故事，而且和 eTable 12c 里
+Medicaid 的 joint 估计在 Omicron 掉到 1.13 不显著自洽。这条此前没有被当作发现写出来。
+
+## D14 — 2026-09-02 — 联合模型的叙述顺序要按新排序改
+
+重跑后联合 SDoH 模型：
+
+    失业        1.350 (1.198–1.521)   旧 1.23
+    收入 <10k   1.211 (1.046–1.402)   旧 1.18
+    收入 10–25k 1.205 (1.053–1.380)   旧 1.18
+    Medicaid    1.193 (1.047–1.360)   旧 1.33
+    租房        1.161 (1.054–1.279)   旧 1.13
+    教育 <GED   1.060 (0.919–1.223)   p=0.42，仍不显著
+
+方向和显著性全部保住，教育低于 GED 仍不显著——**核心论点毫发无损**。但排序变了：
+**失业取代 Medicaid 成为最强的社会关联**，Medicaid 掉得最多。
+
+Results 开篇的 "Medicaid coverage carried the largest insurance estimate" 与 Discussion
+的叙述顺序都要按 失业 → 收入 → Medicaid ≈ 租房 重排。
+
+顺带：`profile_odds_ratio_contrast.csv` 现在存在，组合对比是
+**1.670 (1.403–1.988), p = 7.8e-09**（稿子印的是 1.78 且无区间）。D3 闭合。
+
+## D15 — 2026-09-02 — 把种族衰减的分域分解写进稿子
+
+`race_attenuation_table.csv` 一直有单域分解，从来没被用过。Black-race AOR 2.387 被各域
+单独拉低的幅度：
+
+    收入        11.7%        教育       4.8%
+    住房         8.7%        就业       3.8%
+    保险         6.2%        住房稳定性 0.1%
+                             残疾       0.0%（七种口径全试过）
+    六域联合    15.1%   （2.387 → 2.093）
+
+**收入一个域吃掉总衰减的四分之三；残疾和住房稳定性一点贡献都没有。**
+
+稿子现在只报总数 2.30→2.00。这张表信息量大得多，不需要任何新分析，而且直接回应
+"哪些社会域真的承载了种族差异"这个问题。加进 eTable 12a 的正文叙述里。
