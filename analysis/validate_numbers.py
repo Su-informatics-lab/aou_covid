@@ -47,6 +47,39 @@ def assertions(v: Validator, text: str) -> None:
         v.require(text, n["Cases_n"], f"{cohort} matched cases, Table 1 N row")
         v.require(text, n["Controls_n"], f"{cohort} matched controls, Table 1 N row")
 
+    # Cross-artifact coherence: the CONSORT counts that draw Figure 1 must agree
+    # with the Table 1 they sit beside. Added after the 2026-09-02 re-run, where
+    # 05_figures.py carried six hardcoded integers (413457, 25160, 4064, 21096,
+    # 4423200, 139489) that had been correct when typed and were silently wrong
+    # afterwards: consort_counts.csv printed 4,064 cases and 15,960 controls
+    # against a Table 1 of 3,997 and 15,523. Nothing caught it, because both
+    # files were internally consistent. This is the transcription failure of
+    # v18.5 wearing a different hat.
+    con = v.frame(f"{RESULTS}/tables/consort_counts.csv")
+
+    def con_val(metric):
+        r = v.one(con, Site="AoU", Metric=metric)
+        return _num(r["Value"])
+
+    t1_case = _num(v.one(aou, Variable="N")["Cases_n"])
+    t1_ctrl = _num(v.one(aou, Variable="N")["Controls_n"])
+    for metric, want, label in (
+        ("cases_with_matching_vars", t1_case, "cases"),
+        ("control_observations", t1_ctrl, "control observations"),
+        ("matched_observations", t1_case + t1_ctrl, "matched observations"),
+    ):
+        got = con_val(metric)
+        if got != want:
+            v._fail(
+                f"consort_counts.csv disagrees with Table 1 on {label}: "
+                f"{got:,.0f} vs {want:,.0f}. Figure 1 is drawn from the first "
+                f"and Table 1 from the second, so one of them is in the paper "
+                f"and wrong."
+            )
+    if con_val("matched_strata") != t1_case:
+        v._fail("consort_counts.csv: matched_strata must equal the case count; "
+                "the design is one stratum per case")
+
     # The direction check that would have caught the stale comorbidity block:
     # a crude rate lower in cases must not sit beside an AOR above 1.
     cross = v.frame(f"{RESULTS}/tables/eTable_S10_crosssite.csv")
@@ -169,7 +202,11 @@ def assertions(v: Validator, text: str) -> None:
         ("20,199", "pre-index-restriction MarketScan mild liver disease"),
         ("9,080", "pre-index-restriction MarketScan myocardial infarction"),
         # wrong standardized mean differences
-        ("0.554", "MatchIt reports 0.489 for the All of Us diagnosis-count SMD"),
+        ("0.554", "an SMD the study never produced for the diagnosis count"),
+        ("0.489", "the All of Us diagnosis-count SMD BEFORE the matching "
+                  "variables were restricted to pre-index records; the fixed "
+                  "pipeline reports 0.410, and about a sixth of the old "
+                  "imbalance was manufactured by the outcome itself"),
         ("0.700", "MatchIt reports 0.613 for the MarketScan diagnosis-count SMD"),
         # the invalid predicted probability
         ("1.31-fold", "inverse logit of a centred clogit linear predictor; the "

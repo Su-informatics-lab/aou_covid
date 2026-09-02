@@ -263,3 +263,39 @@ Results 开篇的 "Medicaid coverage carried the largest insurance estimate" 与
 
 稿子现在只报总数 2.30→2.00。这张表信息量大得多，不需要任何新分析，而且直接回应
 "哪些社会域真的承载了种族差异"这个问题。加进 eTable 12a 的正文叙述里。
+
+## D16 — 2026-09-02 — CONSORT 计数必须从产物导出，且必须与 Table 1 对得上
+
+重跑后 `consort_counts.csv` 说 **4,064 例 / 15,960 对照**，`table1_demographics.csv` 说
+**3,997 / 15,523**。查到两个原因，都在 `05_figures.py`：
+
+1. **六个整数是写死的**：`413457`、`25160`、`4064`、`21096`（AoU）与 `4423200`、`139489`
+   （MarketScan）。它们在被敲进去的那天是对的，此后一直是对的——直到队列变了。
+   `matched_observations` 更糟：`4064 + n_ctrl`，把一个写死的病例数和一个算出来的对照数相加。
+2. **`n_ctrl` 取的是修剪之前的对照数**（`07b_control_reuse.csv` 的 `n_control_rows` = 15,960），
+   而 Table 1 用的是模型真正拟合的那份（`08_regression_base.csv` = 15,523）。两个阶段混在了一起。
+
+三个文件的真实关系：
+
+    07_matched_cohort.csv    19,957 行 = 3,997 例 + 15,960 对照   MatchIt 的原始输出
+    08_regression_base.csv   19,520 行 = 3,997 例 + 15,523 对照   模型实际拟合的
+    table1_demographics.csv  3,997 / 15,523                       与后者一致 ✅
+    consort_counts.csv       4,064 / 15,960                       两个阶段各取一半 ❌
+
+**模型吃进去的是 `08_regression_base.csv`，所以论文的 N 就是 3,997 / 15,523。**
+差额 15,960 − 15,523 = **437 个对照观测**因随访不足被剔除（旧稿是 388，队列变了）。
+
+**已改。** `05_figures.py` 现在从 `01_covid_cohort.csv` 和 `08_regression_base.csv` 导出全部
+计数，并额外输出 `cases_with_matching_vars`、`matched_strata`、
+`control_observations_prematched`、`controls_dropped_followup`，让 Figure 1 能同时画出两个阶段。
+只剩 `CDR_TOTAL_PARTICIPANTS = 413457` 一个常量——它是 CDR person 表的 COUNT，本地没有产物，
+已加注释说明来源与何时必须更新。另加两条断言：severity 必须划分队列，strata 数必须等于病例数。
+
+**gate 加了跨产物一致性检查**：`consort_counts.csv` 的 cases / control_observations /
+matched_observations / matched_strata 必须与 Table 1 相符，不符即 fail。
+两个文件各自内部自洽却互相矛盾，正是 v18.5 那个错换了张脸——旧的 gate 看不见它。
+
+**`0.489` 进 banned 列表。** 它是修复前的诊断数 SMD，现在是 0.410。
+
+**待你手改：Figure 1（draw.io）的排除框**从 388 改成 **437**，AoU 侧全部计数按新的
+consort_counts 更新，`Enrollment date` 改成 `Survey date`。

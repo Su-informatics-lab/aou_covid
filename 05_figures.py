@@ -686,11 +686,35 @@ if has_ms:
 # CONSORT COUNTS
 # ===================================================================
 print("\n" + "=" * 60 + "\nCONSORT COUNTS\n" + "=" * 60)
+# Every count below except CDR_TOTAL_PARTICIPANTS is derived from a frozen
+# artifact. They used to be six hardcoded integers, which agreed with the
+# analysis only because nothing had changed since they were typed; the
+# 2026-09-02 re-run moved the cohort and consort_counts.csv silently kept
+# printing the old ones, disagreeing with Table 1 by 67 cases and 437
+# controls. Figure 1 is drawn from this file, so a stale constant here is a
+# wrong number in the paper's first display.
+#
+# CDR_TOTAL_PARTICIPANTS is the one value with no local artifact: it is a
+# COUNT over the CDR person table, printed by 01_aou_etl.py at STEP 1. It
+# must be re-read from that log whenever the CDR version changes.
+CDR_TOTAL_PARTICIPANTS = 413457  # C2022Q4R13, from 01_aou_etl.py STEP 1
+
+_cohort_path = os.path.join(BASE, "aou_v7", "01_covid_cohort.csv")
+_cohort = pd.read_csv(_cohort_path)
+_n_covid = len(_cohort)
+_n_case = int((_cohort.severity == 1).sum())
+_n_out = int((_cohort.severity == 0).sum())
+if _n_case + _n_out != _n_covid:
+    raise AssertionError(
+        f"severity does not partition {_cohort_path}: "
+        f"{_n_case} + {_n_out} != {_n_covid}"
+    )
+
 consort_rows = [
-    {"Site": "AoU", "Metric": "total_participants", "Value": 413457},
-    {"Site": "AoU", "Metric": "covid_positive", "Value": 25160},
-    {"Site": "AoU", "Metric": "hospitalized_strict_14d", "Value": 4064},
-    {"Site": "AoU", "Metric": "outpatient_controls", "Value": 21096},
+    {"Site": "AoU", "Metric": "total_participants", "Value": CDR_TOTAL_PARTICIPANTS},
+    {"Site": "AoU", "Metric": "covid_positive", "Value": _n_covid},
+    {"Site": "AoU", "Metric": "hospitalized_strict_14d", "Value": _n_case},
+    {"Site": "AoU", "Metric": "outpatient_controls", "Value": _n_out},
 ]
 
 
@@ -703,15 +727,39 @@ def read_reuse(site_dir):
     return None
 
 
-aou_reuse = read_reuse(os.path.join(BASE, "aou_v7"))
-if aou_reuse:
-    n_ctrl = int(aou_reuse.get("n_control_rows", 0))
-    consort_rows.extend(
-        [
-            {"Site": "AoU", "Metric": "matched_observations", "Value": 4064 + n_ctrl},
-            {"Site": "AoU", "Metric": "control_observations", "Value": n_ctrl},
-        ]
+# The matched set has two stages and Figure 1 needs both. 07_matched_cohort
+# is what MatchIt returned; 08_regression_base is what the models actually
+# fitted, after control observations whose index date falls within 14 days of
+# the CDR cutoff are dropped for unverifiable follow-up. Table 1 reports the
+# second. Reporting the first as "matched observations" beside a Table 1 built
+# from the second is how these counts drifted apart.
+_reg = pd.read_csv(os.path.join(BASE, "aou_v7", "08_regression_base.csv"))
+_m_case = int((_reg.Treatment == 1).sum())
+_m_ctrl = int((_reg.Treatment == 0).sum())
+_m_strata = int(_reg.stratum.nunique())
+if _m_case != _n_case:
+    print(
+        f"  note: {_n_case} met the phenotype but {_m_case} carry complete "
+        f"matching variables; {_n_case - _m_case} dropped before matching"
     )
+if _m_case != _m_strata:
+    raise AssertionError(
+        f"one stratum per case is violated: {_m_case} cases, {_m_strata} strata"
+    )
+
+_pre = pd.read_csv(os.path.join(BASE, "aou_v7", "07_matched_cohort.csv"))
+_pre_ctrl = int((_pre.Treatment == 0).sum())
+
+consort_rows.extend(
+    [
+        {"Site": "AoU", "Metric": "cases_with_matching_vars", "Value": _m_case},
+        {"Site": "AoU", "Metric": "matched_strata", "Value": _m_strata},
+        {"Site": "AoU", "Metric": "control_observations_prematched", "Value": _pre_ctrl},
+        {"Site": "AoU", "Metric": "controls_dropped_followup", "Value": _pre_ctrl - _m_ctrl},
+        {"Site": "AoU", "Metric": "control_observations", "Value": _m_ctrl},
+        {"Site": "AoU", "Metric": "matched_observations", "Value": _m_case + _m_ctrl},
+    ]
+)
 consort_rows.append({"Site": "MS", "Metric": "covid_positive", "Value": 4423200})
 ms_reuse = read_reuse(os.path.join(BASE, "ms"))
 if ms_reuse:
