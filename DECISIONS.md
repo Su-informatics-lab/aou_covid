@@ -97,9 +97,15 @@ the repository, and eTable 12b/12c depended on them — so those tables survived
 only as hardcoded constants in `make_figures.py` and could not be reproduced
 from the repository the Data Availability statement names.
 
-`02c` now stops if any of the four wave outputs is missing. **eTable 12b and 12c
-remain UNVERIFIED until 02c is re-run on the Workbench and the CSVs committed.**
-This is the single largest open item.
+`02c` now stops if any of the four wave outputs is missing.
+
+**CLOSED 2026-09-02.** Not by re-running 02c. The four CSVs were still in the
+Researcher Workbench 1.0 bucket, migrated intact to
+`gs://rw-migration-aou-rw-46c7ae9e/data/covid_sdoh/aou_v7/`, and every value in
+eTable 12b and 12c was read from them and matched to the printed precision. The
+gap was never the bucket; nobody had pulled the outputs back into git. See
+`reviews/2026-09-02_eTable12_VERIFIED.md`. What remains is committing the four
+files, which is an export decision, not an analysis one.
 
 ## D9 — 2026-09-01 — One semantic colour grammar across all five figures
 
@@ -157,3 +163,28 @@ Intro、摘要、Figure 5、Results 一节、Discussion 一节、Conclusions 六
 所以功效比上表估算的还高。
 
 **约束。** 必须在修好 pre-index 泄漏之后跑；现在跑是在有偏的匹配集上做新检验。
+
+## D12 — 2026-09-02 — WORKSPACE_BUCKET must be set explicitly before any re-run
+
+Checked the environment variable inside a fresh AoU Jupyter app on Researcher
+Workbench 2.0: `WORKSPACE_BUCKET` is **empty**.
+
+Every upload block in this pipeline is guarded by `if (nchar(bucket) > 0)`, in
+`01b_psm.R`, `02_models.R`, `02c_wave_stratified_race_insurance.R` and the new
+`02d_wave_interaction.R`. An empty value therefore skips the upload **silently**
+and the run's outputs live only on an ephemeral VM disk. That is one of the two
+mechanisms that produced the eTable 12b/12c gap in the first place; the other is
+that a bucket is not a repository.
+
+Before any re-run:
+
+    export WORKSPACE_BUCKET=gs://rw-migration-aou-rw-46c7ae9e
+
+and after the run, pull the CSVs down and `git add` them. Do not treat "uploaded
+to the bucket" as "saved".
+
+Also recorded from the same session, because both were assumed and neither was
+true: the workspace perimeter does **not** block github.com, pypi.org or
+cloud.r-project.org (all returned 200), so `git clone` and CRAN installs work;
+and a fresh clone lands on the default branch, where `notebooks/` does not
+exist, so `git checkout review/v18.7-reconcile` is required.
