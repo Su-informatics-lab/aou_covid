@@ -1,6 +1,6 @@
 # What the manuscript still needs · 2026-09-02
 
-Current draft: `working/JAMIA_manuscript_v19.0.docx` (3,968 words, limit 4,000)
+Current draft: `working/JAMIA_manuscript_v19.0.docx` (3,979 words, limit 4,000)
 and `working/JAMIA_supplementary_v19.0.docx`. Full round record in
 `reviews/2026-09-02_v19_platform_completion.md`.
 
@@ -11,10 +11,8 @@ and `working/JAMIA_supplementary_v19.0.docx`. Full round record in
    with complete matching variables, 19,520 observations in 3,997 strata with
    15,523 controls. Panel (b) MarketScan: the whole CONSORT chain changed.
    Per-box values are in `working/MS_SUPPLEMENT_UPDATES.md`.
-2. **eTable 10b Panel B.** The MarketScan variance comparison is the last
-   `[STALE]` marker in the supplement. Submit `ms_variance_sensitivity.sbatch` on
-   Quartz; it guards its own input and prints the finished table.
-3. **A manual read-through.**
+2. **A manual read-through.** The body is 3,979 words against a 4,000 limit, so
+   any addition has to be paid for.
 
 ## Not blocking
 

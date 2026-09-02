@@ -127,3 +127,33 @@ eTable 11c 的联合列原来是空的，现在填上了：
 
 **公开仓库历史：** `results/` 已从 `main` 的 tip 移除（`8c0b56d`），但 blob 还在 60 个 commit 的历史里。
 清历史要 rewrite + force-push，是实验室的决定。
+
+---
+
+## 九、补记：eTable 10b Panel B —— 不用重跑，它早就跑好了
+
+用 Desktop Commander 从你的 Mac ssh 到 Quartz（`~/.ssh/config` 里的 `quartz` 别名、
+`id_ed25519`，key 认证，没有密码），发现 **Panel B 根本不需要重跑**：
+`results/ms/variance_sensitivity_etable11b.csv` 的时间是 **Sep 1 23:01**，
+就在 `01b_psm.R` 写出修正后的 `08_regression_base.csv`（22:59）两分钟之后。
+02b 那一步当时没失败，**只是结果从来没被取回来过**——你 Mac 上那份是 Jun 7 的。
+
+按内容验过才用：
+
+- 输入 `results/ms/08_regression_base.csv`：637,679 观测 / 127,696 例 / 509,983 对照 /
+  127,696 strata / 443,061 名不同对照 / 最大复用 21。Figure 1b 的四个不变量加 eTable 10 的两个，全对。
+- 输出的系数与修正后的 MarketScan 基础模型一致：女性 0.75、接种 0.50、Delta 1.11、
+  Omicron 0.73、severe renal 3.31、AIDS 1.69。
+
+**结果：38 个模型项，CI 比值中位数 1.00，一处推断改变** —— consumer-directed 计划类型，
+exact 0.99–1.42 对 cluster-robust 1.01–1.39。我另外用"exact 区间是否含 1"与
+"robust 区间是否含 1"独立复算了一遍翻转，只有这一项，与文件里的 `flip` 列一致。
+
+所以 ¶38 现在写：两个队列都用 Efron 重拟过，**All of Us 零处改变，MarketScan 一处，
+而且是计划类型这个协变量，不是暴露**。这比原来那句（"每个队列各一处"）和上一版
+（"AoU 一处、MS 零处"）都准，而且两个 panel 现在同属一个版本。
+
+`ms_variance_sensitivity.sbatch` 留在仓库里没删——将来要重跑还是它，
+而且它那段按内容拒绝错误输入的 guard 正是这一轮反复用到的做法。
+
+**补充材料现在零处 [STALE]。**正文 3,979 词（上限 4,000，**余 21**）。
