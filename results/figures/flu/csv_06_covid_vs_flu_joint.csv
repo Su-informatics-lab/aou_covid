@@ -1,0 +1,15 @@
+pathogen,cdr,domain,level,level_label,aor,lo,hi,sig,source
+COVID-19,v7 C2022Q4R13,education,Below_GED,Below GED,1.057,0.916,1.219,False,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,education,Below_GED,Below GED,0.908,0.758,1.089,False,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,employment,Unemployed,Unemployed,1.342,1.192,1.511,True,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,employment,Unemployed,Unemployed,1.471,1.233,1.756,True,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,housing,Rent,Renting,1.163,1.055,1.281,True,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,housing,Rent,Renting,1.212,1.035,1.418,True,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,housing_stability,Unstable,Housing unstable,0.907,0.817,1.005,False,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,housing_stability,Unstable,Housing unstable,0.988,0.849,1.148,False,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,income,10k_25k,"$10,000-24,999",1.206,1.054,1.381,True,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,income,10k_25k,"$10,000-24,999",1.825,1.479,2.253,True,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,income,less_10k,<$10000,1.215,1.049,1.406,True,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,income,less_10k,<$10000,1.549,1.243,1.930,True,flu/08_models.csv
+COVID-19,v7 C2022Q4R13,insurance_type,Medicaid,Medicaid,1.188,1.043,1.354,True,"v21 five-domain refit, aou_v7_5domain"
+Influenza,v9 C2025Q4R6,insurance_type,Medicaid,Medicaid,0.990,0.810,1.210,False,flu/08_models.csv

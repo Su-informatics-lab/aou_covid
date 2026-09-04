@@ -1,0 +1,7 @@
+cohort,variable,abs_smd_pre,abs_smd_post
+All of Us,Survey date,0.095,0.015
+All of Us,Number of diagnoses,0.410,0.003
+All of Us,Length of EHR history,0.041,0.012
+MarketScan,Enrollment date,0.241,0.063
+MarketScan,Number of diagnoses,0.199,0.012
+MarketScan,Coverage span,0.400,0.045

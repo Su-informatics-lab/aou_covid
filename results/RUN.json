@@ -1,0 +1,29 @@
+{
+  "run_id": "aou_covid_v22",
+  "frozen": true,
+  "frozen_at": "2026-09-04",
+  "what_is_here": "The values every figure in the manuscript draws, one CSV per figure, plus the figures themselves. Model output beyond that stays on the platform it was computed on; see README 'Data policy'.",
+  "data": {
+    "aou_covid": "All of Us Controlled Tier CDR v7 C2022Q4R13, cutoff 2022-07-01",
+    "aou_influenza": "All of Us Controlled Tier CDR v9 C2025Q4R6, cutoff 2025-01-01",
+    "marketscan": "Merative MarketScan Commercial Claims 2020-2023"
+  },
+  "cohort": {
+    "aou_cases": 3997,
+    "aou_control_observations": 15523,
+    "aou_unique_control_individuals": 9784,
+    "influenza_case_person_seasons": 1672,
+    "influenza_control_observations": 6616,
+    "ms_cases": 127696,
+    "ms_control_observations": 509983,
+    "ms_unique_control_individuals": 443061
+  },
+  "frozen_analysis_runs": {
+    "note": "Model fits live in the All of Us Researcher Workbench workspace bucket and on Quartz. They are not mirrored here; only the aggregate values the figures draw are.",
+    "aou_v7_5domain": "five-domain refit, the primary specification",
+    "aou_v7_5domain_split": "employment split, influenza Wald tests, eFigure 3 offsets",
+    "aou_v7_5domain_mi40": "multiple imputation at m = 40, and the Black-race attenuation under imputation"
+  },
+  "screening": "results/SCREENING.md",
+  "regenerate": "python figures/export_source_data.py"
+}

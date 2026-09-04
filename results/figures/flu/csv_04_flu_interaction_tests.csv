@@ -1,0 +1,9 @@
+domain,domain_label,chisq,df,p,pathogen,sig
+insurance_type,Insurance,21.06,8,0.007,Influenza,True
+income,Income,11.82,14,0.621,Influenza,False
+employment,Employment,7.29,8,0.5061,Influenza,False
+education,Education,4.92,6,0.5536,Influenza,False
+housing,Housing tenure,9.92,6,0.1281,Influenza,False
+housing_stability,Housing stability,3.89,4,0.4218,Influenza,False
+insurance_type,Insurance,25.50,8,0.00128,COVID-19,True
+income,Income,19.32,14,0.153,COVID-19,False

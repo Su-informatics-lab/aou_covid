@@ -29,22 +29,28 @@ results/*/*.RData
 results/*/*.fst
 
 # ---------------------------------------------------------------------------
-# 2026-09-02: results/ is local-only.
+# 2026-09-02: results/ is local-only by default.
 #
 # It held 81 aggregate files -- coefficient tables, balance tables, summary
 # CSVs, figures -- on a PUBLIC repository, none of which had ever been screened
 # against the All of Us rule on aggregate statistics covering fewer than 20
-# participants. At least one is known to be at risk: the "never attended
+# participants. At least one was known to be at risk: the "never attended
 # school" education stratum has under 20 participants, and the raw coefficient
 # files carry no suppression where Table 2 does.
 #
 # The Data Availability statement promises *code*, not artifacts, so nothing we
-# told readers depends on these files being here.
+# told readers depends on those files being here.
 #
-# If a specific artifact needs to be public, screen it and add it with
-# `git add -f`, one file at a time, with the screen recorded.
+# 2026-09-04: three exceptions, screened and recorded in results/SCREENING.md --
+# the values every figure draws, the figures themselves, and RUN.json. They are
+# named below rather than force-added, so the screen is visible in the tree and
+# a new file is not published by accident. Anything else added to results/ stays
+# ignored until it is screened and named here.
 # ---------------------------------------------------------------------------
-results/
+results/*
+!results/figures/
+!results/RUN.json
+!results/SCREENING.md
 
 # Word lock files
 ~$*

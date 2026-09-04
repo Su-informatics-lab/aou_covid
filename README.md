@@ -37,8 +37,10 @@ project record and superseded code are local-only and untracked; see
 ```
 01-08*                  the pipeline, in run order
 analysis/               number checks: validate_numbers.py, ledger.py, gate.sh
-figures/                figure code and the diagram guard
-results/                model output           (local only)
+figures/                the code that draws every figure in the manuscript
+results/figures/        what each figure draws: one CSV per figure, and the
+                        figure itself.  Screened; see results/SCREENING.md
+results/                everything else in it is local only
 submission/             the manuscript package (local only)
 archive/                project record, drafts, superseded code (local only)
 ```
@@ -58,6 +60,8 @@ MODELS (02*, 03)                      on-platform, reads CSV
   02c_wave_stratified_race_insurance.R  Within-wave race and Medicaid models
   02d_wave_interaction.R              Pooled exposure-by-wave interaction tests
   03_sensitivity.R                    Reviewer sensitivity S1-S5 (AoU only)
+  03b_income_mi.R                     Multiple imputation of the survey items
+  03c_employment_split_and_flu_wald.R Employment split; influenza Wald tests
 
 TABLES (04, 06-08)                    04 on-platform; the rest off-platform
   04_tables.py                        Table 1 (demographics), Table 2 (SDoH)
@@ -67,22 +71,49 @@ TABLES (04, 06-08)                    04 on-platform; the rest off-platform
   06_supplement.py                    Supplementary eTables
   07_build_tables_docx.py             Table 1 and the MarketScan eTable as .docx
   08_build_maintext_tables.py         Tables 1-3 in one house style
+  06b_ms_balance_medians.py           eTable 8 post-matching medians (Quartz)
 
 FIGURES                               off-platform, from aggregate values
-  figures/fig3_base_forest.py         Figure 3
-  figures/fig4_sdoh_forest.py         Figure 4
-  figures/fig5_wave.py                Figure 5
-  figures/jamia_forest.py             shared style and forest helper
-  05b_love.R                          eFigure 1 (PSM balance, both cohorts)
-  Figures 1 and 2 are draw.io diagrams; their sources live with the submission
-  package and their counts are guarded by figures/fig1_consort_check.py
+  figures/style.py                    shared style, palette, export
+  figures/fig1_clinical_check.py      Figure 1
+  figures/fig2_domain_vs_joint.py     Figure 2
+  figures/fig3_race_attenuation.py    Figure 3
+  figures/fig4_era.py                 Figure 4
+  figures/fig5_covid_vs_flu.py        Figure 5
+  figures/efig2_balance.py            eFigure 2
+  figures/efig3_visits.py             eFigure 3
+  figures/export_source_data.py       writes results/figures/*_data.csv
+  eFigure 1 (participant flow) and eFigure 4 (phenotype decision tree) are
+  draw.io diagrams; their sources live with the submission package.
 
 CHECKS                                off-platform
-  figures/fig1_consort_check.py       asserts both CONSORT chains close
-  figures/drawio_preview.py           renders a .drawio, reports overflow/overlap
   analysis/validate_numbers.py        assert manuscript values against outputs
   analysis/ledger.py                  generate the claim ledger from those asserts
   analysis/gate.sh                    run the chain
+```
+
+## Which figure comes from what
+
+Every figure is drawn from aggregate values, never from rows. Each script carries
+those values as literals with the frozen run they were read from, and
+`export_source_data.py` writes them out, so the CSV in `results/figures/` is by
+construction the numbers the figure draws.
+
+| Figure | Script | Values |
+|---|---|---|
+| Figure 1. Clinical model, MarketScan before and after the pre-index correction, and against All of Us | `figures/fig1_clinical_check.py` | `results/figures/Figure1_data.csv` |
+| Figure 2. Test 1. Domain-specific against jointly adjusted | `figures/fig2_domain_vs_joint.py` | `results/figures/Figure2_data.csv` |
+| Figure 3. Test 2. What the five domains account for in the Black-race association | `figures/fig3_race_attenuation.py` | `results/figures/Figure3_data.csv` |
+| Figure 4. Test 3. What changed across pandemic eras | `figures/fig4_era.py` | `results/figures/Figure4_data.csv` |
+| Figure 5. Test 4. COVID-19 against influenza | `figures/fig5_covid_vs_flu.py` | `results/figures/Figure5_data_panel_a.csv`, `results/figures/flu/` |
+| eFigure 2. Matching balance | `figures/efig2_balance.py` | `results/figures/eFigure2_data.csv` |
+| eFigure 3. Visit timing around the index date | `figures/efig3_visits.py` | `results/figures/eFigure3_data.csv` |
+| eFigure 1, eFigure 4 | draw.io, sources with the submission package | — |
+
+```bash
+python figures/fig1_clinical_check.py     # and the other six: each writes its
+                                          # own PDF and PNG into results/figures
+python figures/export_source_data.py      # regenerate every *_data.csv
 ```
 
 ## Reproduction
@@ -104,14 +135,10 @@ sbatch ms_resume_from_psm.sbatch               # ETL -> PSM -> models -> Table 1
 sbatch ms_variance_sensitivity.sbatch          # eTable 10b Panel B
 
 # -- Figures, tables, supplement (anywhere, from aggregate values) ---
-python  figures/fig3_base_forest.py results/figures
-python  figures/fig4_sdoh_forest.py results/figures
-python  figures/fig5_wave.py        results/figures
-Rscript 05b_love.R
+python  figures/export_source_data.py          # every figure and every *_data.csv
 python  05_figures.py                          # tables and CONSORT counts only
 python  06_supplement.py
 python  08_build_maintext_tables.py
-python  figures/fig1_consort_check.py submission/04_figures/src/fig1_consort.drawio
 ```
 
 Quartz jobs carry their own module and library-path preamble; `r/4.5.1` is only
@@ -121,9 +148,16 @@ if the input is not the corrected cohort.
 
 ## Data policy
 
-`results/` is **local-only and untracked** (`a0b2add`, `8c0b56d`). It previously
+`results/` is **local-only by default** (`a0b2add`, `8c0b56d`). It previously
 held 81 aggregate files in the public tree, with person-level files kept out by
 care rather than by rule — one `git add results/` away from a disclosure.
+
+Three things in it are published, named explicitly in `.gitignore` rather than
+force-added: `results/figures/`, `results/RUN.json` and `results/SCREENING.md`.
+They were screened against the under-20 rule before they were first committed and
+the screen is `results/SCREENING.md`. Model fits, matched cohorts and balance
+tables are not published; they stay in the Workbench workspace bucket and on
+Quartz.
 
 Analysis runs where the data lives. Aggregate output — coefficients, intervals,
 balance tables, counts of 20 or more — may be read off the platform; rows are not

@@ -1,0 +1,47 @@
+pathogen,cdr,period,kind,domain,domain_label,level,level_label,aor,lo,hi,p,sig
+Influenza,v9 C2025Q4R6,ALL,domain,education,Education,Advanced,Advanced degree,0.808,0.71,0.921,0.00138,True
+Influenza,v9 C2025Q4R6,ALL,joint,education,Education,Advanced,Advanced degree,0.978,0.847,1.13,0.765,False
+Influenza,v9 C2025Q4R6,ALL,domain,education,Education,Below_GED,Below GED,1.037,0.868,1.238,0.687,False
+Influenza,v9 C2025Q4R6,ALL,joint,education,Education,Below_GED,Below GED,0.908,0.758,1.089,0.298,False
+Influenza,v9 C2025Q4R6,ALL,domain,education,Education,Missing,Missing,0.899,0.647,1.249,0.527,False
+Influenza,v9 C2025Q4R6,ALL,joint,education,Education,Missing,Missing,0.854,0.612,1.193,0.355,False
+Influenza,v9 C2025Q4R6,ALL,domain,employment,Employment,Missing,Missing,1.424,1.05,1.931,0.0228,True
+Influenza,v9 C2025Q4R6,ALL,joint,employment,Employment,Missing,Missing,1.186,0.854,1.648,0.309,False
+Influenza,v9 C2025Q4R6,ALL,domain,employment,Employment,Others,Not employed (other),1.386,1.165,1.648,0.000224,True
+Influenza,v9 C2025Q4R6,ALL,joint,employment,Employment,Others,Not employed (other),1.278,1.06,1.541,0.0103,True
+Influenza,v9 C2025Q4R6,ALL,domain,employment,Employment,Student,Student,1.64,1.092,2.462,0.017,True
+Influenza,v9 C2025Q4R6,ALL,joint,employment,Employment,Student,Student,1.46,0.971,2.196,0.069,False
+Influenza,v9 C2025Q4R6,ALL,domain,employment,Employment,Unemployed,Unemployed,1.777,1.528,2.067,8.9e-14,True
+Influenza,v9 C2025Q4R6,ALL,joint,employment,Employment,Unemployed,Unemployed,1.471,1.233,1.756,1.91e-05,True
+Influenza,v9 C2025Q4R6,ALL,domain,housing,Housing tenure,Missing,Missing,1.4,1.08,1.814,0.011,True
+Influenza,v9 C2025Q4R6,ALL,joint,housing,Housing tenure,Missing,Missing,1.034,0.773,1.382,0.824,False
+Influenza,v9 C2025Q4R6,ALL,domain,housing,Housing tenure,Others,Other arrangement,1.596,1.298,1.963,9.45e-06,True
+Influenza,v9 C2025Q4R6,ALL,joint,housing,Housing tenure,Others,Other arrangement,1.198,0.957,1.5,0.115,False
+Influenza,v9 C2025Q4R6,ALL,domain,housing,Housing tenure,Rent,Renting,1.507,1.309,1.735,1.19e-08,True
+Influenza,v9 C2025Q4R6,ALL,joint,housing,Housing tenure,Rent,Renting,1.212,1.035,1.418,0.0166,True
+Influenza,v9 C2025Q4R6,ALL,domain,housing_stability,Housing stability,Missing,Missing,1.904,1.26,2.878,0.00224,True
+Influenza,v9 C2025Q4R6,ALL,joint,housing_stability,Housing stability,Missing,Missing,1.867,1.208,2.886,0.00497,True
+Influenza,v9 C2025Q4R6,ALL,domain,housing_stability,Housing stability,Unstable,Housing unstable,1.204,1.044,1.388,0.0107,True
+Influenza,v9 C2025Q4R6,ALL,joint,housing_stability,Housing stability,Unstable,Housing unstable,0.988,0.849,1.148,0.871,False
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,100k_150k,"$100,000-149,999",0.984,0.763,1.269,0.903,False
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,100k_150k,"$100,000-149,999",1.047,0.807,1.359,0.727,False
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,10k_25k,"$10,000-24,999",2.073,1.704,2.521,2.93e-13,True
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,10k_25k,"$10,000-24,999",1.825,1.479,2.253,2.14e-08,True
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,150k_200k,"$150,000-199,999",0.82,0.57,1.18,0.286,False
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,150k_200k,"$150,000-199,999",0.907,0.626,1.314,0.606,False
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,25k_35k,"$25,000-34,999",1.329,1.047,1.687,0.0195,True
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,25k_35k,"$25,000-34,999",1.278,1.005,1.625,0.0457,True
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,Missing,Missing,1.58,1.325,1.883,3.3e-07,True
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,Missing,Missing,1.432,1.183,1.734,0.000234,True
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,less_10k,<$10000,1.88,1.551,2.278,1.24e-10,True
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,less_10k,<$10000,1.549,1.243,1.93,9.69e-05,True
+Influenza,v9 C2025Q4R6,ALL,domain,income,Income,more_200k,>=$200000,0.864,0.601,1.241,0.428,False
+Influenza,v9 C2025Q4R6,ALL,joint,income,Income,more_200k,>=$200000,0.941,0.649,1.364,0.749,False
+Influenza,v9 C2025Q4R6,ALL,domain,insurance_type,Insurance,Medicaid,Medicaid,1.597,1.349,1.891,5.76e-08,True
+Influenza,v9 C2025Q4R6,ALL,joint,insurance_type,Insurance,Medicaid,Medicaid,0.99,0.81,1.21,0.919,False
+Influenza,v9 C2025Q4R6,ALL,domain,insurance_type,Insurance,Medicare,Medicare,1.317,1.076,1.612,0.00763,True
+Influenza,v9 C2025Q4R6,ALL,joint,insurance_type,Insurance,Medicare,Medicare,0.966,0.775,1.203,0.754,False
+Influenza,v9 C2025Q4R6,ALL,domain,insurance_type,Insurance,Missing,Missing,1.108,0.917,1.339,0.286,False
+Influenza,v9 C2025Q4R6,ALL,joint,insurance_type,Insurance,Missing,Missing,0.819,0.67,1.003,0.0531,False
+Influenza,v9 C2025Q4R6,ALL,domain,insurance_type,Insurance,Other_None,Other or none,1.28,1.001,1.638,0.0493,True
+Influenza,v9 C2025Q4R6,ALL,joint,insurance_type,Insurance,Other_None,Other or none,0.929,0.716,1.205,0.58,False
