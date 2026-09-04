@@ -75,13 +75,13 @@ TABLES (04, 06-08)                    04 on-platform; the rest off-platform
 
 FIGURES                               off-platform, from aggregate values
   figures/style.py                    shared style, palette, export
-  figures/fig1_clinical_check.py      Figure 1
-  figures/fig2_domain_vs_joint.py     Figure 2
-  figures/fig3_race_attenuation.py    Figure 3
-  figures/fig4_era.py                 Figure 4
-  figures/fig5_covid_vs_flu.py        Figure 5
+  figures/fig1_domain_vs_joint.py     Figure 1
+  figures/fig2_race_attenuation.py    Figure 2
+  figures/fig3_era.py                 Figure 3
+  figures/fig4_covid_vs_flu.py        Figure 4
   figures/efig2_balance.py            eFigure 2
   figures/efig3_visits.py             eFigure 3
+  figures/efig5_clinical_check.py     eFigure 5
   figures/export_source_data.py       writes results/figures/*_data.csv
   eFigure 1 (participant flow) and eFigure 4 (phenotype decision tree) are
   draw.io diagrams; their sources live with the submission package.
@@ -101,17 +101,17 @@ construction the numbers the figure draws.
 
 | Figure | Script | Values |
 |---|---|---|
-| Figure 1. Clinical model, MarketScan before and after the pre-index correction, and against All of Us | `figures/fig1_clinical_check.py` | `results/figures/Figure1_data.csv` |
-| Figure 2. Test 1. Domain-specific against jointly adjusted | `figures/fig2_domain_vs_joint.py` | `results/figures/Figure2_data.csv` |
-| Figure 3. Test 2. What the five domains account for in the Black-race association | `figures/fig3_race_attenuation.py` | `results/figures/Figure3_data.csv` |
-| Figure 4. Test 3. What changed across pandemic eras | `figures/fig4_era.py` | `results/figures/Figure4_data.csv` |
-| Figure 5. Test 4. COVID-19 against influenza | `figures/fig5_covid_vs_flu.py` | `results/figures/Figure5_data_panel_a.csv`, `results/figures/flu/` |
+| Figure 1. Test 1. Domain-specific against jointly adjusted | `figures/fig1_domain_vs_joint.py` | `results/figures/Figure1_data.csv` |
+| Figure 2. Test 2. What the five domains account for in the Black-race association | `figures/fig2_race_attenuation.py` | `results/figures/Figure2_data.csv` |
+| Figure 3. Test 3. What changed across pandemic eras | `figures/fig3_era.py` | `results/figures/Figure3_data.csv` |
+| Figure 4. Test 4. COVID-19 against influenza | `figures/fig4_covid_vs_flu.py` | `results/figures/Figure4_data_panel_a.csv`, `results/figures/flu/` |
 | eFigure 2. Matching balance | `figures/efig2_balance.py` | `results/figures/eFigure2_data.csv` |
 | eFigure 3. Visit timing around the index date | `figures/efig3_visits.py` | `results/figures/eFigure3_data.csv` |
+| eFigure 5. The clinical model in both cohorts | `figures/efig5_clinical_check.py` | `results/figures/eFigure5_data.csv` |
 | eFigure 1, eFigure 4 | draw.io, sources with the submission package | — |
 
 ```bash
-python figures/fig1_clinical_check.py     # and the other six: each writes its
+python figures/fig1_domain_vs_joint.py    # and the other six: each writes its
                                           # own PDF and PNG into results/figures
 python figures/export_source_data.py      # regenerate every *_data.csv
 ```

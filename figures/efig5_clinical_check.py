@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Figure 1. The clinical model in two cohorts.
+"""eFigure 5. The clinical model in two cohorts.
 
 Base-model adjusted odds ratios in All of Us and in MarketScan, on one shared log
 scale. Both models are fitted on matched strata whose encounter-density proxies
@@ -225,4 +225,4 @@ ax.legend(
     handletextpad=0.5,
 )
 
-save(fig, os.path.join(OUT, "Figure1"))
+save(fig, os.path.join(OUT, "eFigure5"))

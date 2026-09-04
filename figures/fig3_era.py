@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Figure  4. Test 3. What changed across pandemic eras, and what did not.
+"""Figure 3. Test 3. What changed across pandemic eras, and what did not.
 
 Income rows: eTable 12 (within-wave models carrying that domain alone).
 Medicaid row: eTable 11c, joint column (within-wave models carrying all six).
@@ -162,5 +162,5 @@ ax.legend(
     title=None,
 )
 panel_labels([ax])
-save(fig, os.path.join(OUT, "Figure4"))
+save(fig, os.path.join(OUT, "Figure3"))
 print("  rows:", len(rows))

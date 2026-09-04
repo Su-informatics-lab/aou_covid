@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Figure  3. Test 2. What the six social domains account for in the
+"""Figure 2. Test 2. What the six social domains account for in the
 Black-race association.
 
 Values transcribed from eTable 11a. Single-domain percentages are competing,
@@ -126,4 +126,4 @@ for s in ("top", "right", "left"):
     bx.spines[s].set_visible(False)
 
 panel_labels([ax, bx], alpha=1.0)
-save(fig, os.path.join(OUT, "Figure3"))
+save(fig, os.path.join(OUT, "Figure2"))

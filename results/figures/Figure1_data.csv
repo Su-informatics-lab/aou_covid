@@ -1,55 +1,18 @@
-cohort,variable,aor,lo,hi
-All of Us,Female sex,0.768,0.709,0.832
-All of Us,Age 45–54,1.046,0.930,1.177
-All of Us,Age 55–64,1.328,1.193,1.480
-All of Us,Age ≥65,1.506,1.350,1.682
-All of Us,Black race,2.387,2.175,2.619
-All of Us,Vaccinated before index,0.427,0.377,0.484
-All of Us,Delta wave,1.234,1.109,1.373
-All of Us,Omicron wave,1.000,0.919,1.088
-All of Us,Myocardial infarction,1.060,0.938,1.198
-All of Us,Congestive heart failure,1.193,1.075,1.325
-All of Us,Peripheral vascular disease,0.961,0.866,1.067
-All of Us,Cerebrovascular disease,1.193,1.075,1.324
-All of Us,Dementia,1.135,0.962,1.339
-All of Us,Chronic pulmonary disease,0.904,0.835,0.980
-All of Us,Rheumatic disease,1.038,0.920,1.171
-All of Us,Peptic ulcer disease,0.964,0.840,1.106
-All of Us,"Liver disease, mild",0.827,0.752,0.908
-All of Us,"Liver disease, mod./severe",1.464,1.190,1.800
-All of Us,Diabetes w/o complications,1.098,0.983,1.226
-All of Us,Diabetes w/ complications,1.154,1.039,1.281
-All of Us,Hemiplegia or paraplegia,1.364,1.143,1.628
-All of Us,"Renal disease, mild/mod.",1.122,1.000,1.258
-All of Us,"Renal disease, severe",1.488,1.289,1.716
-All of Us,HIV,1.107,0.770,1.590
-All of Us,Metastatic solid tumor,1.295,1.082,1.550
-All of Us,Malignancy,1.102,0.995,1.220
-All of Us,AIDS,0.770,0.572,1.035
-MarketScan,Female sex,0.745,0.736,0.756
-MarketScan,Age 45–54,1.750,1.721,1.779
-MarketScan,Age 55–64,2.394,2.354,2.434
-MarketScan,Age ≥65,2.519,2.164,2.932
-MarketScan,Black race,not captured in MarketScan,,
-MarketScan,Vaccinated before index,0.503,0.491,0.515
-MarketScan,Delta wave,1.112,1.059,1.167
-MarketScan,Omicron wave,0.729,0.696,0.763
-MarketScan,Myocardial infarction,1.048,0.993,1.105
-MarketScan,Congestive heart failure,1.657,1.594,1.721
-MarketScan,Peripheral vascular disease,1.058,1.019,1.098
-MarketScan,Cerebrovascular disease,1.061,1.018,1.105
-MarketScan,Dementia,1.607,1.455,1.774
-MarketScan,Chronic pulmonary disease,1.164,1.141,1.187
-MarketScan,Rheumatic disease,1.091,1.047,1.136
-MarketScan,Peptic ulcer disease,1.006,0.937,1.081
-MarketScan,"Liver disease, mild",1.060,1.030,1.091
-MarketScan,"Liver disease, mod./severe",1.990,1.809,2.189
-MarketScan,Diabetes w/o complications,1.806,1.771,1.843
-MarketScan,Diabetes w/ complications,2.019,1.961,2.078
-MarketScan,Hemiplegia or paraplegia,2.176,2.023,2.340
-MarketScan,"Renal disease, mild/mod.",1.583,1.526,1.642
-MarketScan,"Renal disease, severe",3.313,3.112,3.527
-MarketScan,HIV,1.247,1.111,1.399
-MarketScan,Metastatic solid tumor,2.626,2.476,2.785
-MarketScan,Malignancy,1.222,1.179,1.267
-MarketScan,AIDS,1.686,1.338,2.123
+domain,level,domain_specific_aor,domain_specific_lo,domain_specific_hi,joint_aor,joint_lo,joint_hi
+Income,"<$10,000",1.505,1.326,1.708,1.215,1.049,1.406
+Income,"$10,000–24,999",1.409,1.244,1.596,1.206,1.054,1.381
+Income,"$25,000–34,999",1.176,1.012,1.367,1.099,0.942,1.283
+Income,"$100,000–149,999",1.170,1.002,1.368,1.216,1.038,1.424
+Income,"$150,000–199,999",1.206,0.971,1.498,1.264,1.014,1.576
+Income,"≥$200,000",1.088,0.887,1.336,1.153,0.935,1.422
+Employment,Unemployed,1.547,1.398,1.711,1.342,1.192,1.511
+Employment,Student,1.478,1.140,1.917,1.368,1.050,1.782
+Employment,Retired or other,1.398,1.254,1.557,1.281,1.140,1.439
+Insurance,Medicaid,1.536,1.380,1.710,1.188,1.043,1.354
+Insurance,Medicare,1.152,1.014,1.309,0.978,0.852,1.123
+Insurance,Other or none,1.328,1.146,1.538,1.102,0.941,1.291
+Housing,Renting,1.282,1.175,1.400,1.163,1.055,1.281
+Housing,Other arrangement,1.129,0.980,1.300,0.979,0.841,1.139
+Housing,Housing instability,1.002,0.908,1.105,0.907,0.817,1.005
+Education,Below GED,1.290,1.130,1.474,1.057,0.916,1.219
+Education,GED or some college,1.107,1.015,1.206,1.008,0.918,1.107

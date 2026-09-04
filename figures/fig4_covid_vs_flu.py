@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Figure  5. Test 4. The same design applied to influenza.
+"""Figure 4. Test 4. The same design applied to influenza.
 
 (a) pairs each social exposure's jointly adjusted estimate across the two
     pathogens. Six of seven agree; the one that does not is Medicaid.
@@ -193,5 +193,5 @@ fig.legend(
     frameon=False,
 )
 panel_labels([ax, bx], alpha=1.0)
-save(fig, os.path.join(OUT, "Figure5"))
+save(fig, os.path.join(OUT, "Figure4"))
 print("  panel a rows: %d | panel b domains: %d" % (len(ORDER), len(DOMS)))

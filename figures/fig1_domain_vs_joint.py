@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Figure  2. Test 1. Under mutual adjustment, employment and income outrank
+"""Figure 1. Test 1. Under mutual adjustment, employment and income outrank
 insurance.
 
 The grey connector is the point of the figure: its length is what mutual
@@ -186,5 +186,5 @@ ax.legend(
     handletextpad=0.5,
 )
 panel_labels([ax])
-save(fig, os.path.join(OUT, "Figure2"))
+save(fig, os.path.join(OUT, "Figure1"))
 print("  rows:", len(rows))
