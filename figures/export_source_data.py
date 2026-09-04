@@ -39,17 +39,13 @@ def run(script):
 def figure1():
     ns = run("fig1_clinical_check.py")
     rows = []
-    for series, d in (
-        ("MarketScan, before correction", ns["B"]),
-        ("MarketScan, after correction", ns["M"]),
-        ("All of Us", ns["A"]),
-    ):
+    for series, d in (("All of Us", ns["A"]), ("MarketScan", ns["M"])):
         for lab, v in d.items():
             if v is None:
-                rows.append([series, lab, "not estimable", "", ""])
+                rows.append([series, lab, "not captured in MarketScan", "", ""])
             else:
                 rows.append([series, lab] + [f"{x:.3f}" for x in v])
-    write("Figure1_data.csv", ["series", "variable", "aor", "lo", "hi"], rows)
+    write("Figure1_data.csv", ["cohort", "variable", "aor", "lo", "hi"], rows)
 
 
 def figure2():

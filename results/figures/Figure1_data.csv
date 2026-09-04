@@ -1,58 +1,4 @@
-series,variable,aor,lo,hi
-"MarketScan, before correction",Female sex,0.500,0.490,0.500
-"MarketScan, before correction",Age 45–54,1.460,1.440,1.480
-"MarketScan, before correction",Age 55–64,1.780,1.750,1.810
-"MarketScan, before correction",Age ≥65,1.730,1.510,1.980
-"MarketScan, before correction",Black race,not estimable,,
-"MarketScan, before correction",Vaccinated before index,0.480,0.470,0.500
-"MarketScan, before correction",Delta wave,1.470,1.440,1.490
-"MarketScan, before correction",Omicron wave,0.470,0.470,0.480
-"MarketScan, before correction",Myocardial infarction,0.940,0.890,0.990
-"MarketScan, before correction",Congestive heart failure,1.360,1.310,1.410
-"MarketScan, before correction",Peripheral vascular disease,0.860,0.830,0.890
-"MarketScan, before correction",Cerebrovascular disease,0.860,0.830,0.890
-"MarketScan, before correction",Dementia,1.270,1.160,1.390
-"MarketScan, before correction",Chronic pulmonary disease,0.860,0.840,0.870
-"MarketScan, before correction",Rheumatic disease,0.820,0.790,0.850
-"MarketScan, before correction",Peptic ulcer disease,0.790,0.730,0.840
-"MarketScan, before correction","Liver disease, mild",0.780,0.760,0.810
-"MarketScan, before correction","Liver disease, mod./severe",1.430,1.310,1.560
-"MarketScan, before correction",Diabetes w/o complications,1.410,1.380,1.440
-"MarketScan, before correction",Diabetes w/ complications,1.460,1.420,1.500
-"MarketScan, before correction",Hemiplegia or paraplegia,1.710,1.590,1.830
-"MarketScan, before correction","Renal disease, mild/mod.",1.290,1.250,1.340
-"MarketScan, before correction","Renal disease, severe",2.450,2.310,2.590
-"MarketScan, before correction",HIV,0.860,0.760,0.960
-"MarketScan, before correction",Metastatic solid tumor,1.680,1.590,1.770
-"MarketScan, before correction",Malignancy,0.940,0.910,0.980
-"MarketScan, before correction",AIDS,1.270,1.030,1.580
-"MarketScan, after correction",Female sex,0.745,0.736,0.756
-"MarketScan, after correction",Age 45–54,1.750,1.721,1.779
-"MarketScan, after correction",Age 55–64,2.394,2.354,2.434
-"MarketScan, after correction",Age ≥65,2.519,2.164,2.932
-"MarketScan, after correction",Black race,not estimable,,
-"MarketScan, after correction",Vaccinated before index,0.503,0.491,0.515
-"MarketScan, after correction",Delta wave,1.112,1.059,1.167
-"MarketScan, after correction",Omicron wave,0.729,0.696,0.763
-"MarketScan, after correction",Myocardial infarction,1.048,0.993,1.105
-"MarketScan, after correction",Congestive heart failure,1.657,1.594,1.721
-"MarketScan, after correction",Peripheral vascular disease,1.058,1.019,1.098
-"MarketScan, after correction",Cerebrovascular disease,1.061,1.018,1.105
-"MarketScan, after correction",Dementia,1.607,1.455,1.774
-"MarketScan, after correction",Chronic pulmonary disease,1.164,1.141,1.187
-"MarketScan, after correction",Rheumatic disease,1.091,1.047,1.136
-"MarketScan, after correction",Peptic ulcer disease,1.006,0.937,1.081
-"MarketScan, after correction","Liver disease, mild",1.060,1.030,1.091
-"MarketScan, after correction","Liver disease, mod./severe",1.990,1.809,2.189
-"MarketScan, after correction",Diabetes w/o complications,1.806,1.771,1.843
-"MarketScan, after correction",Diabetes w/ complications,2.019,1.961,2.078
-"MarketScan, after correction",Hemiplegia or paraplegia,2.176,2.023,2.340
-"MarketScan, after correction","Renal disease, mild/mod.",1.583,1.526,1.642
-"MarketScan, after correction","Renal disease, severe",3.313,3.112,3.527
-"MarketScan, after correction",HIV,1.247,1.111,1.399
-"MarketScan, after correction",Metastatic solid tumor,2.626,2.476,2.785
-"MarketScan, after correction",Malignancy,1.222,1.179,1.267
-"MarketScan, after correction",AIDS,1.686,1.338,2.123
+cohort,variable,aor,lo,hi
 All of Us,Female sex,0.768,0.709,0.832
 All of Us,Age 45–54,1.046,0.930,1.177
 All of Us,Age 55–64,1.328,1.193,1.480
@@ -80,3 +26,30 @@ All of Us,HIV,1.107,0.770,1.590
 All of Us,Metastatic solid tumor,1.295,1.082,1.550
 All of Us,Malignancy,1.102,0.995,1.220
 All of Us,AIDS,0.770,0.572,1.035
+MarketScan,Female sex,0.745,0.736,0.756
+MarketScan,Age 45–54,1.750,1.721,1.779
+MarketScan,Age 55–64,2.394,2.354,2.434
+MarketScan,Age ≥65,2.519,2.164,2.932
+MarketScan,Black race,not captured in MarketScan,,
+MarketScan,Vaccinated before index,0.503,0.491,0.515
+MarketScan,Delta wave,1.112,1.059,1.167
+MarketScan,Omicron wave,0.729,0.696,0.763
+MarketScan,Myocardial infarction,1.048,0.993,1.105
+MarketScan,Congestive heart failure,1.657,1.594,1.721
+MarketScan,Peripheral vascular disease,1.058,1.019,1.098
+MarketScan,Cerebrovascular disease,1.061,1.018,1.105
+MarketScan,Dementia,1.607,1.455,1.774
+MarketScan,Chronic pulmonary disease,1.164,1.141,1.187
+MarketScan,Rheumatic disease,1.091,1.047,1.136
+MarketScan,Peptic ulcer disease,1.006,0.937,1.081
+MarketScan,"Liver disease, mild",1.060,1.030,1.091
+MarketScan,"Liver disease, mod./severe",1.990,1.809,2.189
+MarketScan,Diabetes w/o complications,1.806,1.771,1.843
+MarketScan,Diabetes w/ complications,2.019,1.961,2.078
+MarketScan,Hemiplegia or paraplegia,2.176,2.023,2.340
+MarketScan,"Renal disease, mild/mod.",1.583,1.526,1.642
+MarketScan,"Renal disease, severe",3.313,3.112,3.527
+MarketScan,HIV,1.247,1.111,1.399
+MarketScan,Metastatic solid tumor,2.626,2.476,2.785
+MarketScan,Malignancy,1.222,1.179,1.267
+MarketScan,AIDS,1.686,1.338,2.123
