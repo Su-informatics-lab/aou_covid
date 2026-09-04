@@ -49,6 +49,35 @@ def efigure5():
 
 
 def figure1():
+    """Panels (b) and (c) of the new Figure 1.  Panel (a) is the design strip
+    and carries no data.  Panel (c) repeats the 26 estimates that eFigure 5
+    plots one by one; both are written here so the file stands alone."""
+    ns = run("fig1_panels.py")
+    rows = []
+    for cohort, _col, items in ns["BALANCE"]:
+        for lab, pre, post in items:
+            rows.append(["b", cohort, lab, f"{pre:.3f}", f"{post:.3f}", "", ""])
+    disc = set(ns["DISC"])
+    for lab, a, m in ns["PAIRS"]:
+        rows.append(
+            ["c", "All of Us vs MarketScan", lab, "", "", f"{a:.3f}", f"{m:.3f}"]
+        )
+    write(
+        "Figure1_data.csv",
+        [
+            "panel",
+            "cohort",
+            "variable",
+            "abs_smd_pre",
+            "abs_smd_post",
+            "aou_aor",
+            "marketscan_aor",
+        ],
+        rows,
+    )
+
+
+def figure2():
     ns = run("fig1_domain_vs_joint.py")
     rows = []
     for dom, levels in ns["GROUPS"]:
@@ -57,7 +86,7 @@ def figure1():
                 [dom, lab] + [f"{x:.3f}" for x in ds] + [f"{x:.3f}" for x in jt]
             )
     write(
-        "Figure1_data.csv",
+        "Figure2_data.csv",
         [
             "domain",
             "level",
@@ -72,22 +101,22 @@ def figure1():
     )
 
 
-def figure4():
+def figure5():
     ns = run("fig4_race_attenuation.py")
     rows = [
-        ["a", lab, f"{v[0]:.3f}", f"{v[1]:.3f}", f"{v[2]:.3f}", ""]
+        ["b", lab, f"{v[0]:.3f}", f"{v[1]:.3f}", f"{v[2]:.3f}", ""]
         for lab, v, _c, _m in ns["SEQ"]
     ]
-    rows += [["b", lab, "", "", "", f"{pct:.1f}"] for lab, pct in ns["DECOMP"]]
-    rows.append(["b", "All five domains jointly", "", "", "", f"{ns['JOINT_PCT']:.1f}"])
+    rows += [["c", lab, "", "", "", f"{pct:.1f}"] for lab, pct in ns["DECOMP"]]
+    rows.append(["c", "All five domains jointly", "", "", "", f"{ns['JOINT_PCT']:.1f}"])
     write(
-        "Figure4_data.csv",
+        "Figure5_data.csv",
         ["panel", "model_or_domain", "black_race_aor", "lo", "hi", "attenuation_pct"],
         rows,
     )
 
 
-def figure2():
+def figure3():
     ns = run("fig2_era.py")
     waves = ns["WAVES"]
     rows = []
@@ -101,20 +130,20 @@ def figure2():
                     + [" ".join(test.split())]
                 )
     write(
-        "Figure2_data.csv",
+        "Figure3_data.csv",
         ["block", "level", "wave", "aor", "lo", "hi", "omnibus_interaction"],
         rows,
     )
 
 
-def figure3():
+def figure4():
     ns = run("fig3_covid_vs_flu.py")
     rows = []
     for dom, lev, lab in ns["ORDER"]:
         for pathogen, r in ns["D"][(dom, lev)].items():
             rows.append([lab, pathogen, r["aor"], r["lo"], r["hi"], r["sig"]])
     write(
-        "Figure3_data_panel_a.csv",
+        "Figure4_data.csv",
         ["level", "pathogen", "aor", "lo", "hi", "significant"],
         rows,
     )
@@ -144,5 +173,14 @@ def efigure3():
 
 
 if __name__ == "__main__":
-    for fn in (figure1, figure2, figure3, figure4, efigure2, efigure3, efigure5):
+    for fn in (
+        figure1,
+        figure2,
+        figure3,
+        figure4,
+        figure5,
+        efigure2,
+        efigure3,
+        efigure5,
+    ):
         fn()

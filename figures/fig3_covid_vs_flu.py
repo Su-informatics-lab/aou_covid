@@ -192,6 +192,9 @@ fig.legend(
     handletextpad=0.5,
     frameon=False,
 )
-panel_labels([ax, bx], alpha=1.0)
-save(fig, os.path.join(OUT, "Figure3"))
+#  the design strip is panel (a) of every figure in the main text, so the two
+#  data panels here are (b) and (c).
+panel_labels([ax, bx], letters="bc", alpha=1.0)
+os.makedirs(os.path.join(OUT, "panels"), exist_ok=True)
+save(fig, os.path.join(OUT, "panels", "F4b_covid_vs_flu"))
 print("  panel a rows: %d | panel b domains: %d" % (len(ORDER), len(DOMS)))

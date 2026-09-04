@@ -186,5 +186,6 @@ ax.legend(
     handletextpad=0.5,
 )
 panel_labels([ax])
-save(fig, os.path.join(OUT, "Figure1"))
+os.makedirs(os.path.join(OUT, "panels"), exist_ok=True)
+save(fig, os.path.join(OUT, "panels", "F2b_domain_vs_joint"))
 print("  rows:", len(rows))

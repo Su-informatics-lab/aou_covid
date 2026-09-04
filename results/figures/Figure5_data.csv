@@ -1,0 +1,11 @@
+panel,model_or_domain,black_race_aor,lo,hi,attenuation_pct
+b,"Base model, no exposures",2.387,2.175,2.619,
+b,Adding income alone,2.160,1.960,2.380,
+b,Adding all five domains,2.100,1.900,2.320,
+c,Income,,,,11.7
+c,Housing (ownership),,,,8.7
+c,Insurance,,,,6.2
+c,Education,,,,4.8
+c,Employment,,,,3.8
+c,Housing (stability),,,,0.1
+c,All five domains jointly,,,,14.7

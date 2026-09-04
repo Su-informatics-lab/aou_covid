@@ -1,11 +1,15 @@
-panel,model_or_domain,black_race_aor,lo,hi,attenuation_pct
-a,"Base model, no exposures",2.387,2.175,2.619,
-a,Adding income alone,2.160,1.960,2.380,
-a,Adding all five domains,2.100,1.900,2.320,
-b,Income,,,,11.7
-b,Housing (ownership),,,,8.7
-b,Insurance,,,,6.2
-b,Education,,,,4.8
-b,Employment,,,,3.8
-b,Housing (stability),,,,0.1
-b,All five domains jointly,,,,14.7
+level,pathogen,aor,lo,hi,significant
+Unemployed,COVID-19,1.342,1.192,1.511,True
+Unemployed,Influenza,1.471,1.233,1.756,True
+"Income below $10,000",COVID-19,1.215,1.049,1.406,True
+"Income below $10,000",Influenza,1.549,1.243,1.930,True
+"Income $10,000–24,999",COVID-19,1.206,1.054,1.381,True
+"Income $10,000–24,999",Influenza,1.825,1.479,2.253,True
+Renting,COVID-19,1.163,1.055,1.281,True
+Renting,Influenza,1.212,1.035,1.418,True
+Medicaid coverage,COVID-19,1.188,1.043,1.354,True
+Medicaid coverage,Influenza,0.990,0.810,1.210,False
+Education below GED,COVID-19,1.057,0.916,1.219,False
+Education below GED,Influenza,0.908,0.758,1.089,False
+Housing instability,COVID-19,0.907,0.817,1.005,False
+Housing instability,Influenza,0.988,0.849,1.148,False

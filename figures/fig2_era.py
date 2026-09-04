@@ -162,5 +162,6 @@ ax.legend(
     title=None,
 )
 panel_labels([ax])
-save(fig, os.path.join(OUT, "Figure2"))
+os.makedirs(os.path.join(OUT, "panels"), exist_ok=True)
+save(fig, os.path.join(OUT, "panels", "F3b_eras"))
 print("  rows:", len(rows))
