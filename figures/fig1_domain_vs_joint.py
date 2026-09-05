@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from style import (
+    GREY,
     INK,
     MM,
     NAVY,
@@ -25,6 +26,19 @@ from style import (
     save,
     sig,
 )
+
+#  Every estimate is against a reference level, and a forest plot that does not
+#  say which one is unreadable: five of the six income rows sit above 1.0, and
+#  a reader who cannot see that the reference is the $35,000-99,999 band has no
+#  way to know the gradient is not monotone.  Table 3 prints these; so does the
+#  figure now.
+REFERENCE = {
+    "Income": "vs $35,000–99,999",
+    "Employment": "vs employed",
+    "Insurance": "vs employer",
+    "Housing": "vs owns home",
+    "Education": "vs college graduate",
+}
 
 OUT = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "results", "figures"
@@ -145,6 +159,19 @@ for gname, gy in headers:
         fontsize=10.5,
         fontweight="bold",
         color=INK,
+        clip_on=False,
+    )
+    #  the reference level, right-aligned on the same rule, so it can never
+    #  collide with a row label however long the reference is
+    ax.text(
+        1.0,
+        gy + 0.14,
+        REFERENCE[gname],
+        transform=ax.get_yaxis_transform(),
+        ha="right",
+        va="bottom",
+        fontsize=10,
+        color=GREY,
         clip_on=False,
     )
     ax.plot(

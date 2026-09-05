@@ -33,14 +33,20 @@ joint = rd("csv_06_covid_vs_flu_joint.csv")
 inter = rd("csv_04_flu_interaction_tests.csv")
 f = float
 
+#  Each level is against a reference, and the figure says which: without it a
+#  reader cannot tell what "1.5" is 1.5 times.  The domain is Insurance and the
+#  level is Medicaid; the row label used to say "Medicaid coverage" while panel
+#  (c) said "Insurance", which read as two different things in one figure.
 ORDER = [
-    ("employment", "Unemployed", "Unemployed"),
-    ("income", "less_10k", "Income below $10,000"),
-    ("income", "10k_25k", "Income $10,000–24,999"),
-    ("housing", "Rent", "Renting"),
-    ("insurance_type", "Medicaid", "Medicaid coverage"),
-    ("education", "Below_GED", "Education below GED"),
-    ("housing_stability", "Unstable", "Housing instability"),
+    ("employment", "Unemployed", "Unemployed (vs employed)"),
+    #  dollars are escaped: two unescaped "$" in one label turn the text
+    #  between them into mathtext and the label renders as "Income <10, 000".
+    ("income", "less_10k", r"Income <\$10,000 (vs \$35–99k)"),
+    ("income", "10k_25k", r"Income \$10,000–24,999 (vs \$35–99k)"),
+    ("housing", "Rent", "Renting (vs owns home)"),
+    ("insurance_type", "Medicaid", "Medicaid (vs employer)"),
+    ("education", "Below_GED", "Below GED (vs higher)"),
+    ("housing_stability", "Unstable", "Housing instability (vs stable)"),
 ]
 
 D = {}
@@ -138,9 +144,13 @@ for yi, (dom, lab) in zip(yb, DOMS):
         )
 bx.axvline(0.05, color="0.45", lw=1.0, ls=(0, (4, 3)), zorder=1)
 bx.set_xscale("log")
-bx.set_xlim(0.0016, 1.5)
-bx.set_xticks([0.005, 0.05, 0.5])
-bx.set_xticklabels(["0.005", "0.05", "0.5"])
+#  the COVID-19 insurance interaction is P = 0.00128, the strongest result the
+#  panel has; the old lower limit of 0.0016 clipped it off the axis entirely.
+bx.set_xlim(0.0006, 1.5)
+#  decade ticks; 0.05 is carried by the dashed line rather than a tick, which
+#  would sit too close to 0.01 to read
+bx.set_xticks([0.001, 0.01, 0.1, 1])
+bx.set_xticklabels(["0.001", "0.01", "0.1", "1"])
 import matplotlib as mpl
 
 bx.xaxis.set_minor_formatter(mpl.ticker.NullFormatter())
