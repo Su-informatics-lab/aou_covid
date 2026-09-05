@@ -58,12 +58,64 @@ cat("observations", nrow(m), "| persons", length(unique(m$person_id)),
 cat("periods:\n"); print(table(m$period))
 
 ## ---- person-level frame ---------------------------------------------------
+## Unlike the COVID-19 arm, a person here can be a case in one season and a
+## control in another, so case status is not constant within a person. That
+## makes it a legitimate predictor but not a person-level constant: the
+## imputation frame keeps the first row's status, and how many people that
+## approximates is printed so the choice is visible rather than assumed.
 chk <- tapply(m$Treatment, m$person_id, function(z) length(unique(z)))
-cat("persons with both a case and a control season:", sum(chk > 1), "\n")
+cat("persons who are a case in one season and a control in another:",
+    sum(chk > 1), "of", length(chk), "\n")
 P <- m[!duplicated(m$person_id),
        c("person_id","Treatment","sex_at_birth","race","ethnicity","age_group",
          CH, "insurance_type", IMP)]
 rownames(P) <- NULL
+
+## Congeniality. The analysis conditions on a matched stratum, so the
+## imputation model has to carry the variables the stratum is a function of.
+## The COVID-19 arm matched on survey_ord, num_diagnosis and ehr_length_days
+## (01b_psm.R); the influenza arm should be the same three. They may already be
+## columns of the matched cohort, or they may be in a matching-variables file
+## beside it. Look in both, and say in the log which was found, because an
+## imputation model that is missing them is the first thing a reviewer asks
+## about and it should not be a matter of anyone's memory.
+MVAR <- c("survey_ord", "num_diagnosis", "ehr_length_days")
+have <- intersect(MVAR, names(m))
+if (length(have)) {
+  for (v in have) P[[v]] <- m[[v]][match(P$person_id, m$person_id)]
+  cat("matching variables taken from 07_matched_cohort.csv:",
+      paste(have, collapse = ", "), "\n")
+}
+mvf <- file.path(FLU, "06_matching_variables.csv")
+if (file.exists(mvf)) {
+  mv <- read.csv(mvf)
+  cat("06_matching_variables.csv columns:", paste(names(mv), collapse = ", "), "\n")
+  i <- match(P$person_id, mv$person_id)
+  for (v in setdiff(intersect(MVAR, names(mv)), have)) {
+    P[[v]] <- mv[[v]][i]; have <- c(have, v)
+  }
+}
+missing_mv <- setdiff(MVAR, have)
+if (length(missing_mv)) {
+  cat("!! matching variables NOT found:", paste(missing_mv, collapse = ", "),
+      "\n!! the influenza imputation model is not fully congenial with the",
+      "matched analysis; say so in Methods rather than leaving it implicit\n")
+} else {
+  cat("all three matching variables carried in the imputation model\n")
+}
+for (v in have) if (any(is.na(P[[v]]))) {
+  cat("  ", v, "missing for", sum(is.na(P[[v]])), "persons; filled at the median\n")
+  P[[v]][is.na(P[[v]])] <- median(P[[v]], na.rm = TRUE)
+}
+
+cat("\n===== congeniality checks =====\n")
+cat("1. case status in the imputation model: ",
+    if ("Treatment" %in% names(P)) "YES" else "NO -- STOP", "\n", sep = "")
+cat("2. imputation frame is person level: rows ", nrow(P), " vs persons ",
+    length(unique(m$person_id)),
+    if (nrow(P) == length(unique(m$person_id))) "  YES" else "  NO -- STOP", "\n", sep = "")
+stopifnot("Treatment" %in% names(P), nrow(P) == length(unique(m$person_id)))
+cat("3. matching variables carried: ", length(have), " of 3\n", sep = "")
 for (v in IMP) {
   z <- as.character(P[[v]]); z[z == "Missing"] <- NA
   P[[v]] <- factor(z, levels = setdiff(levels(m[[v]]), "Missing"))
