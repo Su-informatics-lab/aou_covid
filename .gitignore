@@ -75,3 +75,6 @@ _to_delete/
 __pycache__/
 .DS_Store
 .idea/
+
+# Cowork drops delivered files here; they are not part of the repository.
+Claude outputs/
