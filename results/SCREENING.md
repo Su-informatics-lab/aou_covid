@@ -7,13 +7,14 @@ against that rule. What is in it now has been screened, and this file is the
 record.
 
 **Screened 2026-09-04, before the files were first committed.**
-**Re-screened 2026-09-05, when the figures were rebuilt as separate panels.**
+**Re-screened 2026-09-05, when the figures were rebuilt as separate panels and
+again when reference levels were added to them.**
 
 ## What is published
 
 | Path | Content | Smallest quantity |
 |---|---|---|
-| `figures/Figure{1..5}_data.csv` | adjusted odds ratios, confidence bounds, standardized mean differences and percentage-point attenuations | not a count |
+| `figures/Figure{1..5}_data.csv` | adjusted odds ratios, confidence bounds, standardized mean differences, percentage-point attenuations, and the reference level each estimate is measured against | not a count |
 | `figures/eFigure2_data.csv` | absolute standardized mean differences | not a count |
 | `figures/eFigure3_data.csv` | qualifying visits per day relative to the index date | 72 visits (day −10) |
 | `figures/eFigure5_data.csv` | base-model odds ratios in both cohorts | not a count |
@@ -47,7 +48,9 @@ integer in the 1–19 range. The panels themselves are drawn from
 `figures/design_strip.py` and the five figure scripts, which were scanned in
 the same pass; their hits are font sizes, marker sizes, drawing order, the
 matched-set ratio, the 19 comorbidities of the base model, and the 14-day
-outcome window. None is a participant count.
+outcome window. None is a participant count. The `reference` column added to `Figure4_data.csv`
+later the same day holds level names such as "employed" and "$35,000-99,999";
+it carries no count either.
 
 ## What is not published, and why
 
