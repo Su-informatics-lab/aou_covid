@@ -126,6 +126,12 @@ cat("3. matching variables carried: ", paste(MVAR, collapse = ", "),
 drop_const <- names(which(sapply(P[, CH, drop = FALSE], function(z) length(unique(z)) < 2)))
 if (length(drop_const)) cat("dropping constant columns:", drop_const, "\n")
 
+#  Every imputed item is categorical, so the methods are polyreg and logreg
+#  rather than predictive mean matching. The two matching variables added below
+#  enter as raw predictors rather than through the logit propensity score: the
+#  score is a function of survey_ord, num_diagnosis and ehr_length_days, and
+#  giving the imputation model the three directly is both more stable and
+#  easier to explain to a reviewer than giving it their summary.
 make_meth <- function(dat) {
   m <- make.method(dat); m[] <- ""
   m["f.income"] <- m["f.education"] <- m["f.employment"] <- m["f.housing"] <- "polyreg"

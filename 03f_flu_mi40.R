@@ -58,18 +58,59 @@ cat("observations", nrow(m), "| persons", length(unique(m$person_id)),
 cat("periods:\n"); print(table(m$period))
 
 ## ---- person-level frame ---------------------------------------------------
-## Unlike the COVID-19 arm, a person here can be a case in one season and a
-## control in another, so case status is not constant within a person. That
-## makes it a legitimate predictor but not a person-level constant: the
-## imputation frame keeps the first row's status, and how many people that
-## approximates is printed so the choice is visible rather than assumed.
-chk <- tapply(m$Treatment, m$person_id, function(z) length(unique(z)))
-cat("persons who are a case in one season and a control in another:",
-    sum(chk > 1), "of", length(chk), "\n")
+## Case status is not a person-level constant in this arm. Matching is within
+## season, so the same person can be a case in one season and a control in
+## another, and taking the first row's status would be an arbitrary choice
+## dressed up as a summary. The imputation frame carries ever_case (a case in
+## any season) and n_seasons instead, which keeps case status in the model --
+## the check that matters -- without pretending it is constant.
+##
+## Rule fixed before the run rather than after seeing the number: if the people
+## with mixed status are under 5% of the arm's persons, ever_case is the
+## summary and the count goes in the log. At 5% or above, ever_case is still
+## fitted so the run produces something, but the log says so loudly and
+## person-season imputation has to be discussed before the estimates are used.
+MIXED_RULE <- 0.05
+chk       <- tapply(m$Treatment, m$person_id, function(z) length(unique(z)))
+n_mixed   <- sum(chk > 1)
+n_pers    <- length(chk)
+pct_mixed <- 100 * n_mixed / n_pers
+cat(sprintf("\npersons who are a case in one season and a control in another: %d of %d (%.2f%%)\n",
+            n_mixed, n_pers, pct_mixed))
+if (pct_mixed < 100 * MIXED_RULE) {
+  cat(sprintf("  below the pre-specified %.0f%% threshold: ever_case is the summary, count logged, proceed\n",
+              100 * MIXED_RULE))
+} else {
+  cat(sprintf("  !! AT OR ABOVE the pre-specified %.0f%% threshold (%.2f%%).\n",
+              100 * MIXED_RULE, pct_mixed))
+  cat("  !! ever_case is still fitted below so the run produces something, but\n")
+  cat("  !! person-season imputation must be discussed before these estimates are used.\n")
+}
+
+ever_case <- tapply(m$Treatment, m$person_id, max)
+n_rows    <- table(m$person_id)
+SEASON_COL <- intersect(c("season", "flu_season", "season_label", "period"), names(m))[1]
+if (is.na(SEASON_COL)) {
+  cat("!! no season column found; n_seasons falls back to the matched row count,\n",
+      "!! which for a reused control counts strata rather than seasons\n", sep = "")
+  n_seasons <- setNames(as.integer(n_rows), names(n_rows))
+} else {
+  cat("n_seasons counted on column:", SEASON_COL, "\n")
+  n_seasons <- tapply(m[[SEASON_COL]], m$person_id, function(z) length(unique(z)))
+}
+
 P <- m[!duplicated(m$person_id),
-       c("person_id","Treatment","sex_at_birth","race","ethnicity","age_group",
+       c("person_id","sex_at_birth","race","ethnicity","age_group",
          CH, "insurance_type", IMP)]
 rownames(P) <- NULL
+key <- as.character(P$person_id)
+P$ever_case <- as.integer(ever_case[key])
+P$n_seasons <- as.integer(n_seasons[key])
+n_rows_p    <- as.integer(n_rows[key])          # diagnostic only, not a predictor
+cat("\never_case:\n");  print(table(P$ever_case))
+cat("n_seasons:\n"); print(table(P$n_seasons))
+cat("matched rows per person (control reuse, not a predictor): median ",
+    median(n_rows_p), ", max ", max(n_rows_p), "\n", sep = "")
 
 ## Congeniality. The analysis conditions on a matched stratum, so the
 ## imputation model has to carry the variables the stratum is a function of.
@@ -110,12 +151,17 @@ for (v in have) if (any(is.na(P[[v]]))) {
 
 cat("\n===== congeniality checks =====\n")
 cat("1. case status in the imputation model: ",
-    if ("Treatment" %in% names(P)) "YES" else "NO -- STOP", "\n", sep = "")
+    if (all(c("ever_case", "n_seasons") %in% names(P)))
+      "YES, as ever_case + n_seasons" else "NO -- STOP", "\n", sep = "")
 cat("2. imputation frame is person level: rows ", nrow(P), " vs persons ",
     length(unique(m$person_id)),
     if (nrow(P) == length(unique(m$person_id))) "  YES" else "  NO -- STOP", "\n", sep = "")
-stopifnot("Treatment" %in% names(P), nrow(P) == length(unique(m$person_id)))
+stopifnot(all(c("ever_case", "n_seasons") %in% names(P)),
+          nrow(P) == length(unique(m$person_id)))
 cat("3. matching variables carried: ", length(have), " of 3\n", sep = "")
+cat("4. mixed case/control persons: ", n_mixed, " (", sprintf("%.2f%%", pct_mixed),
+    ") against the pre-specified 5% rule -- ",
+    if (pct_mixed < 100 * MIXED_RULE) "PASS" else "BREACHED, see above", "\n", sep = "")
 for (v in IMP) {
   z <- as.character(P[[v]]); z[z == "Missing"] <- NA
   P[[v]] <- factor(z, levels = setdiff(levels(m[[v]]), "Missing"))
@@ -128,6 +174,11 @@ drop_const <- names(which(sapply(P[, CH, drop = FALSE],
                                  function(z) length(unique(z)) < 2)))
 if (length(drop_const)) cat("dropping constant columns:", drop_const, "\n")
 MIDAT <- P[, setdiff(names(P), c("person_id", drop_const))]
+#  Every imputed item is categorical, so the methods are polyreg and logreg
+#  rather than predictive mean matching. The matching variables still enter as
+#  raw predictors rather than through the propensity score: the score is a
+#  function of the three, and giving the imputation model the three directly is
+#  both more stable and easier to defend than giving it their summary.
 meth <- make.method(MIDAT); meth[] <- ""
 meth["income"] <- meth["education"] <- meth["employment"] <- meth["housing"] <- "polyreg"
 meth["housing_stability"] <- "logreg"
