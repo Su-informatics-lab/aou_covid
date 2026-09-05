@@ -78,3 +78,6 @@ __pycache__/
 
 # Cowork drops delivered files here; they are not part of the repository.
 Claude outputs/
+
+# The frozen JAMIA-targeted package. Local only, same rule as submission/.
+jamia_old/
