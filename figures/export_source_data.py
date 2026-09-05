@@ -139,12 +139,12 @@ def figure3():
 def figure4():
     ns = run("fig3_covid_vs_flu.py")
     rows = []
-    for dom, lev, lab in ns["ORDER"]:
+    for dom, lev, lab, _short, ref in ns["ORDER"]:
         for pathogen, r in ns["D"][(dom, lev)].items():
-            rows.append([lab, pathogen, r["aor"], r["lo"], r["hi"], r["sig"]])
+            rows.append([lab, ref, pathogen, r["aor"], r["lo"], r["hi"], r["sig"]])
     write(
         "Figure4_data.csv",
-        ["level", "pathogen", "aor", "lo", "hi", "significant"],
+        ["level", "reference", "pathogen", "aor", "lo", "hi", "significant"],
         rows,
     )
 

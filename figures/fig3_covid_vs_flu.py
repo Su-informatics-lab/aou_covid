@@ -37,17 +37,31 @@ f = float
 #  reader cannot tell what "1.5" is 1.5 times.  The domain is Insurance and the
 #  level is Medicaid; the row label used to say "Medicaid coverage" while panel
 #  (c) said "Insurance", which read as two different things in one figure.
+#
+#  domain, level key, level name, short reference (for the tick), full reference
 ORDER = [
-    ("employment", "Unemployed", "Unemployed (vs employed)"),
-    #  dollars are escaped: two unescaped "$" in one label turn the text
-    #  between them into mathtext and the label renders as "Income <10, 000".
-    ("income", "less_10k", r"Income <\$10,000 (vs \$35–99k)"),
-    ("income", "10k_25k", r"Income \$10,000–24,999 (vs \$35–99k)"),
-    ("housing", "Rent", "Renting (vs owns home)"),
-    ("insurance_type", "Medicaid", "Medicaid (vs employer)"),
-    ("education", "Below_GED", "Below GED (vs higher)"),
-    ("housing_stability", "Unstable", "Housing instability (vs stable)"),
+    ("employment", "Unemployed", "Unemployed", "employed", "employed"),
+    ("income", "less_10k", "Income <$10,000", "$35–99k", "$35,000–99,999"),
+    ("income", "10k_25k", "Income $10,000–24,999", "$35–99k", "$35,000–99,999"),
+    ("housing", "Rent", "Renting", "owns home", "owns home"),
+    ("insurance_type", "Medicaid", "Medicaid", "employer", "employer insurance"),
+    ("education", "Below_GED", "Below GED", "higher", "higher attainment"),
+    (
+        "housing_stability",
+        "Unstable",
+        "Housing instability",
+        "stable",
+        "stable housing",
+    ),
 ]
+
+
+def tick(o):
+    """Tick label for a row.  Dollars are escaped: two unescaped "$" in one
+    string turn the text between them into mathtext, and the label renders as
+    "Income <10, 000"."""
+    return ("%s (vs %s)" % (o[2], o[3])).replace("$", chr(92) + "$")
+
 
 D = {}
 for r in joint:
@@ -63,7 +77,7 @@ fig, (ax, bx) = plt.subplots(
 
 # ── panel a ──
 ys = list(range(len(ORDER)))[::-1]
-for yi, (dom, lev, lab) in zip(ys, ORDER):
+for yi, (dom, lev, lab, _rs, _rf) in zip(ys, ORDER):
     d = D[(dom, lev)]
     c, fl = d["COVID-19"], d["Influenza"]
     sc, sf = c["sig"] == "True", fl["sig"] == "True"
@@ -105,7 +119,7 @@ log_axis(
     "Adjusted odds ratio (95% CI), log scale",
 )
 ax.set_yticks(ys)
-ax.set_yticklabels([o[2] for o in ORDER])
+ax.set_yticklabels([tick(o) for o in ORDER])
 ax.set_ylim(-0.75, len(ORDER) - 0.25)
 ax.spines["bottom"].set_bounds(0.72, 2.55)
 
