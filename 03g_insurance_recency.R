@@ -31,7 +31,11 @@
 
 suppressPackageStartupMessages({library(survival); library(sandwich)})
 
-RES <- "/home/jupyter/refit_nodis/results/aou_v7"
+# The compute environment was rebuilt on 2026-09-01 and /home/jupyter/refit_nodis is
+# gone with it, so the inputs come from the mounted workspace bucket.
+BUCKET <- "/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh"
+RES    <- file.path(BUCKET, "aou_v7_5domain")   # joint_model_inputs.rds, 04b_sdoh_timing.csv
+RESV7  <- file.path(BUCKET, "aou_v7")           # 06_matching_variables.csv, cohort tables
 OUT <- "/home/jupyter/recency"
 dir.create(OUT, showWarnings = FALSE)
 sink(file.path(OUT, "log.txt"), split = TRUE)
@@ -51,8 +55,10 @@ print(round(quantile(d$gap, c(0, .25, .5, .75, 1), na.rm = TRUE)))
 d$recency <- NA_character_
 pre <- !is.na(d$gap) & d$gap >= 0
 qs <- quantile(d$gap[pre], c(1/3, 2/3), na.rm = TRUE)
-d$recency[pre] <- cut(d$gap[pre], breaks = c(-Inf, qs, Inf),
-                      labels = c("recent", "middle", "old"))
+## as.character() is not decoration: assigning a factor into a character vector
+## stores the integer codes, and every stratum then reads back as NA.
+d$recency[pre] <- as.character(cut(d$gap[pre], breaks = c(-Inf, qs, Inf),
+                                   labels = c("recent", "middle", "old")))
 d$recency[!is.na(d$gap) & d$gap < 0] <- "post_index"
 d$recency <- factor(d$recency, levels = c("recent", "middle", "old", "post_index"))
 cat("\nobservations by recency:\n"); print(table(d$recency, useNA = "ifany"))

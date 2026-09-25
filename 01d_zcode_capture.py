@@ -34,7 +34,14 @@ if len(sys.argv) < 2 or sys.argv[1] not in ("v7", "v8", "v9"):
 VERSION = sys.argv[1]
 
 CDR = os.environ["WORKSPACE_CDR"]
-RESULTS = f"results/aou_{VERSION}"
+
+#  The compute environment was rebuilt on 2026-09-01, so the frozen inputs are read
+#  from the mounted workspace bucket rather than a working directory that no longer
+#  exists. Outputs go to the VM, not into the frozen freeze.
+BUCKET = "/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh"
+SRC = os.path.join(BUCKET, f"aou_{VERSION}")
+RESULTS = f"/home/jupyter/zcode/aou_{VERSION}"
+os.makedirs(RESULTS, exist_ok=True)
 MIN_CELL = 20  # All of Us: no published count below 20, and none derivable
 
 #  The Z-code blocks, with what each is for. Z58 (physical environment) is
@@ -52,9 +59,9 @@ BLOCKS = {
     "Z65": "other psychosocial circumstances",
 }
 
-cohort = pd.read_csv(os.path.join(RESULTS, "01_covid_cohort.csv"))
-sdoh = pd.read_csv(os.path.join(RESULTS, "04_sdoh.csv"))
-matched = pd.read_csv(os.path.join(RESULTS, "08_regression_base.csv"))
+cohort = pd.read_csv(os.path.join(SRC, "01_covid_cohort.csv"))
+sdoh = pd.read_csv(os.path.join(SRC, "04_sdoh.csv"))
+matched = pd.read_csv(os.path.join(SRC, "08_regression_base.csv"))
 people = sorted(set(matched.person_id))
 print(f"matched cohort: {len(matched):,} observations, {len(people):,} people")
 

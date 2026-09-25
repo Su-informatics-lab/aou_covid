@@ -46,6 +46,10 @@ m$education <- rl(m$education, "GED_or_College"); m$housing <- rl(m$housing, "Ow
 m$housing_stability <- rl(m$housing_stability, "Stable")
 m$insurance_type <- rl(m$insurance_type, "Employer")
 m$age_group <- rl(m$age_group, "18-44"); m$race <- rl(m$race, "White")
+## left as character these two reach mice as "constant" and are dropped from
+## the predictor set, which quietly narrows the imputation model.
+m$sex_at_birth <- rl(m$sex_at_birth, "Female")
+m$ethnicity    <- rl(m$ethnicity, "Not Hispanic or Latino")
 m$period <- rl(factor(m$period), "3_post")
 BASE  <- paste(c("sex_at_birth","race","ethnicity","age_group",CH), collapse = " + ")
 DOM   <- c("insurance_type","income","employment","education","housing","housing_stability")
@@ -186,7 +190,7 @@ meth["housing_stability"] <- "logreg"
 t0 <- Sys.time()
 mi <- mice(MIDAT, m = M, maxit = 5, method = meth,
            predictorMatrix = make.predictorMatrix(MIDAT),
-           printFlag = FALSE, seed = 20260905)
+           printFlag = TRUE, seed = 20260905)
 cat("mice done in", round(as.numeric(difftime(Sys.time(), t0, units = "mins")), 1), "min\n")
 print(mi$loggedEvents)
 
@@ -219,18 +223,31 @@ D1 <- function(p, keep) {
          else t_ * (1 + 1 / k) * (1 + 1 / r1)^2 / 2
   c(F = stat, df1 = k, df2 = df2, r1 = r1, p = pf(stat, k, df2, lower.tail = FALSE))
 }
+dropped <- character(0)
 fit_all <- function(formula, label, prep = identity) {
   CO <- VA <- list(); fails <- 0
+  dropped <<- character(0)
   for (k in seq_len(M)) {
     mk <- prep(apply_imp(k))
     fk <- tryCatch(clogit(formula, data = mk, method = "efron"), error = function(e) NULL)
-    if (is.null(fk) || any(is.na(coef(fk)))) { fails <- fails + 1; next }
-    CO[[length(CO) + 1]] <- coef(fk)
-    VA[[length(VA) + 1]] <- tryCatch(sandwich::vcovCL(fk, cluster = mk$person_id),
-                                     error = function(e) vcov(fk))
+    if (is.null(fk)) { fails <- fails + 1; next }
+    b  <- coef(fk)
+    Vk <- tryCatch(sandwich::vcovCL(fk, cluster = mk$person_id),
+                   error = function(e) vcov(fk))
+    ## An aliased nuisance level is not a failed fit. race has 11 levels and
+    ## sex_at_birth 6; inside a fine stratification the rare ones are not always
+    ## estimable and clogit returns NA for them. Keep the fit, pool the terms that
+    ## are estimable, and let pool_full's name intersection drop the rest.
+    ok <- intersect(names(b)[!is.na(b)], rownames(Vk))
+    if (length(ok) < 2) { fails <- fails + 1; next }
+    if (length(ok) < length(b)) dropped <<- union(dropped, setdiff(names(b), ok))
+    CO[[length(CO) + 1]] <- b[ok]
+    VA[[length(VA) + 1]] <- Vk[ok, ok, drop = FALSE]
     if (k %% 10 == 0) cat("   ", label, k, "of", M, "\n")
   }
   cat(label, ": fitted", length(CO), "of", M, "| failures", fails, "\n")
+  if (length(dropped)) cat("   not estimable in at least one fit, dropped from the pool:",
+                           paste(dropped, collapse = ", "), "\n")
   if (length(CO) < 2) return(NULL)
   pool_full(CO, VA)
 }
@@ -298,6 +315,13 @@ for (dm in DOM) {
   p1 <- fit_all(f1, paste(dm, "x period"))
   if (is.null(p1)) { cat(dm, ": not estimable under imputation\n"); next }
   keep <- grep(paste0("^", dm, ".*:period|^period.*:", dm), p1$nm, value = TRUE)
+  ## A domain x period term that is not estimable in every imputation is dropped
+  ## by pool_full's name intersection. That silently shrinks the very test this
+  ## loop exists to run, so name the casualties rather than reporting a Wald on a
+  ## reduced set as though it were the full one.
+  lost <- grep(paste0("^", dm, ".*:period|^period.*:", dm), dropped, value = TRUE)
+  if (length(lost)) cat("  !!", dm, "-- interaction terms NOT in the test:",
+                        paste(lost, collapse = ", "), "\n")
   if (!length(keep)) { cat(dm, ": no interaction terms retained\n"); next }
   s <- D1(p1, keep)
   cat(sprintf("%-20s F %8.3f  df1 %3d  df2 %9.1f  P %.4g\n",

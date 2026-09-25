@@ -58,8 +58,14 @@ suppressPackageStartupMessages({
 })
 set.seed(20260904)
 
-RES <- "/home/jupyter/refit_nodis/results/aou_v7"
-OUT <- "/home/jupyter/mi40b"
+#  The compute environment was rebuilt on 2026-09-01 and /home/jupyter/refit_nodis
+#  is gone with it, so the inputs come from the mounted workspace bucket. They are
+#  not in one place: joint_model_inputs.rds and 04b_sdoh_timing.csv are in the
+#  five-domain freeze, 06_matching_variables.csv is in the aou_v7 freeze.
+BUCKET <- "/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh"
+RES    <- file.path(BUCKET, "aou_v7_5domain")
+RESV7  <- file.path(BUCKET, "aou_v7")
+OUT    <- "/home/jupyter/mi40b"
 dir.create(OUT, showWarnings = FALSE)
 sink(file.path(OUT, "log.txt"), split = TRUE)
 
@@ -88,12 +94,30 @@ pv <- c("person_id", "Treatment", "f.sex", "f.age", "f.vacc", "f.race",
         "f.ethnicity", "f.wave", CH, "f.insurance", IMP)
 P <- d[!duplicated(d$person_id), pv]; rownames(P) <- NULL
 
-mv <- read.csv(file.path(RES, "06_matching_variables.csv"))
+#  survey_ord exactly as step8b.R built it, or the legacy arm is not a
+#  reproduction: as.numeric(as.Date(basics_survey_date)), NA at the median.
+tim <- read.csv(file.path(RES, "04b_sdoh_timing.csv"))
+P$survey_ord <- as.numeric(as.Date(tim$basics_survey_date[match(P$person_id, tim$person_id)]))
+cat("survey_ord missing for", sum(is.na(P$survey_ord)), "persons; filled at the median\n")
+P$survey_ord[is.na(P$survey_ord)] <- median(P$survey_ord, na.rm = TRUE)
+
+mv <- read.csv(file.path(RESV7, "06_matching_variables.csv"))
 cat("06_matching_variables.csv columns:", paste(names(mv), collapse = ", "), "\n")
 stopifnot(all(MVAR %in% names(mv)))
 i <- match(P$person_id, mv$person_id)
-for (v in MVAR) P[[v]] <- mv[[v]][i]
-for (v in MVAR) {
+#  sanity: the matching file carries its own survey_ord. If it disagrees with the
+#  one step8b used, say so rather than letting the two arms differ in two ways.
+so2 <- mv$survey_ord[i]
+off   <- so2 - P$survey_ord
+offc  <- median(off, na.rm = TRUE)
+agree <- sum(abs(off - offc) < 1e-6, na.rm = TRUE)
+cat("survey_ord offset (matching-file ordinal minus R Date origin): ", offc,
+    "\n  an additive constant is absorbed by the intercept, so the two arms differ",
+    "\n  only in the two added matching variables\n", sep = "")
+cat("survey_ord agreement between 04b_sdoh_timing and 06_matching_variables: ",
+    agree, " of ", sum(!is.na(so2)), "\n", sep = "")
+for (v in c("num_diagnosis", "ehr_length_days")) {
+  P[[v]] <- mv[[v]][i]
   n_na <- sum(is.na(P[[v]]))
   if (n_na) {
     cat("  ", v, "missing for", n_na, "persons; filled at the median\n")
@@ -144,7 +168,7 @@ run_mice <- function(cols, seed, tag) {
   t0 <- Sys.time()
   mi <- mice(dat, m = M, maxit = 5, method = make_meth(dat),
              predictorMatrix = make.predictorMatrix(dat),
-             printFlag = FALSE, seed = seed)
+             printFlag = TRUE, seed = seed)
   cat("   done in", round(as.numeric(difftime(Sys.time(), t0, units = "mins")), 1), "min\n")
   if (nrow(mi$loggedEvents %||% data.frame())) print(head(mi$loggedEvents, 20))
   lapply(seq_len(M), function(k) complete(mi, k)[, IMP])
@@ -156,9 +180,11 @@ COLS_LEG <- setdiff(keep, c("num_diagnosis", "ehr_length_days"))
 COLS_CON <- keep
 
 IMPS_LEG <- run_mice(COLS_LEG, 20260904, "legacy (frozen predictor set)")
-IMPS_CON <- run_mice(COLS_CON, 20260904, "congenial (+ num_diagnosis, ehr_length_days)")
 saveRDS(list(person_id = P$person_id, imps = IMPS_LEG), file.path(OUT, "imputations_legacy.rds"))
+cat("   legacy imputations written\n")
+IMPS_CON <- run_mice(COLS_CON, 20260904, "congenial (+ num_diagnosis, ehr_length_days)")
 saveRDS(list(person_id = P$person_id, imps = IMPS_CON), file.path(OUT, "imputations.rds"))
+cat("   congenial imputations written\n")
 
 idx <- match(d$person_id, P$person_id)
 apply_imp <- function(IMPS, k) {

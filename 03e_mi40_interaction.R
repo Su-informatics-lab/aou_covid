@@ -22,7 +22,11 @@ suppressPackageStartupMessages({
   library(survival); library(sandwich)
 })
 
-RES <- "/home/jupyter/refit_nodis/results/aou_v7"
+# The compute environment was rebuilt on 2026-09-01 and /home/jupyter/refit_nodis is
+# gone with it, so the inputs come from the mounted workspace bucket.
+BUCKET <- "/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh"
+RES    <- file.path(BUCKET, "aou_v7_5domain")   # joint_model_inputs.rds, 04b_sdoh_timing.csv
+RESV7  <- file.path(BUCKET, "aou_v7")           # 06_matching_variables.csv, cohort tables
 OUT <- "/home/jupyter/mi40b"
 sink(file.path(OUT, "log_interaction.txt"), split = TRUE)
 
@@ -63,23 +67,43 @@ D1 <- function(p, keep) {
   c(F = stat, df1 = k, df2 = df2, r1 = r1, p = pf(stat, k, df2, lower.tail = FALSE))
 }
 
+dropped <- character(0)
 run_interaction <- function(exposure, tag) {
   f <- as.formula(paste("Treatment ~", X$base_rhs, "+", X$joint_sdoh, "+",
                         exposure, ":f.wave + strata(stratum)"))
   CO <- VA <- list(); fails <- 0
+  dropped <<- character(0)
   for (k in seq_len(M)) {
     dk <- apply_imp(k)
     fk <- tryCatch(clogit(f, data = dk, method = "efron"), error = function(e) NULL)
-    if (is.null(fk) || any(is.na(coef(fk)))) { fails <- fails + 1; next }
+    if (is.null(fk)) { fails <- fails + 1; next }
+    bk <- coef(fk)
     v <- tryCatch(sandwich::vcovCL(fk, cluster = dk$person_id),
                   error = function(e) vcov(fk))
-    CO[[length(CO) + 1]] <- coef(fk); VA[[length(VA) + 1]] <- v
+    ## An aliased nuisance coefficient is not a failed fit. Delta holds 282 strata
+    ## and the wave interaction adds 8 to 14 terms, so a rare level is not always
+    ## estimable and clogit returns NA for it. Treating that as a failure throws
+    ## away the whole imputation; keep the fit, pool what is estimable, and let
+    ## pool_full's name intersection drop the rest.
+    ok <- intersect(names(bk)[!is.na(bk)], rownames(v))
+    if (length(ok) < 2) { fails <- fails + 1; next }
+    if (length(ok) < length(bk)) dropped <<- union(dropped, setdiff(names(bk), ok))
+    CO[[length(CO) + 1]] <- bk[ok]; VA[[length(VA) + 1]] <- v[ok, ok, drop = FALSE]
     if (k %% 10 == 0) cat("   ", tag, k, "of", M, "\n")
   }
   cat(tag, ": fitted", length(CO), "of", M, "| failed or rank-deficient:", fails, "\n")
   if (length(CO) < 2) { cat(tag, ": not estimable under imputation\n"); return(NULL) }
   p <- pool_full(CO, VA)
   keep <- grep(paste0("^", exposure, ".*:f\\.wave|^f\\.wave.*:", exposure), p$nm, value = TRUE)
+  ## An interaction term that is not estimable in every imputation is dropped by
+  ## pool_full's name intersection, which silently shrinks the very test this
+  ## function exists to run. Name the casualties instead of reporting a Wald on a
+  ## reduced set as though it were the full one.
+  lost <- grep(paste0("^", exposure, ".*:f\\.wave|^f\\.wave.*:", exposure), dropped, value = TRUE)
+  if (length(lost)) cat("  !!", tag, "-- interaction terms NOT in the test:",
+                        paste(lost, collapse = ", "), "\n")
+  if (length(dropped)) cat("   nuisance terms dropped from the pool:",
+                           paste(setdiff(dropped, lost), collapse = ", "), "\n")
   cat(tag, ": interaction terms", length(keep), "\n")
   s <- D1(p, keep)
   print(round(s, 4))
