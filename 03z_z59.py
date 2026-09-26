@@ -15,7 +15,7 @@ Codes are read as eTable 13 reads them: from the source concept (what the coder 
 condition_occurrence and observation, because Z codes usually map to the Observation domain and
 condition_source_value is not reliably the ICD code. (The z_inc / z59_any flags in
 03z_extract.py read condition_source_value and are superseded by this script.)
-Counts below 20 print as "<20", a count whose complement is below 20 as "masked", and an
+Counts of 20 or fewer print as "<=20", a count whose complement is 20 or fewer as "masked", and an
 all-era total that would reveal the pooled count of the masked era cells as "masked".
   ARM=covid python3 03z_z59.py      (or ARM=flu)
 """
@@ -83,10 +83,13 @@ G = {
 }
 
 
-def cell(k, n):
-    if k < 20:
-        return "<20", "masked"
-    if n - k < 20:
+def cell(k, n, kp):
+    ## R10 Codex: the published policy prohibits counts of 1 to 20, so 20 is masked too, and
+    ## a count must also rest on more than 20 distinct participants (influenza rows are
+    ## person-seasons)
+    if k <= 20 or kp <= 20:
+        return "<=20", "masked"
+    if n - k <= 20:
         return "masked", "masked"
     return str(k), f"{100 * k / n:.1f}"
 
@@ -98,15 +101,16 @@ for e in ["all"] + sorted(W.era.unique()):
     n = len(key)
     for g, pat in G.items():
         hit = M[M.code.str.contains(pat, regex=True)]
-        k = len(set(zip(hit.person_id, hit.d)) & key)
+        pairs = set(zip(hit.person_id, hit.d)) & key
+        k, kp = len(pairs), len({p for p, _ in pairs})
         raw[(e, g)] = (k, n)
-        kk, pc = cell(k, n)
+        kk, pc = cell(k, n, kp)
         rows.append(
             {
                 "arm": ARM,
                 "era": e,
                 "group": g,
-                "n": n if n >= 20 else "<20",
+                "n": n if n > 20 else "<=20",
                 "k": kk,
                 "pct": pc,
             }
@@ -121,12 +125,12 @@ for g in G:
     shown = [
         e
         for e in eras
-        if o[(o.era == e) & (o.group == g)].k.iloc[0] not in ("<20", "masked")
+        if o[(o.era == e) & (o.group == g)].k.iloc[0] not in ("<=20", "masked")
     ]
     if len(shown) < len(eras):
         k_p = k_all - sum(raw[(e, g)][0] for e in shown)
         n_p = n_all - sum(raw[(e, g)][1] for e in shown)
-        if k_p < 20 or n_p - k_p < 20:
+        if k_p <= 20 or n_p - k_p <= 20:
             o.loc[(o.group == g) & (o.era == "all"), ["k", "pct"]] = "masked"
 o.to_csv(f"/home/jupyter/jno_v26/z59_{ARM}.csv", index=False)
 print(

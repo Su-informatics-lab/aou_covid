@@ -48,9 +48,9 @@ SRC = {
     "t2": "working/v25/tables/Table2_data.csv",
     "fig2": "results/figures/v25/Figure2_era_attenuation_data.csv, log(alone) - log(joint): 0.329, 0.317, 0.313",
     "derived": "arithmetic on asserted values (see gloss)",
-    "e13": "supplement eTable 13 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%)",
+    "e13": "supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%)",
     "03w": "working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R)",
-    "e21": "supplement eTable 21 (working/v25/platform_03u/covid_crude.csv, flu_crude.csv; 03v_crude.py)",
+    "e21": "supplement eTable 9 (working/v25/platform_03u/covid_crude.csv, flu_crude.csv; 03v_crude.py)",
     "r10": "working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10)",
 }
 
@@ -163,7 +163,7 @@ CLAIMS = OrderedDict(
         (
             "int_inc",
             (
-                "(P = .59 and P = .91; eTables 7 and 20)",
+                "(P = .59 and P = .91; eTables 15, 19, and 20)",
                 "03d",
                 "income x era, COVID-19 and influenza",
             ),
@@ -195,7 +195,7 @@ CLAIMS = OrderedDict(
         (
             "flu_med_ror",
             (
-                "(in a period-interaction model, 1.13 before the pandemic and 0.84 after influenza returned; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 8)",
+                "(in a period-interaction model, 1.13 before the pandemic and 0.84 after influenza returned; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 7)",
                 "03o",
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
@@ -251,7 +251,7 @@ CLAIMS = OrderedDict(
         (
             "unemp_rent_att",
             (
-                "against 43% and 39% for being out of work or unable to work and 55% and 59% for renting",
+                "against 43% and 39% for being out of work or unable to work (eTable 21) and 55% and 59% for renting",
                 "03oAB",
                 "unemployment and renting attenuation",
             ),
@@ -323,7 +323,7 @@ CLAIMS = OrderedDict(
         (
             "medicare_flu",
             (
-                "but not in influenza (1.03; 95% CI, 0.66-1.61; eTable 22)",
+                "but not in influenza (1.03; 95% CI, 0.66-1.61; eTable 12)",
                 "03u",
                 "Medicare ROR after/before, influenza, combined model",
             ),
@@ -350,7 +350,7 @@ CLAIMS = OrderedDict(
             (
                 "hospitalized about 10 percentage points more often (crude) than those with $35 000 to $99 999 in every era",
                 "e21",
-                "Key Points; crude gaps 10.2-12.0 points (eTable 21)",
+                "Key Points; crude gaps 10.2-12.0 points (eTable 9)",
             ),
         ),
         (
@@ -396,7 +396,7 @@ CLAIMS = OrderedDict(
         (
             "med_gap",
             (
-                "from 15.3 to 9.4 and 9.7 points (eTable 21)",
+                "from 15.3 to 9.4 and 9.7 points (eTable 9)",
                 "03v",
                 "Medicaid-employer crude RD by wave",
             ),
@@ -452,7 +452,7 @@ CLAIMS = OrderedDict(
         (
             "r10_severe",
             (
-                "the ratio was 1.18 (95% CI, 0.79-1.75)",
+                "and 1.18 (95% CI, 0.79-1.75) among those with one",
                 "r10",
                 "case_severe Medicaid 1.1764 (0.7895-1.7530)",
             ),
@@ -496,7 +496,7 @@ CLAIMS = OrderedDict(
         (
             "r10_ip_ed24",
             (
-                "cases with an inpatient stay (0.64) or with an inpatient or emergency stay of 24 hours or more (0.65)",
+                "cases with an inpatient stay (0.64) or with an inpatient stay or an emergency stay of 24 hours or more (0.65)",
                 "r10",
                 "case_ip 0.6358; case_ed24b 0.6518",
             ),
@@ -536,9 +536,17 @@ CLAIMS = OrderedDict(
         (
             "r10_dx_range",
             (
-                "weakened or removed it (0.79 to 1.04)",
+                "the ratio ranged from 0.73 to 1.04",
                 "r10",
-                "eTable 24A: case_dxwin2 0.7895 ... case_dx2 1.0420",
+                "eTable 23A: case_infwin2 0.7273 ... case_dx2 1.0420",
+            ),
+        ),
+        (
+            "r10_short",
+            (
+                "the ratio was 0.60 (95% CI, 0.44-0.81) among cases without a stay of 3 days or more, intensive care, or death",
+                "r10",
+                "sens_r10d_covid.csv case_short Medicaid 0.5985 (0.4428-0.8089)",
             ),
         ),
     ]
@@ -639,8 +647,8 @@ DISPLAY_MAP = {
 
 
 def displays(root):
-    """eTables 20A-B and the figures render the same era-specific estimates. They
-    must agree. Figure 2A plots every eTable 20A cell (alone and jointly); Figure
+    """eTables 15A-B and the figures render the same era-specific estimates. They
+    must agree. Figure 2A plots every eTable 15A cell (alone and jointly); Figure
     1C plots the jointly adjusted ones. A withheld cell must be a dash in the
     table and empty in both figure data files (v25; the v24 Table 2 against
     Figure 1 check no longer applies because v25 Figure 1 shows no Table 2
@@ -679,7 +687,7 @@ def displays(root):
         got = fmt(r["aor"], r["lo"], r["hi"])
         if got != want:
             print(
-                "  DISAGREE Figure 2B/eFigure 8 %-9s %-12s %-6s era %s: eTable20A=%s figure=%s"
+                "  DISAGREE Figure 2B/eFigure 7 %-9s %-12s %-6s era %s: eTable15A=%s figure=%s"
                 % (r["pathogen"], r["term"], r["model"], r["era_order"], want, got)
             )
             bad += 1
@@ -699,11 +707,11 @@ def displays(root):
                 got = fmt(r["aor"], r["lo"], r["hi"])
                 if got != want:
                     print(
-                        "  DISAGREE eFigure 7 %-9s %-12s %s: eTable20A=%s figure=%s"
+                        "  DISAGREE eFigure 6 %-9s %-12s %s: eTable15A=%s figure=%s"
                         % (pth, term, r["era"], want, got)
                     )
                     bad += 1
-    # eTable 20B against the Figure 2A forest (v26)
+    # eTable 15B against the Figure 2A forest (v26)
     blkb = sup[sup.index("**B. Ratios of odds ratios") :]
     blkb = blkb[: blkb.index("\n\n", blkb.index("| Medicaid"))]
     rowsb = {}
@@ -729,7 +737,7 @@ def displays(root):
             )
             bad += 1
     print(
-        "\neTable 20A/20B against Figure 2 and eFigure 7 data: %d discrepancies." % bad
+        "\neTable 15A/15B against Figure 2 and eFigure 6 data: %d discrepancies." % bad
     )
     return 1 if bad else 0
 

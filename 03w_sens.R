@@ -151,7 +151,46 @@ if (SPART == "R10") {
     specs$case_lab <- keep_rows(none, function(dk) dk$r10_lab_idx == 1)
     specs$case_lab_dxwin2 <- keep_rows(none, function(dk) dk$r10_lab_idx == 1 & dk$r10_dx_win2 == 1)
     specs$case_ed24b <- keep_rows(none, function(dk) dk$r10_q_ip == 1 | (!is.na(dk$r10_ed24b) & dk$r10_ed24b == 1)) }
+  ## R10 Codex: the complement of case_severe, fitted directly (stays under 3 days, no
+  ## intensive care, alive at 30 days), to test where the change sits
+  if (!is.null(d$r10_severe)) specs$case_short <- keep_rows(none, function(dk) dk$r10_severe == 0)
   if (nzchar(Sys.getenv("R10SPECS"))) specs <- specs[strsplit(Sys.getenv("R10SPECS"), ",")[[1]]]
+  ## R10CELLS=1: minimum-cell audit of every R10 restriction instead of the models. For
+  ## each definition x era (and all eras) x level of income and insurance, reference levels
+  ## included: case rows, control rows, distinct case and control participants, the
+  ## smallest over the 40 imputations. Counts of 20 or fewer print as "<=20".
+  if (Sys.getenv("R10CELLS") == "1") {
+    cnt <- function(x) c(cases = sum(x$Treatment == 1), controls = sum(x$Treatment == 0),
+      case_persons = length(unique(x$person_id[x$Treatment == 1])),
+      control_persons = length(unique(x$person_id[x$Treatment == 0])))
+    KR <- lapply(specs, function(f) f(d)); acc <- list()
+    for (k in seq_len(M)) {
+      dk0 <- apply_imp(k)
+      for (nm in names(KR)) {
+        dd <- dk0[KR[[nm]], ]
+        for (v in c(DV[["inc"]], DV[["ins"]])) for (e in c("all", sort(unique(as.character(dd[[ERA]]))))) {
+          de <- if (e == "all") dd else dd[as.character(dd[[ERA]]) == e, ]
+          for (lv in levels(factor(dk0[[v]]))) {
+            key <- paste(nm, v, e, lv, sep = "|")
+            cur <- cnt(de[as.character(de[[v]]) == lv, ])
+            acc[[key]] <- if (is.null(acc[[key]])) cur else pmin(acc[[key]], cur)
+          }
+        }
+      }
+    }
+    CC <- c("cases", "controls", "case_persons", "control_persons")
+    o <- do.call(rbind, lapply(names(acc), function(key) {
+      p <- strsplit(key, "|", fixed = TRUE)[[1]]
+      data.frame(arm = ARM, spec = p[1], domain = p[2], era = p[3], level = p[4],
+                 t(setNames(acc[[key]], paste0("min_", CC))), row.names = NULL) }))
+    mc <- paste0("min_", CC)
+    o$flag <- ifelse(apply(o[, mc] <= 20, 1, any), "LE_20", "ok")
+    for (cc in mc) o[[cc]] <- ifelse(o[[cc]] <= 20, "<=20", as.character(o[[cc]]))
+    write.csv(o, file.path(OUT, "cells_r10.csv"), row.names = FALSE)
+    cat("cells audited:", nrow(o), "| with a count of 20 or fewer:", sum(o$flag == "LE_20"), "\n")
+    print(o[o$flag == "LE_20", ], row.names = FALSE)
+    cat("DONE\n"); sink(); quit(save = "no")
+  }
   cat("rows flagged: controls pre-admitted", M20(sum(d$Treatment == 0 & d$r10_pre_adm == 1)),
       "| cases with dx", M20(sum(d$Treatment == 1 & d$r10_q_dx == 1)),
       "| cases IP", M20(sum(d$Treatment == 1 & d$r10_q_ip == 1)),
