@@ -85,7 +85,7 @@ def panel(a, rows, title_n):
     )
 
 
-panel(ax, AOU, "A   All of Us")
+panel(ax, AOU, "A   All of Us, COVID-19")
 panel(bx, MS, "B   MarketScan")
 bx.set_xlabel("Absolute standardized mean difference")
 

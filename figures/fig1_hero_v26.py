@@ -197,8 +197,8 @@ def hero_facet(ax, d, eras, title, tcol):
         if weak:
             ax.text(
                 x,
-                floor - 3.0,
-                "few data:\n817 matched rows",
+                floor - 2.4,
+                "few data: %d and\n%d person-seasons" % (hi.n, lo.n),
                 ha="center",
                 va="top",
                 color=REF_TXT,

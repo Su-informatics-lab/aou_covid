@@ -70,7 +70,7 @@ PANEL = {
 }
 PTEST = {
     "income_lt10k": ("Income × era:  COVID-19 P = .59;  influenza P = .91"),
-    "medicaid": ("Insurance × era:  COVID-19 P = .002;  influenza P = .01"),
+    "medicaid": ("Insurance × era:  COVID-19 P = .002;  influenza P = .01*"),
 }
 
 

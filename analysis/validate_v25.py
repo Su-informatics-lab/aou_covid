@@ -177,7 +177,7 @@ CLAIMS = OrderedDict(
         (
             "med_pre",
             (
-                "1.93 alone and 1.38 (95% CI, 1.16-1.65) jointly",
+                "1.92 alone and 1.38 (95% CI, 1.16-1.65) jointly",
                 "03o",
                 "Medicaid pre-Delta",
             ),
@@ -304,7 +304,7 @@ CLAIMS = OrderedDict(
         (
             "q_both",
             (
-                "(income P = .43 and P = .72; insurance P = .002 and P = .01)",
+                "(income P = .43; insurance P = .002)",
                 "03q",
                 "era tests under case-by-era imputation",
             ),
@@ -664,7 +664,7 @@ def displays(root):
         got = fmt(r["aor"], r["lo"], r["hi"])
         if got != want:
             print(
-                "  DISAGREE Figure 2A %-9s %-12s %-6s era %s: eTable20A=%s figure=%s"
+                "  DISAGREE Figure 2B/eFigure 8 %-9s %-12s %-6s era %s: eTable20A=%s figure=%s"
                 % (r["pathogen"], r["term"], r["model"], r["era_order"], want, got)
             )
             bad += 1
@@ -684,7 +684,7 @@ def displays(root):
                 got = fmt(r["aor"], r["lo"], r["hi"])
                 if got != want:
                     print(
-                        "  DISAGREE Figure 1C %-9s %-12s %s: eTable20A=%s figure=%s"
+                        "  DISAGREE eFigure 7 %-9s %-12s %s: eTable20A=%s figure=%s"
                         % (pth, term, r["era"], want, got)
                     )
                     bad += 1

@@ -340,7 +340,7 @@ def main():
         axB,
         "B",
         "COVID-19: the part shared with the other items",
-        "Medicaid's own part fell to about zero; income's did not",
+        "Medicaid's jointly adjusted OR approached 1; income's did not",
         dx=0.10,
     )
     panel_title(

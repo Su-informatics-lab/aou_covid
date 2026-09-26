@@ -29,7 +29,7 @@ source column names the run result the value was transcribed from.
 | `covid_waves_inc` | 1.44 before Delta, 1.57 during Delta, and 1.55 during Omicron | working/v24/03n_RESULTS.md | income <$10k by wave |
 | `covid_ror_inc` | (ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38; Figure 2A) | working/v25/03o_RESULTS.md | income ROR Omicron/pre-Delta |
 | `int_inc` | (P = .59 and P = .91; eTables 7 and 20) | working/v23/03d_03e_RESULTS.md | income x era, COVID-19 and influenza |
-| `med_pre` | 1.93 alone and 1.38 (95% CI, 1.16-1.65) jointly | working/v25/03o_RESULTS.md | Medicaid pre-Delta |
+| `med_pre` | 1.92 alone and 1.38 (95% CI, 1.16-1.65) jointly | working/v25/03o_RESULTS.md | Medicaid pre-Delta |
 | `med_later_alone` | (1.23 and 1.25) | working/v25/03o_RESULTS.md | Medicaid alone, Delta and Omicron |
 | `med_later_joint` | 0.89 [95% CI, 0.68-1.17] and 0.91 [95% CI, 0.75-1.11] | working/v25/03o_RESULTS.md | Medicaid joint, Delta and Omicron |
 | `med_ror` | 0.66 (95% CI, 0.52-0.83) | working/v25/03o_RESULTS.md | Medicaid ROR Omicron/pre-Delta |
@@ -50,7 +50,7 @@ source column names the run result the value was transcribed from.
 | `unemp_rent_att` | against 43% and 39% for being out of work or unable to work and 55% and 59% for renting | working/v25/03o_RESULTS.md, COVID-19 A/B (r4_covid/AB_attenuation.csv) | unemployment and renting attenuation |
 | `edu_att` | education below GED lost 95% in COVID-19 (1.30 to 1.01) | working/v25/03o_RESULTS.md, COVID-19 A/B (r4_covid/AB_attenuation.csv) | education attenuation, COVID-19 |
 | `abs_inc_joint` | (AOR, 1.50 in COVID-19 and 1.64 in influenza) | working/v24/03n_RESULTS.md | abstract, income <$10k joint |
-| `q_both` | (income P = .43 and P = .72; insurance P = .002 and P = .01) | working/v25/platform_03q/ (covid_era_refit.csv, flu_era_refit.csv, *_calib_bootstrap.csv) | era tests under case-by-era imputation |
+| `q_both` | (income P = .43; insurance P = .002) | working/v25/platform_03q/ (covid_era_refit.csv, flu_era_refit.csv, *_calib_bootstrap.csv) | era tests under case-by-era imputation |
 | `crude_inc` | 21.9% of those with income below $10 000 and 11.5% of those with $35 000 to $99 999 | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | crude hospitalization, COVID-19, 675/3,082 and 793/6,925 |
 | `crude_waves` | 10.2, 10.3, and 10.6 percentage points | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | crude risk difference by wave, COVID-19 |
 | `zcode` | 5.8% of those reporting being out of work or unable to work had a Z56 code | supplement eTable 13 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%) | 208 of 3,608 |

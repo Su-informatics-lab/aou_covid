@@ -40,7 +40,9 @@ from style import (
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "..", "results", "figures", "v23", "eFigure4_data.csv")
+DATA = os.path.join(
+    HERE, "..", "results", "figures", "v25", "eFigure4_data.csv"
+)  # imputation series: 03n R2 (current primary)
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 SENS = "#8C8C8C"  # sensitivity specification: neutral grey, square marker
 
