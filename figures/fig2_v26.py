@@ -311,7 +311,8 @@ def zcodes(ax):
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.spines["left"].set_visible(False)
     ax.set_xlabel(
-        "% of COVID-19 matched participants reporting the risk", fontsize=PT_BODY
+        "% of COVID-19 matched participants reporting each circumstance",
+        fontsize=PT_BODY,
     )
 
 
@@ -332,7 +333,7 @@ def main():
         axA,
         "A",
         "What changed, beyond the other social items",
-        "Medicaid fell in COVID-19; income showed no detected change",
+        "Medicaid fell in COVID-19; income did not narrow",
         dx=0.13,
     )
     panel_title(
@@ -347,7 +348,7 @@ def main():
         fig,
         axC,
         "C",
-        "The record rarely codes the social risk patients report",
+        "The record rarely codes the circumstances patients report",
         dx=0.28,
     )
     for ext in ("pdf", "png"):

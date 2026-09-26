@@ -517,6 +517,30 @@ CLAIMS = OrderedDict(
                 "ard_covid_x.csv income 0.8816, 3.3628",
             ),
         ),
+        (
+            "r10_linked_mix",
+            (
+                "appeared in 62.9% of employer-insured Omicron admissions, down from 84.1% before Delta (Medicaid, 87.1% and 90.5%)",
+                "r10",
+                "describe_r10_covid: dx on visit / linked = 107/170, 211/251; Medicaid 283/325, 664/734",
+            ),
+        ),
+        (
+            "r10_scr_ehr",
+            (
+                "(2.1% and 9.8% of participants)",
+                "r10",
+                "r10b_*.txt EHR-site screening 290/13,781; 527/5,364",
+            ),
+        ),
+        (
+            "r10_dx_range",
+            (
+                "weakened or removed it (0.79 to 1.04)",
+                "r10",
+                "eTable 24A: case_dxwin2 0.7895 ... case_dx2 1.0420",
+            ),
+        ),
     ]
 )
 
