@@ -7,8 +7,9 @@ script keeps the draw.io file as the source of every box's text and redraws the
 flow on a 180 mm canvas with 7 pt text: boxes are narrower, text is wrapped to
 fit them, and exclusion boxes sit in side columns beside the connector they
 leave from, so they add no rows. The counts live only in the draw.io file
-(figures/efig1_consort_three_panel.drawio, kept local until the MarketScan
-small-cell rule is confirmed); this script holds the layout only.
+(figures/efig1_consort_three_panel.drawio); this script holds the layout only.
+The MarketScan panel shows no count below 11 (the unmatched case is pooled with the
+cases excluded near the data cutoff), a common Merative data-use threshold.
 Writes submission_v25/04_figures/supplement/eFigure1.{pdf,png}.
 """
 
