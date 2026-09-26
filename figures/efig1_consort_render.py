@@ -22,16 +22,12 @@ from matplotlib.patches import FancyArrowPatch, Rectangle
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(
-    HERE,
-    "..",
-    "submission_v24",
-    "04_figures",
-    "src",
-    "efig1_consort_three_panel.drawio",
-)
+    HERE, "efig1_consort_three_panel.drawio"
+)  # source of record, in the repository
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 PX = 0.01  # inches per draw.io pixel
 PT = PX * 72  # points per pixel
+FONT = 1.12  # the most the box text can grow before the narrowest box overflows (R9)
 
 
 def text_of(v):
@@ -97,7 +93,7 @@ for c in cells:
                 t,
                 ha="left" if left else "center",
                 va="top" if is_text else "center",
-                fontsize=fsize(v) * PT,
+                fontsize=fsize(v) * PT * FONT,
                 family="Arial",
                 fontweight="bold" if (is_text and "<b>" in v) else "normal",
                 wrap=False,
@@ -132,5 +128,5 @@ for c in cells:
 
 os.makedirs(OUT, exist_ok=True)
 for ext in ("pdf", "png"):
-    fig.savefig(os.path.join(OUT, "eFigure1." + ext), dpi=200, facecolor="white")
+    fig.savefig(os.path.join(OUT, "eFigure1." + ext), dpi=300, facecolor="white")
 print("wrote eFigure1 to", OUT, "| canvas", W, "x", H)

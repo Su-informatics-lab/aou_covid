@@ -25,15 +25,17 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import matplotlib.pyplot as plt
 import pandas as pd
-from style import GREY, INK, MM, NAVY, RULE, apply_style
+from style import DARK, INK, MM, PT_BODY, PT_SMALL, RULE, apply_style
+
+GREY = "#9A9A9A"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "results", "figures", "v24")
-DATA = os.path.join(OUT, "eFigure6_data.csv")
+DATA = os.path.join(HERE, "..", "results", "figures", "v24", "eFigure6_data.csv")
+OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 
 LIM = (0.355, 2.90)
 TICKS = [0.4, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5]
-SHADE = "#EAEFF5"
+SHADE = "#EFEFEF"
 
 # Every term whose two cohorts disagree is named, with a leader line, because
 # four of the six sit inside one small patch and cannot be labelled in place.
@@ -44,7 +46,7 @@ LABELS = {
     "Cerebrovascular disease": (1.42, 0.868, "left"),
     "Rheumatic disease": (1.42, 0.790, "left"),
     "Omicron": (1.30, 0.474, "left"),
-    "AIDS": (0.50, 1.52, "left"),
+    "AIDS": (0.60, 1.42, "right"),
 }
 
 
@@ -89,7 +91,7 @@ def main():
 
     for _, r in d.iterrows():
         agree = bool(r.agree)
-        col = NAVY if agree else GREY
+        col = DARK if agree else GREY
         ax.plot(
             [r.aou_lo, r.aou_hi],
             [r.ms_aor] * 2,
@@ -104,12 +106,11 @@ def main():
         ax.plot(
             r.aou_aor,
             r.ms_aor,
-            "o",
-            ms=5.0,
+            "o" if agree else "s",
+            ms=5.0 if agree else 4.6,
             zorder=3,
-            mfc=col if agree else "white",
+            mfc=col,
             mec=col,
-            mew=1.2,
         )
         if r.term in LABELS:
             lx, ly, ha = LABELS[r.term]
@@ -124,7 +125,14 @@ def main():
                 zorder=2,
             )
             ax.text(
-                lx, ly, r.term, fontsize=8.5, color=INK, ha=ha, va="center", zorder=4
+                lx,
+                ly,
+                r.term,
+                fontsize=PT_SMALL,
+                color=INK,
+                ha=ha,
+                va="center",
+                zorder=4,
             )
 
     for a in (ax.xaxis, ax.yaxis):
@@ -134,8 +142,9 @@ def main():
     ax.set_xticklabels(["%g" % t for t in TICKS])
     ax.set_yticks(TICKS)
     ax.set_yticklabels(["%g" % t for t in TICKS])
-    ax.set_xlabel("All of Us, adjusted odds ratio")
-    ax.set_ylabel("MarketScan, adjusted odds ratio")
+    ax.set_xlabel("All of Us, adjusted odds ratio (log scale)", fontsize=PT_BODY)
+    ax.set_ylabel("MarketScan, adjusted odds ratio (log scale)", fontsize=PT_BODY)
+    ax.tick_params(labelsize=PT_SMALL)
     ax.spines["top"].set_visible(True)
     ax.spines["right"].set_visible(True)
     for s in ax.spines.values():
@@ -147,7 +156,7 @@ def main():
         0.975,
         "%d of %d terms agree in direction" % (n_agree, len(d)),
         transform=ax.transAxes,
-        fontsize=10,
+        fontsize=PT_BODY,
         va="top",
         color=INK,
     )
@@ -158,28 +167,31 @@ def main():
             ls="",
             marker="o",
             ms=5.0,
-            mfc=NAVY,
-            mec=NAVY,
+            mfc=DARK,
+            mec=DARK,
             label="Same direction",
         ),
         plt.Line2D(
             [],
             [],
             ls="",
-            marker="o",
-            ms=5.0,
-            mfc="white",
+            marker="s",
+            ms=4.6,
+            mfc=GREY,
             mec=GREY,
-            mew=1.2,
             label="Different direction",
         ),
     ]
     ax.legend(
-        handles=h, loc="lower right", fontsize=9, borderpad=0.2, handletextpad=0.4
+        handles=h,
+        loc="lower right",
+        fontsize=PT_SMALL,
+        borderpad=0.2,
+        handletextpad=0.4,
     )
 
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "eFigure6." + ext), dpi=600)
+        fig.savefig(os.path.join(OUT, "eFigure6." + ext), dpi=400)
     print("wrote eFigure6  |  %d of %d agree" % (n_agree, len(d)))
 
 

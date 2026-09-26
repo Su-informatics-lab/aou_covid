@@ -1,23 +1,27 @@
 # -*- coding: utf-8 -*-
-"""Shared style for the v20 figures.
+"""Shared style for the figures (v26 palette, R9 visualization review).
 
-Type. OUP artwork guidance for its journals asks for Arial, nothing below
-10 pt, axis labels and legends at 10 pt and in-figure text at 12 pt, a minimum
-width of 168 mm and a white background. Arial is not installed here; Liberation
-Sans is, and it is metrically identical to Arial, so a production substitution
-will not reflow the labels. Fonts embed as type 42 so the text stays editable.
+Type. Arial, embedded as type 42 so the text stays editable (Liberation Sans
+is the metric-identical fallback). The figures are drawn at their final print
+width (180 mm for two-column figures) and nothing is placed outside the axes
+grid, so `bbox_inches="tight"` cannot widen the canvas. JAMA Network Open
+re-creates accepted figures in house style; its font and width minimums were
+not verified from the author instructions (see working/v25/reviews_R9viz/).
 
-Colour, one rule for the whole set:
+Colour, one key for the whole set:
 
-    WARM  = pathogen              COVID-19 deep brick, influenza amber
-    COOL  = our own analysis      navy = the estimate the claim rests on,
-                                  teal = the comparison it is read against
-    COOL RAMP = ordered time      light to dark across pandemic eras
-    GREY  = reference line, connectors, and anything not significant
+    HUE = the variable        INCOME navy (income below $10 000),
+                              MEDICAID reddish purple (Okabe-Ito #CC79A7,
+                              separable from navy under deuteranopia),
+                              REFG grey (the reference group, and the part
+                              of an association shared with the other items)
+    LIGHTNESS = the model     a tint of the hue = fitted alone,
+                              the full hue = jointly adjusted
+    WARM = the virus only     COVID-19 brick, influenza amber; never a model,
+                              never a policy
+    HATCH/OUTLINE = weak or withheld (pandemic influenza seasons; <20 cells)
 
-So warm never means a model and cool never means a disease. A reader who learns
-the key on one figure carries it to the next. Filled marker = interval excludes
-1.0; open marker = it does not.
+Open marker = the 95% CI includes 1, and nothing else.
 """
 
 import matplotlib as mpl
@@ -33,10 +37,22 @@ NAVY = "#2C4B7C"  # cool, dark   — primary / adjusted / joint
 TEAL = "#3B9AB2"  # cool, mid    — comparison / base / domain-specific
 ERA = ("#9CC3D5", "#3D7FA6", "#14395C")  # ordered: pre-Delta, Delta, Omicron
 GREY = "#8C8C8C"
+# v26 key (R9): hue = variable, tint = fitted alone, warm = virus only
+INCOME = "#1F3A68"
+INCOME_TINT = "#9FB0CC"
+MEDICAID = "#CC79A7"
+MEDICAID_TINT = "#E3AFCD"
+REFG = "#9A9A9A"
+SHARED = "#C9C9C9"
+COVID_TINT = "#E3B4AE"
+FLU_TINT = "#F6D2B2"
+TXT_GREY = "#666666"  # informative grey text (contrast about 5.7:1); lighter greys for rules only
+DARK = "#4D4D4D"
 RULE = "#AAAAAA"
 INK = "#222222"
 
 SANS = ["Arial", "Liberation Sans", "Helvetica", "Nimbus Sans", "DejaVu Sans"]
+PT_SMALL, PT_BODY, PT_HEAD = 7, 8, 9  # in-figure text at 180 mm print width
 
 
 def apply_style():
@@ -84,7 +100,7 @@ def log_axis(ax, xlim, xticks, xlabel, ref=1.0):
         ax.spines[s].set_visible(False)
 
 
-def panel_labels(axes, letters="abcdefg", alpha=0.0, dy=0.010):
+def panel_labels(axes, letters="ABCDEFG", alpha=0.0, dy=0.010):
     """Panel letters sit at the top-left of each panel's own tight bounding
     box, so they clear the row labels rather than floating over the plot.
     Single-panel figures call this with the default alpha=0: the space is

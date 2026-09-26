@@ -161,7 +161,7 @@ CLAIMS = OrderedDict(
         (
             "covid_ror_inc",
             (
-                "(ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38)",
+                "(ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38; Figure 2A)",
                 "03o",
                 "income ROR Omicron/pre-Delta",
             ),
@@ -209,7 +209,7 @@ CLAIMS = OrderedDict(
         (
             "flu_med_ror",
             (
-                "(in a period-interaction model, 1.13 and 0.84; ratio, 0.74; 95% CI, 0.51-1.07)",
+                "(in a period-interaction model, 1.13 and 0.84; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 8)",
                 "03o",
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
@@ -449,7 +449,7 @@ CLAIMS = OrderedDict(
         (
             "flat35b",
             (
-                "In COVID-19 the income gradient was flat above $35 000 (11.3% at $100 000 or more); in influenza it continued modestly (13.6% and 11.3%; Figure 2B)",
+                "In COVID-19 the income gradient was flat above $35 000 (11.3% at $100 000 or more); in influenza it continued modestly (13.6% and 11.3%; Figure 1A)",
                 "03v",
                 "COVID 542/4,786; influenza 317/2,335 and 179/1,580",
             ),
@@ -465,7 +465,7 @@ CLAIMS = OrderedDict(
         (
             "med_gap",
             (
-                "from 15.3 to 9.4 and 9.7 points (Figure 1B)",
+                "from 15.3 to 9.4 and 9.7 points (eTable 21)",
                 "03v",
                 "Medicaid-employer crude RD by wave",
             ),
@@ -624,7 +624,7 @@ DISPLAY_MAP = {
 
 
 def displays(root):
-    """eTable 20A and the figures render the same era-specific estimates. They
+    """eTables 20A-B and the figures render the same era-specific estimates. They
     must agree. Figure 2A plots every eTable 20A cell (alone and jointly); Figure
     1C plots the jointly adjusted ones. A withheld cell must be a dash in the
     table and empty in both figure data files (v25; the v24 Table 2 against
@@ -688,7 +688,34 @@ def displays(root):
                         % (pth, term, r["era"], want, got)
                     )
                     bad += 1
-    print("\neTable 20A against Figures 1C and 2A: %d discrepancies." % bad)
+    # eTable 20B against the Figure 2A forest (v26)
+    blkb = sup[sup.index("**B. Ratios of odds ratios") :]
+    blkb = blkb[: blkb.index("\n\n", blkb.index("| Medicaid"))]
+    rowsb = {}
+    for line in blkb.splitlines():
+        m = re.match(r"\| (Income <\$10 000|Medicaid) \|(.*)\|$", line)
+        if m:
+            rowsb["medicaid" if m.group(1) == "Medicaid" else "income_lt10k"] = [
+                c.strip() for c in m.group(2).split("|")
+            ]
+    colb = {"Delta vs pre-Delta": 0, "Omicron vs pre-Delta": 1, "After vs before": 2}
+    for r in csv.DictReader(
+        open(
+            os.path.join(root, "results/figures/v25/Figure2_ror_data.csv"),
+            encoding="utf-8",
+        )
+    ):
+        want = rowsb[r["term"]][colb[r["contrast"]]]
+        got = fmt(r["ror"], r["lo"], r["hi"])
+        if got != want:
+            print(
+                "  DISAGREE Figure 2A %-9s %-12s %s: eTable20B=%s figure=%s"
+                % (r["pathogen"], r["term"], r["contrast"], want, got)
+            )
+            bad += 1
+    print(
+        "\neTable 20A/20B against Figure 2 and eFigure 7 data: %d discrepancies." % bad
+    )
     return 1 if bad else 0
 
 

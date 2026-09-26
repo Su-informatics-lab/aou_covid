@@ -378,7 +378,11 @@ def main():
         color=GREY,
     )
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "Figure1." + ext), dpi=300, bbox_inches="tight")
+        fig.savefig(
+            os.path.join(OUT, "Figure1_v25_superseded." + ext),
+            dpi=300,
+            bbox_inches="tight",
+        )
     print("wrote Figure1 to", OUT)
 
 

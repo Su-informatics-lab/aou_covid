@@ -24,13 +24,48 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import re
+
 import matplotlib.pyplot as plt
 import pandas as pd
-from style import COVID, GREY, INK, MM, NAVY, RULE, TEAL, apply_style, sig
+from style import (
+    COVID,
+    DARK,
+    INCOME,
+    INCOME_TINT,
+    INK,
+    MEDICAID,
+    MEDICAID_TINT,
+    MM,
+    PT_BODY,
+    PT_HEAD,
+    PT_SMALL,
+    RULE,
+    TXT_GREY,
+    apply_style,
+    sig,
+)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "results", "figures", "v23")
-DATA = os.path.join(OUT, "eFigure3_data.csv")
+DATA = os.path.join(HERE, "..", "results", "figures", "v23", "eFigure3_data.csv")
+OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
+LIGHT = "#B5B5B5"
+
+
+def colors(r):
+    """v26 key: hue = variable (income navy, Medicaid purple, others dark grey);
+    tint = fitted alone, full = fitted with the other items."""
+    if r.domain == "income":
+        return INCOME_TINT, INCOME
+    if r.level == "Medicaid":
+        return MEDICAID_TINT, MEDICAID
+    return LIGHT, DARK
+
+
+def money(t):
+    t = re.sub(r"(\d),(\d{3})", r"\1 \2", str(t)).replace("\u2013", "-")
+    return t.replace("< $", "<$").replace("\u2265 $", "\u2265$")
+
 
 ORDER = ["income", "employment", "housing", "stability", "insurance", "education"]
 REFTEXT = {
@@ -42,7 +77,7 @@ REFTEXT = {
     "education": "vs college graduate or higher",
 }
 XLIM, XTICKS = (0.78, 2.05), [0.8, 1.0, 1.2, 1.5, 2.0]
-HEADH, DY, CONN = 0.90, 0.190, "#BFBFBF"
+HEADH, DY, CONN = 0.90, 0.190, "#9A9A9A"
 
 
 def main():
@@ -79,23 +114,29 @@ def main():
             lab,
             ha="left",
             va="center",
-            fontsize=10,
+            fontsize=PT_HEAD,
             fontweight="bold",
             color=INK,
         )
-        ax.plot(XLIM, [yy + 0.16] * 2, color="#D8D8D8", lw=0.7, zorder=1)
+        ax.plot(XLIM, [yy + 0.22] * 2, color="#D8D8D8", lw=0.7, zorder=1)
         ax.text(
             XLIM[1],
-            yy - 0.04,
-            REFTEXT[dom],
+            yy - 0.12,
+            money(REFTEXT[dom]),
             ha="right",
             va="center",
-            fontsize=10,
-            color=GREY,
+            fontsize=PT_SMALL,
+            color=TXT_GREY,
         )
     for r, yy in rows:
         ax_lab.text(
-            1.0, yy, r.level_label, ha="right", va="center", fontsize=10, color=INK
+            1.0,
+            yy,
+            money(r.level_label),
+            ha="right",
+            va="center",
+            fontsize=PT_BODY,
+            color=INK,
         )
         ax.annotate(
             "",
@@ -111,9 +152,10 @@ def main():
             ),
             zorder=2,
         )
+        c_alone, c_joint = colors(r)
         for aor, lo, hi, col, off in (
-            (r.ds_aor, r.ds_lo, r.ds_hi, TEAL, -DY),
-            (r.joint_aor, r.joint_lo, r.joint_hi, NAVY, DY),
+            (r.ds_aor, r.ds_lo, r.ds_hi, c_alone, -DY),
+            (r.joint_aor, r.joint_lo, r.joint_hi, c_joint, DY),
         ):
             ax.plot([lo, hi], [yy + off] * 2, color=col, lw=1.1, zorder=3)
             f = sig(lo, hi)
@@ -140,73 +182,71 @@ def main():
         0.320,
         0.960,
         "COVID-19, missing-indicator specification",
-        fontsize=11,
+        fontsize=PT_HEAD,
         fontweight="bold",
         color=COVID,
         ha="left",
     )
     ax.set_xlabel(
-        "Adjusted odds ratio of hospitalization (95% CI, log scale)", labelpad=4
+        "Adjusted odds ratio of hospitalization (95% CI, log scale)",
+        labelpad=4,
+        fontsize=PT_BODY,
     )
+    ax.tick_params(axis="x", labelsize=PT_SMALL)
 
-    key = fig.add_axes([0.004, 0.010, 0.992, 0.036])
+    key = fig.add_axes([0.004, 0.006, 0.992, 0.060])
     key.set_xlim(0, 1)
     key.set_ylim(0, 1)
     key.axis("off")
-    key.plot(
-        [0.006], [0.5], marker="o", ms=4.8, color=TEAL, mfc=TEAL, mew=1.2, clip_on=False
-    )
+    # line 1: alone -> with the other items
+    key.plot([0.330], [0.72], marker="o", ms=4.8, color=LIGHT, clip_on=False)
     key.annotate(
         "",
-        xy=(0.070, 0.5),
-        xytext=(0.014, 0.5),
+        xy=(0.378, 0.72),
+        xytext=(0.338, 0.72),
         arrowprops=dict(arrowstyle="-|>", color=CONN, lw=0.9, mutation_scale=7),
     )
-    key.plot(
-        [0.078], [0.5], marker="o", ms=4.8, color=NAVY, mfc=NAVY, mew=1.2, clip_on=False
-    )
+    key.plot([0.386], [0.72], marker="o", ms=4.8, color=DARK, clip_on=False)
     key.text(
-        0.094,
-        0.5,
-        "the domain fitted on its own",
+        0.398,
+        0.72,
+        "light: fitted alone  \u2192  full: with the other 5 items"
+        "  (navy, income; purple, Medicaid)",
         ha="left",
         va="center",
-        fontsize=10,
-        color=TEAL,
+        fontsize=PT_SMALL,
+        color=INK,
     )
-    key.text(0.392, 0.5, "→", ha="left", va="center", fontsize=10, color=GREY)
+    # line 2: filled vs open
+    key.plot([0.330], [0.22], marker="o", ms=4.8, color=DARK, clip_on=False)
     key.text(
-        0.418,
-        0.5,
-        "fitted with the others",
+        0.342,
+        0.22,
+        "filled: 95% CI excludes 1",
         ha="left",
         va="center",
-        fontsize=10,
-        color=NAVY,
-    )
-    key.plot(
-        [0.606], [0.5], marker="o", ms=4.8, color=INK, mfc=INK, mew=1.2, clip_on=False
-    )
-    key.text(
-        0.622,
-        0.5,
-        "95% CI excludes 1.0",
-        ha="left",
-        va="center",
-        fontsize=10,
+        fontsize=PT_SMALL,
         color=INK,
     )
     key.plot(
-        [0.842],
-        [0.5],
+        [0.520],
+        [0.22],
         marker="o",
         ms=4.8,
-        color=INK,
+        color=DARK,
         mfc="white",
         mew=1.2,
         clip_on=False,
     )
-    key.text(0.858, 0.5, "it does not", ha="left", va="center", fontsize=10, color=INK)
+    key.text(
+        0.532,
+        0.22,
+        "open: 95% CI includes 1",
+        ha="left",
+        va="center",
+        fontsize=PT_SMALL,
+        color=INK,
+    )
 
     stem = os.path.join(OUT, "eFigure3")
     fig.savefig(stem + ".pdf")

@@ -27,14 +27,14 @@ source column names the run result the value was transcribed from.
 | `flu_int_model` | (in a period-interaction model, 1.67 and 1.66; ratio of odds ratios, 0.99; 95% CI, 0.66-1.49) | working/v25/03o_RESULTS.md | income <$10k, period-interaction model, and its ROR, influenza |
 | `flu_ror_inc` | 0.99; 95% CI, 0.66-1.49 | working/v25/03o_RESULTS.md | income ROR after/before, influenza |
 | `covid_waves_inc` | 1.44 before Delta, 1.57 during Delta, and 1.55 during Omicron | working/v24/03n_RESULTS.md | income <$10k by wave |
-| `covid_ror_inc` | (ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38) | working/v25/03o_RESULTS.md | income ROR Omicron/pre-Delta |
+| `covid_ror_inc` | (ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38; Figure 2A) | working/v25/03o_RESULTS.md | income ROR Omicron/pre-Delta |
 | `int_inc` | (P = .59 and P = .91; eTables 7 and 20) | working/v23/03d_03e_RESULTS.md | income x era, COVID-19 and influenza |
 | `med_pre` | 1.93 alone and 1.38 (95% CI, 1.16-1.65) jointly | working/v25/03o_RESULTS.md | Medicaid pre-Delta |
 | `med_later_alone` | (1.23 and 1.25) | working/v25/03o_RESULTS.md | Medicaid alone, Delta and Omicron |
 | `med_later_joint` | 0.89 [95% CI, 0.68-1.17] and 0.91 [95% CI, 0.75-1.11] | working/v25/03o_RESULTS.md | Medicaid joint, Delta and Omicron |
 | `med_ror` | 0.66 (95% CI, 0.52-0.83) | working/v25/03o_RESULTS.md | Medicaid ROR Omicron/pre-Delta |
 | `flu_med` | jointly 1.46 (95% CI, 0.97-2.19) before the pandemic and 0.76 (95% CI, 0.58-1.00) | working/v25/03o_RESULTS.md | Medicaid joint by period, influenza |
-| `flu_med_ror` | (in a period-interaction model, 1.13 and 0.84; ratio, 0.74; 95% CI, 0.51-1.07) | working/v25/03o_RESULTS.md | Medicaid, period-interaction model, and ROR, influenza |
+| `flu_med_ror` | (in a period-interaction model, 1.13 and 0.84; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 8) | working/v25/03o_RESULTS.md | Medicaid, period-interaction model, and ROR, influenza |
 | `race_joint` | 2.07; 95% CI, 1.87-2.30 | working/v24/03n_RESULTS.md | Black vs White, joint |
 | `race_flu` | 34% (95% CI, 23% to 46%) in influenza | working/v25/03o_RESULTS.md | Black attenuation, influenza |
 | `r1` | insurance did when analyses were restricted to surveys completed before infection (P = .48 and P = .01) | working/v24/03n_RESULTS.md | pre-index surveys: income x wave P = .48, insurance P = .01 |
@@ -69,9 +69,9 @@ source column names the run result the value was transcribed from.
 | `crude_mid_range` | ranged from 7.2% to 16.2% and the ratio of the 2 proportions from 1.68 to 2.44 | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | middle-band proportion range and ratio range across 6 eras |
 | `inc_shared` | as did income's (0.14 in each wave) | results/figures/v25/Figure2_era_attenuation_data.csv, log(alone) - log(joint): 0.329, 0.317, 0.313 | log(1.661/1.445)=0.139, log(1.808/1.568)=0.142, log(1.779/1.551)=0.137 |
 | `disc_ratio` | in COVID-19, about 1 in 5 against 1 in 9 | arithmetic on asserted values (see gloss) | 20.8%-22.6% and 10.2%-12.4% by wave (03v) |
-| `flat35b` | In COVID-19 the income gradient was flat above $35 000 (11.3% at $100 000 or more); in influenza it continued modestly (13.6% and 11.3%; Figure 2B) | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | COVID 542/4,786; influenza 317/2,335 and 179/1,580 |
+| `flat35b` | In COVID-19 the income gradient was flat above $35 000 (11.3% at $100 000 or more); in influenza it continued modestly (13.6% and 11.3%; Figure 1A) | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | COVID 542/4,786; influenza 317/2,335 and 179/1,580 |
 | `miss_inc` | hospitalized as often as the lowest band (21.4% in COVID-19) | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | 1,086/5,064 |
-| `med_gap` | from 15.3 to 9.4 and 9.7 points (Figure 1B) | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | Medicaid-employer crude RD by wave |
+| `med_gap` | from 15.3 to 9.4 and 9.7 points (eTable 21) | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | Medicaid-employer crude RD by wave |
 | `z59` | 10.8% of those reporting income below $25 000 a Z59 code | supplement eTable 13 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%) | 414/3,817 |
 | `sens_med_range` | Medicaid ratio of odds ratios ranged from 0.57 to 0.73, with every insurance-by-era test at P ≤ .007 | working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R) | lag 0.57 ... site 0.73; D1 max .007 (region, harmB) |
 | `sens_inc_range` | the income ratio ranged from 0.98 to 1.45, the upper value after adjustment for EHR site (era test, P = .50) | working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R) | tip1 0.98; site_pre 1.447 (1.065-1.965), D1 .499 (03w SPART=SITEPRE, merged by 03w_merge_sitepre.py) |

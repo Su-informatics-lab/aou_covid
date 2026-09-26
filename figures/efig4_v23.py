@@ -21,14 +21,35 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import re
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from style import GREY, INK, MM, NAVY, RULE, TEAL, apply_style, sig
+from style import (
+    DARK,
+    INCOME,
+    INK,
+    MM,
+    PT_BODY,
+    PT_SMALL,
+    RULE,
+    TXT_GREY,
+    apply_style,
+    sig,
+)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "results", "figures", "v23")
-DATA = os.path.join(OUT, "eFigure4_data.csv")
+DATA = os.path.join(HERE, "..", "results", "figures", "v23", "eFigure4_data.csv")
+OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
+SENS = "#8C8C8C"  # sensitivity specification: neutral grey, square marker
+
+
+def money(t):
+    t = re.sub(r"(\d),(\d{3})", r"\1 \2", str(t)).replace("\u2013", "-")
+    return t.replace("< $", "<$").replace("\u2265 $", "\u2265$")
+
+
 XLIM, XTICKS = (0.80, 1.85), [0.8, 1.0, 1.2, 1.5, 1.8]
 DY = 0.185
 
@@ -38,7 +59,7 @@ def main():
     d = pd.read_csv(DATA)
     n = len(d)
     fig = plt.figure(figsize=(180 * MM, 104 * MM))
-    ax = fig.add_axes([0.265, 0.290, 0.720, 0.680])
+    ax = fig.add_axes([0.230, 0.250, 0.600, 0.720])
     ax.set_xscale("log")
     ax.set_xlim(*XLIM)
     ax.set_ylim(-0.7, n - 0.3)
@@ -47,13 +68,20 @@ def main():
 
     for i, r in d.iterrows():
         if r.level == "ref":
-            ax.plot(
-                [1.0], [i], marker="s", ms=3.8, color="#B4B4B4", mec="#B4B4B4", zorder=4
+            ax.plot([1.0], [i], marker="D", ms=3.6, color=TXT_GREY, zorder=4)
+            ax.text(
+                1.012,
+                i,
+                "reference",
+                ha="left",
+                va="center",
+                fontsize=PT_SMALL,
+                color=TXT_GREY,
             )
             continue
-        for aor, lo, hi, col, off in (
-            (r.ind_aor, r.ind_lo, r.ind_hi, TEAL, -DY),
-            (r.mi_aor, r.mi_lo, r.mi_hi, NAVY, DY),
+        for aor, lo, hi, col, off, mk in (
+            (r.ind_aor, r.ind_lo, r.ind_hi, SENS, -DY, "s"),
+            (r.mi_aor, r.mi_lo, r.mi_hi, INCOME, DY, "o"),
         ):
             if np.isnan(aor):
                 continue
@@ -62,8 +90,8 @@ def main():
             ax.plot(
                 [aor],
                 [i + off],
-                marker="o",
-                ms=5.0,
+                marker=mk,
+                ms=5.0 if mk == "o" else 4.6,
                 color=col,
                 mfc=col if f else "white",
                 mew=1.2,
@@ -71,104 +99,89 @@ def main():
             )
 
     ax.set_yticks(range(n))
-    ax.set_yticklabels(d.label, fontsize=10)
+    ax.set_yticklabels([money(t) for t in d.label], fontsize=PT_BODY)
+    ax.tick_params(axis="x", labelsize=PT_SMALL)
     ax.set_xticks(XTICKS)
     ax.set_xticklabels(["%g" % t for t in XTICKS])
     ax.xaxis.set_minor_locator(plt.NullLocator())
     ax.tick_params(axis="y", length=0)
     for s in ("top", "right", "left"):
         ax.spines[s].set_visible(False)
-    ax.set_xlabel("Adjusted odds ratio of hospitalization (95% CI, log scale)")
+    ax.set_xlabel(
+        "Adjusted odds ratio of hospitalization (95% CI, log scale)", fontsize=PT_BODY
+    )
 
-    #  the three bands the argument turns on, marked in the margin rather than
-    #  annotated inside the panel, where the intervals already reach 1.7
-    for i in (4, 5, 6):
-        ax.plot(
-            [XLIM[1] * 0.995],
-            [i],
-            marker="|",
-            ms=9,
-            color=GREY,
-            mew=1.4,
-            clip_on=False,
-            zorder=5,
-        )
+    #  the three highest bands: a bracket with the joint test under imputation
+    bx = XLIM[1] * 1.02
+    ax.plot(
+        [bx, bx * 1.012, bx * 1.012, bx],
+        [3.7, 3.7, 6.3, 6.3],
+        color=DARK,
+        lw=0.9,
+        clip_on=False,
+    )
+    ax.text(
+        bx * 1.03,
+        5.0,
+        "3 highest bands,\njoint test under\nimputation:\nP = .16",
+        ha="left",
+        va="center",
+        fontsize=PT_SMALL,
+        color=DARK,
+    )
 
-    key = fig.add_axes([0.265, 0.020, 0.720, 0.175])
+    key = fig.add_axes([0.230, 0.015, 0.740, 0.100])
     key.set_xlim(0, 1)
     key.set_ylim(0, 1)
     key.axis("off")
-    key.plot(
-        [0.010],
-        [0.80],
-        marker="o",
-        ms=5.0,
-        color=TEAL,
-        mfc=TEAL,
-        mew=1.2,
-        clip_on=False,
-    )
+    key.plot([0.010], [0.75], marker="o", ms=5.0, color=INCOME, clip_on=False)
     key.text(
         0.028,
-        0.80,
-        "missing-indicator (sensitivity 1)",
-        ha="left",
-        va="center",
-        fontsize=10,
-        color=TEAL,
-    )
-    key.plot(
-        [0.010],
-        [0.47],
-        marker="o",
-        ms=5.0,
-        color=NAVY,
-        mfc=NAVY,
-        mew=1.2,
-        clip_on=False,
-    )
-    key.text(
-        0.028,
-        0.47,
+        0.75,
         "imputation, m = 40 (primary)",
         ha="left",
         va="center",
-        fontsize=10,
-        color=NAVY,
+        fontsize=PT_SMALL,
+        color=INK,
     )
-    key.plot(
-        [0.520], [0.80], marker="o", ms=5.0, color=INK, mfc=INK, mew=1.2, clip_on=False
-    )
+    key.plot([0.010], [0.25], marker="s", ms=4.6, color=SENS, clip_on=False)
     key.text(
-        0.538,
-        0.80,
-        "95% CI excludes 1.0",
+        0.028,
+        0.25,
+        "missing-indicator (sensitivity 1)",
         ha="left",
         va="center",
-        fontsize=10,
+        fontsize=PT_SMALL,
+        color=INK,
+    )
+    key.plot([0.480], [0.75], marker="o", ms=5.0, color=DARK, clip_on=False)
+    key.text(
+        0.498,
+        0.75,
+        "filled: 95% CI excludes 1",
+        ha="left",
+        va="center",
+        fontsize=PT_SMALL,
         color=INK,
     )
     key.plot(
-        [0.520],
-        [0.47],
+        [0.480],
+        [0.25],
         marker="o",
         ms=5.0,
-        color=INK,
+        color=DARK,
         mfc="white",
         mew=1.2,
         clip_on=False,
     )
-    key.text(0.538, 0.47, "it does not", ha="left", va="center", fontsize=10, color=INK)
-    key.plot([0.010], [0.13], marker="|", ms=9, color=GREY, mew=1.4, clip_on=False)
     key.text(
-        0.028,
-        0.13,
-        "the 3 highest bands, jointly indistinguishable from "
-        "the reference under imputation",
+        0.498,
+        0.25,
+        "open: 95% CI includes 1",
         ha="left",
         va="center",
-        fontsize=10,
-        color=GREY,
+        fontsize=PT_SMALL,
+        color=INK,
     )
 
     stem = os.path.join(OUT, "eFigure4")

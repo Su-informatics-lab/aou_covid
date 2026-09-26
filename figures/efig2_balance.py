@@ -12,10 +12,14 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-from style import GREY, INK, MM, NAVY, RULE, apply_style, panel_labels, save
+from style import DARK, INK, MM, PT_BODY, PT_HEAD, PT_SMALL, RULE, apply_style
 
 OUT = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "results", "figures"
+    os.path.dirname(os.path.abspath(__file__)),
+    "..",
+    "submission_v25",
+    "04_figures",
+    "supplement",
 )
 
 AOU = [
@@ -30,8 +34,19 @@ MS = [
 ]
 
 apply_style()
+plt.rcParams.update(
+    {
+        "xtick.labelsize": PT_SMALL,
+        "ytick.labelsize": PT_SMALL,
+        "axes.labelsize": PT_BODY,
+    }
+)
 fig, (ax, bx) = plt.subplots(
-    2, 1, figsize=(172 * MM, 92 * MM), sharex=True, gridspec_kw=dict(hspace=0.55)
+    2,
+    1,
+    figsize=(172 * MM, 92 * MM),
+    sharex=True,
+    gridspec_kw=dict(hspace=0.62, left=0.22, right=0.97, top=0.88, bottom=0.22),
 )
 
 
@@ -46,35 +61,32 @@ def panel(a, rows, title_n):
             solid_capstyle="round",
             zorder=1,
         )
-        a.plot(
-            [pre], [yi], marker="^", ms=7.0, color=GREY, mfc="white", mew=1.3, zorder=3
-        )
-        a.plot([post], [yi], marker="o", ms=6.4, color=NAVY, zorder=3)
+        a.plot([pre], [yi], marker="^", ms=6.5, color="#A6A6A6", zorder=3)
+        a.plot([post], [yi], marker="o", ms=6.0, color=DARK, zorder=3)
     a.axvline(0.10, color=RULE, lw=1.0, ls=(0, (4, 3)), zorder=0)
-    a.axvline(0.05, color=RULE, lw=0.9, ls=(0, (1, 2)), zorder=0)
     a.set_yticks(y)
     a.set_yticklabels([r[0] for r in rows])
     a.set_ylim(-0.7, len(rows) - 0.3)
-    a.set_xlim(0, 0.45)
-    a.set_xticks([0, 0.10, 0.2, 0.3, 0.4])
-    a.set_xticklabels(["0", "0.10", "0.2", "0.3", "0.4"])
+    a.set_xlim(-0.012, 0.45)
+    a.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
+    a.set_xticklabels(["0", "0.1", "0.2", "0.3", "0.4"])
     a.tick_params(axis="y", length=0)
     for s in ("top", "right", "left"):
         a.spines[s].set_visible(False)
     a.text(
-        0.0,
-        1.10,
+        -0.28,
+        1.06,
         title_n,
         transform=a.transAxes,
-        fontsize=10.5,
+        fontsize=PT_HEAD,
         fontweight="bold",
         color=INK,
         va="bottom",
     )
 
 
-panel(ax, AOU, "All of Us")
-panel(bx, MS, "MarketScan")
+panel(ax, AOU, "A   All of Us")
+panel(bx, MS, "B   MarketScan")
 bx.set_xlabel("Absolute standardized mean difference")
 
 fig.legend(
@@ -82,23 +94,23 @@ fig.legend(
         Line2D(
             [],
             [],
-            color=GREY,
+            color="#A6A6A6",
             marker="^",
-            ms=7.0,
+            ms=6.5,
             lw=0,
-            mfc="white",
-            mew=1.3,
             label="Before matching",
         ),
-        Line2D([], [], color=NAVY, marker="o", ms=6.4, lw=0, label="After matching"),
+        Line2D([], [], color=DARK, marker="o", ms=6.0, lw=0, label="After matching"),
         Line2D([], [], color=RULE, lw=1.0, ls=(0, (4, 3)), label="|SMD| = 0.10"),
     ],
     loc="lower center",
-    bbox_to_anchor=(0.5, -0.10),
+    bbox_to_anchor=(0.55, 0.0),
     ncol=3,
+    fontsize=PT_SMALL,
     columnspacing=2.4,
     handletextpad=0.6,
     frameon=False,
 )
-panel_labels([ax, bx], alpha=1.0)
-save(fig, os.path.join(OUT, "eFigure2"))
+for ext in ("pdf", "png"):
+    fig.savefig(os.path.join(OUT, "eFigure2." + ext), dpi=400)
+print("wrote eFigure2")
