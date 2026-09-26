@@ -1,10 +1,14 @@
-# COVID-19 Hospitalization × Social Determinants of Health
+# Income, Insurance, and Respiratory Viral Hospitalization
 
-Propensity-matched case-control analysis of survey-derived SDoH and COVID-19
-hospitalization in the NIH *All of Us* Research Program, with a clinical-model
-comparison in Merative MarketScan Commercial Claims.
+Propensity-matched case-control analysis of survey-derived social determinants and
+hospitalization after COVID-19 (CDR v7, 3 waves) and influenza (CDR v9, seasons before,
+during, and after the pandemic) in the NIH *All of Us* Research Program, with a
+clinical-model comparison in Merative MarketScan Commercial Claims.
 
-Manuscript in preparation for *JAMIA* (Research and Applications).
+Manuscript in preparation for *JAMA Network Open* (retargeted from *JAMIA*).
+The influenza-arm scripts are in `flu_arm/`; see `flu_arm/README.md` for the one
+extraction step whose script was not retained. The R10 phenotype, capture, and
+absolute-scale checks are `03z_*.py`, `03z_*.R`, and `03w_sens.R` with `SPART=R10`.
 
 ## Status
 

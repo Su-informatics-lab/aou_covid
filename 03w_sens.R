@@ -79,6 +79,7 @@ if (ARM == "covid") {
 }
 era_block <- function(p, v) grep(paste0("^", v, ".*:", ERA, "|^", ERA, ".*:", v), p$nm, value = TRUE)
 rows <- list()
+M20 <- function(x) if (x < 20) "<20" else as.character(x)
 add <- function(analysis, p, v, ft, n_note = NA) {
   e <- ci_of(p, lor(p, ft, v, PR[1]) - lor(p, ft, v, PR[2]))
   s <- D1(p, era_block(p, v))
@@ -95,6 +96,63 @@ run_pair <- function(analysis, extra = "", prep = function(dk, k) dk, rows_fun =
   cat(sprintf("  %-10s done\n", analysis))
 }
 SPART <- Sys.getenv("SPART", "ALL")
+if (SPART == "R10") {
+  ## R10 review (Hua Xu, Adler-Milstein, Gottlieb personas): the era contrasts under
+  ## phenotype checks that need no rematching (flags from 03z_extract.py)
+  ##   no_preadm    drop control rows hospitalized 1-3 days before, or on, the index date
+  ##   case_dx      keep matched sets whose case's qualifying visit carries a diagnosis of
+  ##                the infection or of a respiratory disorder
+  ##   case_ip      keep matched sets whose case had an inpatient-type visit (not ED only)
+  ##   case_ed24    as case_ip, but also keep cases whose ED stay lasted >= 24 hours by its
+  ##                recorded datetimes (drops ED visits that only crossed midnight)
+  ##   case_severe  keep matched sets whose case had an ICU visit, a stay of >= 3 days,
+  ##                or died within 30 days
+  ##   case_dxwin   as case_dx, but the diagnosis may sit on any visit or none (index - 3 to
+  ##                index + 30 days; needs 03z_dxlink.py)
+  ## R10SPECS=case_dxwin runs a subset.
+  ## A set is kept only if it still holds its case and >= 1 control.
+  R10 <- read.csv(sprintf("/home/jupyter/jno_v26/W_r10_%s.csv", ARM), stringsAsFactors = FALSE)
+  ri <- if (ARM == "covid") match(d$person_id, R10$person_id) else
+    match(paste(d$person_id, as.Date(d$flu_index_date)), paste(R10$person_id, as.Date(R10$d)))
+  stopifnot(!any(is.na(ri)))
+  for (cc in c("pre_adm", "q_ip", "q_ed24", "q_dx", "q_icu", "q_los", "death30")) d[[paste0("r10_", cc)]] <- R10[[cc]][ri]
+  d$r10_severe <- as.integer(d$r10_q_icu == 1 | (!is.na(d$r10_q_los) & d$r10_q_los >= 3) | d$r10_death30 == 1)
+  ## 03z_dxlink.py: the diagnosis requirement without visit linkage (index - 3 to + 30 days)
+  fb <- sprintf("/home/jupyter/jno_v26/W_r10b_%s.csv", ARM)
+  if (file.exists(fb)) { R10b <- read.csv(fb, stringsAsFactors = FALSE)
+    stopifnot(identical(R10b$person_id, R10$person_id))
+    for (cc in c("link_any", "dx_win", "inf_win")) d[[paste0("r10_", cc)]] <- R10b[[cc]][ri] }
+  keep_rows <- function(drop_row, case_ok) function(dk) {
+    keep <- !drop_row(dk)
+    cs <- tapply(keep & dk$Treatment == 1 & case_ok(dk), dk$.s, any)
+    ct <- tapply(keep & dk$Treatment == 0, dk$.s, any)
+    keep & dk$.s %in% names(cs)[cs & ct]
+  }
+  none <- function(dk) rep(FALSE, nrow(dk)); all_ok <- function(dk) rep(TRUE, nrow(dk))
+  specs <- list(
+    no_preadm = keep_rows(function(dk) dk$Treatment == 0 & dk$r10_pre_adm == 1, all_ok),
+    case_dx = keep_rows(none, function(dk) dk$r10_q_dx == 1),
+    case_ip = keep_rows(none, function(dk) dk$r10_q_ip == 1),
+    case_ed24 = keep_rows(none, function(dk) dk$r10_q_ip == 1 | dk$r10_q_ed24 == 1),
+    case_severe = keep_rows(none, function(dk) dk$r10_severe == 1))
+  if (!is.null(d$r10_dx_win)) specs$case_dxwin <- keep_rows(none, function(dk) dk$r10_dx_win == 1)
+  if (nzchar(Sys.getenv("R10SPECS"))) specs <- specs[strsplit(Sys.getenv("R10SPECS"), ",")[[1]]]
+  cat("rows flagged: controls pre-admitted", M20(sum(d$Treatment == 0 & d$r10_pre_adm == 1)),
+      "| cases with dx", M20(sum(d$Treatment == 1 & d$r10_q_dx == 1)),
+      "| cases IP", M20(sum(d$Treatment == 1 & d$r10_q_ip == 1)),
+      "| cases severe", M20(sum(d$Treatment == 1 & d$r10_severe == 1)), "of", sum(d$Treatment == 1), "cases\n")
+  for (nm in names(specs)) {
+    f <- specs[[nm]]; kr <- f(d); nc <- sum(kr & d$Treatment == 1)
+    run_pair(nm, rows_fun = f, note = paste("cases", M20(nc), "| control rows", M20(sum(kr & d$Treatment == 0))))
+    pj <- fit_m(fml(paste(BASE, "+", JOINT)), rows = f)
+    for (ft in FOC[c("inc10k", "medicaid")]) { e <- ci_of(pj, cvec(pj, ft))
+      rows[[length(rows) + 1]] <- data.frame(arm = ARM, analysis = nm, term = ft, contrast = "joint AOR, all eras",
+        ror = exp(e[["est"]]), lo = exp(e[["lo"]]), hi = exp(e[["hi"]]), p = e[["p"]], D1_p = NA, note = NA, row.names = NULL) }
+  }
+  o <- do.call(rbind, rows)
+  write.csv(o, file.path(OUT, if (nzchar(Sys.getenv("R10SPECS"))) "sens_r10b.csv" else "sens_r10.csv"), row.names = FALSE)
+  print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")
+}
 if (SPART == "SITEPRE") {
   ## refit only the site rows, which R7 changed; 03w_merge_sitepre.py puts them into
   ## sens_r6.csv in place of the all-visit-site rows of the earlier full run

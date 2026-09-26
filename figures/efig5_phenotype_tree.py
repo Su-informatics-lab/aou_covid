@@ -6,8 +6,9 @@ source of record. Same logic and wording as the earlier figure: from the data
 domains, a COVID-19-positive participant is a case if admitted as an inpatient
 or from the emergency department to inpatient care within 14 days; otherwise,
 an emergency visit within 14 days with a recorded stay of at least 1 day is a
-case, a same-day emergency visit is a control (a case in the 30-day
-sensitivity analysis), and no emergency visit is a control (outpatient).
+case, a same-day emergency visit is a control, and no emergency visit is a
+control (outpatient). R10: the earlier label "case in 30-day sensitivity" named
+an analysis the manuscript does not report and was removed.
 Neutral colours: case and control are not a pathogen or a social variable.
 Writes submission_v25/04_figures/supplement/eFigure5.{pdf,png}.
 """
@@ -130,7 +131,7 @@ def main():
     diamond(ax, 104, Y2, 17, 9, "Emergency\nvisit ≤14 d?")
     box(ax, 40, Y2, 40, 8, "Control (outpatient)", strong=True)
     diamond(ax, 104, Y3, 17, 9, "Recorded stay\n≥1 day?")
-    box(ax, 40, Y3, 44, 10, "Control\n(case in 30-day sensitivity)", strong=True)
+    box(ax, 40, Y3, 44, 10, "Control\n(same-day emergency visit)", strong=True)
     box(ax, 159, Y3, 36, 8, "Case (hospitalized)", strong=True)
     arrow(ax, (37, Y1), (42, Y1))
     arrow(ax, (57, Y1 + 10), (57, 81.5), "No", (60.5, 76.5))

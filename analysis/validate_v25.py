@@ -50,6 +50,8 @@ SRC = {
     "derived": "arithmetic on asserted values (see gloss)",
     "e13": "supplement eTable 13 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%)",
     "03w": "working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R)",
+    "e21": "supplement eTable 21 (working/v25/platform_03u/covid_crude.csv, flu_crude.csv; 03v_crude.py)",
+    "r10": "working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10)",
 }
 
 # claim key -> (literal string that must appear, source key, one-line gloss)
@@ -199,22 +201,17 @@ CLAIMS = OrderedDict(
             ("0.66 (95% CI, 0.52-0.83)", "03o", "Medicaid ROR Omicron/pre-Delta"),
         ),
         (
-            "flu_med",
-            (
-                "jointly 1.46 (95% CI, 0.97-2.19) before the pandemic and 0.76 (95% CI, 0.58-1.00)",
-                "03o",
-                "Medicaid joint by period, influenza",
-            ),
-        ),
-        (
             "flu_med_ror",
             (
-                "(in a period-interaction model, 1.13 and 0.84; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 8)",
+                "(in a period-interaction model, 1.13 before the pandemic and 0.84 after influenza returned; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 8)",
                 "03o",
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
         ),
-        ("race_joint", ("2.07; 95% CI, 1.87-2.30", "03n", "Black vs White, joint")),
+        (
+            "race_joint",
+            ("AOR was 2.07 (95% CI, 1.87-2.30", "03o", "Black vs White, joint"),
+        ),
         (
             "race_flu",
             (
@@ -223,16 +220,6 @@ CLAIMS = OrderedDict(
                 "Black attenuation, influenza",
             ),
         ),
-        (
-            "r1",
-            (
-                "insurance did when analyses were restricted to surveys completed before infection (P = .48 and P = .01)",
-                "03n",
-                "pre-index surveys: income x wave P = .48, insurance P = .01",
-            ),
-        ),
-        ("r3", ("P = .26 and P = .009", "03n", "laboratory-confirmed")),
-        ("mi_ind", ("(AOR, 1.19; eTable 9)", "ms19", "Medicaid, missing-indicator")),
         (
             "c_inc_att",
             ("26% (95% CI, 9% to 44%)", "03oAB", "income <$10k attenuation, COVID-19"),
@@ -302,14 +289,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "q_both",
-            (
-                "(income P = .43; insurance P = .002)",
-                "03q",
-                "era tests under case-by-era imputation",
-            ),
-        ),
-        (
             "crude_inc",
             (
                 "21.9% of those with income below $10 000 and 11.5% of those with $35 000 to $99 999",
@@ -342,14 +321,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "nearpoor",
-            (
-                "1.38 in COVID-19 and 1.92 in influenza (Table 2)",
-                "t2",
-                "income $10-25k, joint",
-            ),
-        ),
-        (
             "shared",
             (
                 "(0.33, 0.32, and 0.31 on the log scale)",
@@ -358,17 +329,9 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "medicare_waves",
-            (
-                "1.17 before Delta, 0.79 during Omicron",
-                "e8",
-                "Medicare joint, pre-Delta and Omicron, COVID-19",
-            ),
-        ),
-        (
             "medicare_cv",
             (
-                "ratio, 0.65; 95% CI, 0.51-0.84",
+                "ratio in the model with both interactions, 0.65; 95% CI, 0.51-0.84",
                 "03u",
                 "Medicare ROR Omicron/pre-Delta, COVID-19, combined model 0.653 (0.509-0.837)",
             ),
@@ -376,7 +339,7 @@ CLAIMS = OrderedDict(
         (
             "medicare_flu",
             (
-                "(ratio in that model, 1.03; 95% CI, 0.66-1.61; eTable 22)",
+                "but not in influenza (1.03; 95% CI, 0.66-1.61; eTable 22)",
                 "03u",
                 "Medicare ROR after/before, influenza, combined model",
             ),
@@ -401,8 +364,8 @@ CLAIMS = OrderedDict(
         (
             "kp_gap",
             (
-                "hospitalized about 10 percentage points more often than those with $35 000 to $99 999 in every era",
-                "03v",
+                "hospitalized about 10 percentage points more often (crude) than those with $35 000 to $99 999 in every era",
+                "e21",
                 "Key Points; crude gaps 10.2-12.0 points (eTable 21)",
             ),
         ),
@@ -444,14 +407,6 @@ CLAIMS = OrderedDict(
                 "in COVID-19, about 1 in 5 against 1 in 9",
                 "derived",
                 "20.8%-22.6% and 10.2%-12.4% by wave (03v)",
-            ),
-        ),
-        (
-            "flat35b",
-            (
-                "In COVID-19 the income gradient was flat above $35 000 (11.3% at $100 000 or more); in influenza it continued modestly (13.6% and 11.3%; Figure 1A)",
-                "03v",
-                "COVID 542/4,786; influenza 317/2,335 and 179/1,580",
             ),
         ),
         (
@@ -511,20 +466,96 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "emp_rise",
-            (
-                "employer-insured was 9.4% before Delta, 11.7% during Delta, and 9.8% during Omicron",
-                "03v",
-                "employer crude by wave, platform_03u/covid_crude.csv",
-            ),
-        ),
-        (
             "z59_disc",
             (
                 "fewer than 1 in 9 participants reporting low income carried a Z59 code",
                 "e13",
                 "10.8% < 11.1%",
             ),
+        ),
+        (
+            "housing_stab",
+            (
+                "(COVID-19 AOR alone, 1.00; jointly, 0.88; 95% CI, 0.79-0.97; influenza jointly, 0.97; 95% CI, 0.83-1.13)",
+                "03n",
+                "unstable housing alone 1.0021 (0.9080-1.1060), joint 0.8765 (0.7899-0.9727); influenza joint 0.97 (0.83-1.13), 03f",
+            ),
+        ),
+        (
+            "r10_abs_dxwin",
+            (
+                "requiring an infection or respiratory diagnosis, 0.79; 95% CI, 0.62-1.02",
+                "r10",
+                "sens_r10_covid.csv case_dxwin Medicaid 0.7912 (0.6163-1.0157)",
+            ),
+        ),
+        (
+            "r10_preadm",
+            (
+                "excluded (ratio, 0.66)",
+                "r10",
+                "sens_r10_covid.csv no_preadm Medicaid 0.6622",
+            ),
+        ),
+        (
+            "r10_ip_ed24",
+            (
+                "inpatient stay (0.64) or an emergency stay of 24 hours or more (0.65)",
+                "r10",
+                "case_ip 0.6358; case_ed24 0.6532",
+            ),
+        ),
+        (
+            "r10_dxwin",
+            (
+                "infection or respiratory diagnosis (0.79; 95% CI, 0.62-1.02)",
+                "r10",
+                "case_dxwin Medicaid 0.7912 (0.6163-1.0157)",
+            ),
+        ),
+        (
+            "r10_severe",
+            (
+                "(1.18; 95% CI, 0.79-1.75)",
+                "r10",
+                "case_severe Medicaid 1.1764 (0.7895-1.7530)",
+            ),
+        ),
+        (
+            "r10_dx_visit",
+            ("removed the decline (1.04)", "r10", "case_dx Medicaid 1.0449"),
+        ),
+        (
+            "r10_link",
+            (
+                "54.0% of employer-insured Omicron cases (Medicaid, 85.1%)",
+                "r10",
+                "describe_r10_covid.csv linked condition row: employer omicron 170/315, Medicaid 325/382",
+            ),
+        ),
+        (
+            "r10_inc_range",
+            (
+                "ranged from 1.01 to 1.65",
+                "r10",
+                "income ROR over R10 specs: min case_ip 1.0070, max case_dx 1.6480",
+            ),
+        ),
+        (
+            "r10_ard_med",
+            (
+                "fell from 6.1 to 0.3 points",
+                "r10",
+                "ard_covid.csv Medicaid 6.0821 pre-Delta, 0.3355 Omicron",
+            ),
+        ),
+        (
+            "r10_z59_income",
+            ("1.2% a code specific to income", "r10", "z59_covid.csv income 46/3817"),
+        ),
+        (
+            "r10_z59_disc",
+            ("about 1 in 80 a code specific to income", "r10", "46/3817 = 1 in 83"),
         ),
     ]
 )
