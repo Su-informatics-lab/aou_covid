@@ -160,13 +160,20 @@ CLAIMS = OrderedDict(
         ),
         (
             "covid_ror_inc",
-            ("1.07 (95% CI, 0.83-1.38)", "03o", "income ROR Omicron/pre-Delta"),
+            (
+                "(ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38)",
+                "03o",
+                "income ROR Omicron/pre-Delta",
+            ),
         ),
         (
             "int_inc",
-            ("(P = .59 and P = .91)", "03d", "income x era, COVID-19 and influenza"),
+            (
+                "(P = .59 and P = .91; eTables 7 and 20)",
+                "03d",
+                "income x era, COVID-19 and influenza",
+            ),
         ),
-        ("int_ins", ("(P = .002 and P = .01)", "03d", "insurance x era")),
         (
             "med_pre",
             (
@@ -207,30 +214,6 @@ CLAIMS = OrderedDict(
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
         ),
-        (
-            "refit_new",
-            (
-                "the COVID-19 Medicaid ratio was 0.66 (95% CI, 0.52-0.84; eMethod 1)",
-                "03p",
-                "current-item respondents",
-            ),
-        ),
-        (
-            "med_share_flu",
-            (
-                "Income accounted for 58% and 63% of the Medicaid attenuation",
-                "03o",
-                "KHB share via income, Medicaid, both arms",
-            ),
-        ),
-        (
-            "med_emp_flu",
-            (
-                "employment for 42% and 30% (eTable 19)",
-                "03o",
-                "KHB share via employment, Medicaid, influenza",
-            ),
-        ),
         ("race_joint", ("2.07; 95% CI, 1.87-2.30", "03n", "Black vs White, joint")),
         (
             "race_flu",
@@ -243,15 +226,13 @@ CLAIMS = OrderedDict(
         (
             "r1",
             (
-                "income did not vary by wave (P = .48) and insurance did (P = .01; Medicaid 1.51 before Delta, 0.99 during Omicron)",
+                "insurance did when analyses were restricted to surveys completed before infection (P = .48 and P = .01)",
                 "03n",
-                "pre-index surveys",
+                "pre-index surveys: income x wave P = .48, insurance P = .01",
             ),
         ),
         ("r3", ("P = .26 and P = .009", "03n", "laboratory-confirmed")),
         ("mi_ind", ("(AOR, 1.19; eTable 9)", "ms19", "Medicaid, missing-indicator")),
-        ("ontario", ("56.9%", "cited", "Wang et al, mediated share")),
-        ("nl", ("14% to 19%", "cited", "Milkovska et al, vaccination share")),
         (
             "c_inc_att",
             ("26% (95% CI, 9% to 44%)", "03oAB", "income <$10k attenuation, COVID-19"),
@@ -263,17 +244,9 @@ CLAIMS = OrderedDict(
         (
             "c_khb",
             (
-                "more than 2 percentage points, so rescaling",
+                "more than 2 percentage points, and trend models",
                 "03oAB",
                 "max |KHB - log| 0.64 COVID, 1.5 influenza",
-            ),
-        ),
-        (
-            "c_med_shares",
-            (
-                "and employment for 42% and 30% (eTable 19)",
-                "03oAB",
-                "KHB shares, Medicaid",
             ),
         ),
         (
@@ -307,9 +280,9 @@ CLAIMS = OrderedDict(
         (
             "unemp_rent_att",
             (
-                "out of work or unable to work was attenuated by 43% and 39%, and renting by 55% and 59%",
+                "against 43% and 39% for being out of work or unable to work and 55% and 59% for renting",
                 "03oAB",
-                "unemployment and renting attenuation, COVID-19 and influenza",
+                "unemployment and renting attenuation",
             ),
         ),
         (
@@ -331,7 +304,7 @@ CLAIMS = OrderedDict(
         (
             "q_both",
             (
-                "(P = .43 and P = .72) and insurance did (P = .002 and P = .01)",
+                "(income P = .43 and P = .72; insurance P = .002 and P = .01)",
                 "03q",
                 "era tests under case-by-era imputation",
             ),
@@ -393,31 +366,27 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "medicare_ror",
+            "medicare_cv",
             (
-                "0.65; 95% CI, 0.51-0.84",
+                "ratio, 0.65; 95% CI, 0.51-0.84",
                 "03u",
-                "Medicare ROR Omicron/pre-Delta, combined model",
+                "Medicare ROR Omicron/pre-Delta, COVID-19, combined model 0.653 (0.509-0.837)",
             ),
         ),
         (
             "medicare_flu",
-            ("(1.03; 95% CI, 0.66-1.61", "03u", "Medicare ROR after/before, influenza"),
+            (
+                "(ratio in that model, 1.03; 95% CI, 0.66-1.61; eTable 22)",
+                "03u",
+                "Medicare ROR after/before, influenza, combined model",
+            ),
         ),
         (
             "asym",
             (
-                "2.27 (95% CI, 1.38-3.74)",
+                "2.27 (95% CI, 1.38-3.74; joint test across Delta and Omicron, P < .001)",
                 "03u",
-                "ratio of RORs, income <$10k / Medicaid, Omicron vs pre-Delta",
-            ),
-        ),
-        (
-            "asym_d1",
-            (
-                "differed jointly across Delta and Omicron (P < .001)",
-                "03u",
-                "D1 F = 7.78 on 2 df, P = .0004",
+                "ratio of RORs; D1 F = 7.78 on 2 df, P = .0004",
             ),
         ),
         (
@@ -456,7 +425,7 @@ CLAIMS = OrderedDict(
         (
             "crude_mid_range",
             (
-                "ranged from 7.2% to 16.2% and the ratio of the 2 proportions from 1.68 to 2.43",
+                "ranged from 7.2% to 16.2% and the ratio of the 2 proportions from 1.68 to 2.44",
                 "03v",
                 "middle-band proportion range and ratio range across 6 eras",
             ),
@@ -510,14 +479,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "lag_med",
-            (
-                "median, 499 days before Delta and 972 during Omicron among COVID-19 cases",
-                "03w",
-                "lag_by_era.txt",
-            ),
-        ),
-        (
             "sens_med_range",
             (
                 "Medicaid ratio of odds ratios ranged from 0.57 to 0.73, with every insurance-by-era test at P ≤ .007",
@@ -528,15 +489,15 @@ CLAIMS = OrderedDict(
         (
             "sens_inc_range",
             (
-                "the income ratio ranged from 0.98 to 1.46, the upper value after adjustment for EHR site (era test, P = .48)",
+                "the income ratio ranged from 0.98 to 1.44, the upper value after adjustment for EHR site (era test, P = .51)",
                 "03w",
-                "tip1 0.98; site 1.46, D1 .48",
+                "tip1 0.98; site_pre 1.436 (1.059-1.948), D1 .507",
             ),
         ),
         (
             "exp_no",
             (
-                "Among residents of nonexpansion states (595 cases), Medicaid fell further (0.20; 95% CI, 0.08-0.51)",
+                "among the 595 cases from nonexpansion states (0.20; 95% CI, 0.08-0.51; era test, P = .08)",
                 "03w",
                 "expansion_No",
             ),
@@ -544,7 +505,7 @@ CLAIMS = OrderedDict(
         (
             "exp_yes",
             (
-                "among residents of expansion states it was 0.60 (95% CI, 0.45-0.79)",
+                "Medicaid fell among residents of expansion states (0.60; 95% CI, 0.45-0.79)",
                 "03w",
                 "expansion_Yes",
             ),
@@ -552,9 +513,9 @@ CLAIMS = OrderedDict(
         (
             "emp_rise",
             (
-                "rose from 9.4% before Delta to 11.7% during Delta",
+                "employer-insured was 9.4% before Delta, 11.7% during Delta, and 9.8% during Omicron",
                 "03v",
-                "employer 336/3,560 and 135/1,157",
+                "employer crude by wave, platform_03u/covid_crude.csv",
             ),
         ),
         (

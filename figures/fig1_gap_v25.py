@@ -261,6 +261,19 @@ def main():
             al = 0.45 if faint else 1.0
             x = mid(a, b) + off[term] - (timedelta(days=40) if faint else timedelta(0))
             mk = "o" if r.pathogen == "COVID-19" else "D"
+            if pd.isna(r.aor):
+                # withheld: employer reference below 20 cases (03x cell audit)
+                axB.text(
+                    x,
+                    3.4,
+                    "Medicaid withheld (<20)",
+                    ha="center",
+                    va="center",
+                    fontsize=6.5,
+                    color=col,
+                    alpha=0.9,
+                )
+                continue
             axB.plot(
                 [a, b],
                 [r.aor, r.aor],
@@ -359,7 +372,7 @@ def main():
         0.5,
         0.005,
         "Horizontal band: the calendar span of each era. Vertical bars: 95% CIs.\n"
-        "Faint: pandemic influenza seasons (fewer than 1000 matched rows). B omits influenza insurance gaps whose reference cell is suppressed (<20).",
+        "Faint: pandemic influenza seasons (fewer than 1000 matched rows). B omits influenza insurance gaps whose employer reference cell is suppressed; C withholds pandemic-season influenza Medicaid (reference <20 cases).",
         ha="center",
         fontsize=8,
         color=GREY,

@@ -91,6 +91,15 @@ run_pair <- function(analysis, extra = "", prep = function(dk, k) dk, rows_fun =
   }
   cat(sprintf("  %-10s done\n", analysis))
 }
+SPART <- Sys.getenv("SPART", "ALL")
+if (SPART == "SITEPRE") {
+  ## R7: EHR site from visits before the index date only (03w_sitepre.py)
+  d$site <- mode_ref(W$site_pre[wi])
+  run_pair("site_pre", "+ site")
+  o <- do.call(rbind, rows)
+  write.csv(o, file.path(OUT, "sens_r6_sitepre.csv"), row.names = FALSE)
+  print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")
+}
 t0 <- Sys.time()
 run_pair("primary")
 run_pair("region", "+ region")

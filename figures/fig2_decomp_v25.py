@@ -84,6 +84,23 @@ def main():
                 a = sub[(sub.era_order == o) & (sub.model == "alone")].iloc[0]
                 j = sub[(sub.era_order == o) & (sub.model == "joint")].iloc[0]
                 al = 0.45 if a.era.startswith("Pandemic") else 1.0
+                if pd.isna(a.aor) or pd.isna(j.aor):
+                    # withheld: reference group below 20 cases (03x cell audit)
+                    axA.text(
+                        x,
+                        1.3,
+                        "withheld\n(<20 in\nreference)",
+                        ha="center",
+                        va="center",
+                        fontsize=6.5,
+                        color=GREY,
+                        bbox=dict(fc="white", ec="none", pad=1.0),
+                        zorder=6,
+                    )
+                    ticks.append(x)
+                    labs.append(ERA_LAB[a.era])
+                    x += 1.1
+                    continue
                 axA.plot(
                     [x, x],
                     [a.aor, j.aor],
@@ -145,9 +162,9 @@ def main():
         x += 0.9
     axA.axhline(1, color=RULE, lw=0.9, ls=(0, (4, 3)), zorder=1)
     axA.set_yscale("log")
-    axA.set_ylim(0.5, 3.6)
-    axA.set_yticks([0.5, 0.75, 1, 1.5, 2, 3])
-    axA.set_yticklabels(["0.5", "0.75", "1", "1.5", "2", "3"])
+    axA.set_ylim(0.42, 5.4)
+    axA.set_yticks([0.5, 0.75, 1, 1.5, 2, 3, 5])
+    axA.set_yticklabels(["0.5", "0.75", "1", "1.5", "2", "3", "5"])
     axA.yaxis.set_minor_locator(plt.NullLocator())
     axA.set_xticks(ticks)
     axA.set_xticklabels(labs, fontsize=8)
@@ -156,7 +173,7 @@ def main():
     for gx, gl in groups:
         axA.text(
             gx,
-            3.6,
+            5.4,
             gl,
             ha="center",
             va="bottom",
@@ -330,7 +347,7 @@ def main():
     fig.text(
         0.5,
         0.0,
-        "Faint: pandemic influenza seasons (817 matched rows). Vertical bars in B: Wilson 95% CIs; open markers: "
+        "Faint: pandemic influenza seasons (817 matched rows); Medicaid there withheld (reference <20 cases). Vertical bars in B: Wilson 95% CIs; open markers: "
         "income not reported.\nC: COVID-19 matched participants, Z codes dated before the index date (eTable 13).",
         ha="center",
         va="top",

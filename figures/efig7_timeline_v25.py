@@ -83,6 +83,8 @@ def panel(ax, d, term, letter):
     ax.axvspan(*COVID_SPAN, color="#F4E4E1", zorder=0, lw=0)
     ax.axhline(1.0, color=RULE, lw=0.9, ls=(0, (4, 3)), zorder=1)
     for _, r in sub.iterrows():
+        if pd.isna(r.aor):
+            continue  # withheld: reference group below 20 cases (03x cell audit)
         a, b = r.start.date(), r.end.date()
         col = COVID if r.pathogen == "COVID-19" else FLU
         x = mid(a, b) - (
