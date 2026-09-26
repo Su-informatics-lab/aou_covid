@@ -249,14 +249,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "flu_pan_inc",
-            (
-                "(1.12; 95% CI, 0.45-2.74)",
-                "03f",
-                "income <$10k, pandemic influenza, within-period refit",
-            ),
-        ),
-        (
             "unemp_rent_att",
             (
                 "against 43% and 39% for being out of work or unable to work and 55% and 59% for renting",
@@ -396,7 +388,7 @@ CLAIMS = OrderedDict(
         (
             "miss_inc",
             (
-                "hospitalized as often as the lowest band (21.4% in COVID-19)",
+                "hospitalized nearly as often as the lowest band (21.4% vs 21.9% in COVID-19)",
                 "03v",
                 "1,086/5,064",
             ),
@@ -452,39 +444,15 @@ CLAIMS = OrderedDict(
         (
             "housing_stab",
             (
-                "(COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza, 0.97; 95% CI, 0.83-1.13)",
+                "(COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza joint AOR, 0.97; 95% CI, 0.83-1.13)",
                 "03n",
                 "unstable housing alone 1.0021 (0.9080-1.1060), joint 0.8765 (0.7899-0.9727); influenza joint 0.97 (0.83-1.13), 03f",
             ),
         ),
         (
-            "r10_preadm",
-            (
-                "excluded (ratio, 0.66)",
-                "r10",
-                "sens_r10_covid.csv no_preadm Medicaid 0.6622",
-            ),
-        ),
-        (
-            "r10_ip_ed24",
-            (
-                "inpatient stay (0.64) or an emergency stay of 24 hours or more (0.65)",
-                "r10",
-                "case_ip 0.6358; case_ed24 0.6532",
-            ),
-        ),
-        (
-            "r10_dxwin",
-            (
-                "infection or respiratory diagnosis was required (0.79; 95% CI, 0.61-1.01)",
-                "r10",
-                "sens_r10c_covid.csv case_dxwin2 Medicaid 0.7895 (0.6149-1.0136)",
-            ),
-        ),
-        (
             "r10_severe",
             (
-                "(1.18; 95% CI, 0.79-1.75)",
+                "the ratio was 1.18 (95% CI, 0.79-1.75)",
                 "r10",
                 "case_severe Medicaid 1.1764 (0.7895-1.7530)",
             ),
@@ -492,17 +460,9 @@ CLAIMS = OrderedDict(
         (
             "r10_link",
             (
-                "54.0% of employer-insured and 85.1% of Medicaid-insured Omicron cases, 12.5 points apart after standardizing to site mix",
+                "linked to the admission for 54.0% of employer-insured and 85.1% of Medicaid-insured Omicron cases",
                 "r10",
-                "describe_r10_covid linked 170/315, 325/382; r10b_covid.txt site-standardized 76.1% vs 63.6%",
-            ),
-        ),
-        (
-            "r10_inc_range",
-            (
-                "ranged from 1.01 to 1.66",
-                "r10",
-                "income ROR over eTable 24A alternatives: min case_ip 1.0070, max case_dx2 1.6629",
+                "describe_r10_covid linked condition row 170/315, 325/382",
             ),
         ),
         (
@@ -526,43 +486,35 @@ CLAIMS = OrderedDict(
             ("about 1 in 80 a code specific to income", "r10", "46/3817 = 1 in 83"),
         ),
         (
-            "r10_abs_range",
-            (
-                "across 9 alternative outcome definitions, 0.64 to 1.18",
-                "r10",
-                "eTable 24A Medicaid: min case_ip 0.6358, max case_severe 1.1764 (9 alternatives)",
-            ),
-        ),
-        (
             "r10_lab",
             (
-                "among laboratory-confirmed cases (0.65; 95% CI, 0.49-0.87)",
+                "among laboratory-confirmed cases (ratio, 0.65; 95% CI, 0.49-0.87)",
                 "r10",
-                "case_lab Medicaid 0.6509 (0.4854-0.8727)",
+                "sens_r10c_covid.csv case_lab Medicaid 0.6509 (0.4854-0.8727)",
             ),
         ),
         (
-            "r10_inf",
+            "r10_ip_ed24",
             (
-                "an infection diagnosis (0.73; 95% CI, 0.56-0.95)",
+                "cases with an inpatient stay (0.64) or with an inpatient or emergency stay of 24 hours or more (0.65)",
                 "r10",
-                "case_infwin2 Medicaid 0.7273 (0.5586-0.9470)",
+                "case_ip 0.6358; case_ed24b 0.6518",
             ),
         ),
         (
-            "r10_labdx",
+            "r10_abs_lab",
             (
-                "(0.95; 95% CI, 0.67-1.34)",
+                "laboratory-confirmed cases, 0.65; 95% CI, 0.49-0.87",
                 "r10",
-                "case_lab_dxwin2 Medicaid 0.9462 (0.6685-1.3394)",
+                "case_lab Medicaid 0.6509 (0.4854-0.8727); abstract",
             ),
         ),
         (
             "r10_ard_inc",
             (
-                "grew from 0.9 to 3.4 percentage points (difference, 2.5; 95% CI, −0.8 to 6.2)",
+                "did not narrow (0.9 percentage points before Delta, 3.4 during Omicron)",
                 "r10",
-                "ard_covid_x.csv income 0.8816, 3.3628; difference 2.48 (-0.80 to 6.24)",
+                "ard_covid_x.csv income 0.8816, 3.3628",
             ),
         ),
     ]

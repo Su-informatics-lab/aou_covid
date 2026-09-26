@@ -132,7 +132,11 @@ def main():
         ax_lab.text(
             1.0,
             yy,
-            money(r.level_label),
+            money(
+                {"Unemployed": "Out of work or unable to work"}.get(
+                    r.level_label, r.level_label
+                )
+            ),
             ha="right",
             va="center",
             fontsize=PT_BODY,
@@ -211,7 +215,7 @@ def main():
         0.398,
         0.72,
         "light: fitted alone  \u2192  full: with the other 5 items"
-        "  (navy, income; purple, Medicaid)",
+        "  (navy, income; pink, Medicaid)",
         ha="left",
         va="center",
         fontsize=PT_SMALL,
