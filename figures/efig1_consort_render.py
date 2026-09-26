@@ -128,5 +128,9 @@ for c in cells:
 
 os.makedirs(OUT, exist_ok=True)
 for ext in ("pdf", "png"):
-    fig.savefig(os.path.join(OUT, "eFigure1." + ext), dpi=300, facecolor="white")
+    fig.savefig(
+        os.path.join(OUT, "eFigure1_drawio_superseded." + ext),
+        dpi=300,
+        facecolor="white",
+    )
 print("wrote eFigure1 to", OUT, "| canvas", W, "x", H)

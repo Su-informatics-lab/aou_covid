@@ -29,8 +29,8 @@ def main():
     apply_style()
     plt.rcParams.update({"xtick.labelsize": PT_SMALL, "ytick.labelsize": PT_SMALL})
     d = pd.read_csv(DATA)
-    fig = plt.figure(figsize=(120 * MM, 95 * MM))
-    ax = fig.add_axes([0.30, 0.13, 0.64, 0.70])
+    fig = plt.figure(figsize=(180 * MM, 105 * MM))
+    ax = fig.add_axes([0.22, 0.12, 0.72, 0.74])
     split(
         ax,
         d,
