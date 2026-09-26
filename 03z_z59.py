@@ -16,7 +16,7 @@ condition_occurrence and observation, because Z codes usually map to the Observa
 condition_source_value is not reliably the ICD code. (The z_inc / z59_any flags in
 03z_extract.py read condition_source_value and are superseded by this script.)
 Counts below 20 print as "<20", a count whose complement is below 20 as "masked", and an
-all-era total that would reveal a single masked era cell as "masked".
+all-era total that would reveal the pooled count of the masked era cells as "masked".
   ARM=covid python3 03z_z59.py      (or ARM=flu)
 """
 
@@ -91,7 +91,7 @@ def cell(k, n):
     return str(k), f"{100 * k / n:.1f}"
 
 
-rows = []
+rows, raw = [], {}
 for e in ["all"] + sorted(W.era.unique()):
     base = W if e == "all" else W[W.era == e]
     key = set(zip(base.person_id, base.d))
@@ -99,6 +99,7 @@ for e in ["all"] + sorted(W.era.unique()):
     for g, pat in G.items():
         hit = M[M.code.str.contains(pat, regex=True)]
         k = len(set(zip(hit.person_id, hit.d)) & key)
+        raw[(e, g)] = (k, n)
         kk, pc = cell(k, n)
         rows.append(
             {
@@ -111,12 +112,22 @@ for e in ["all"] + sorted(W.era.unique()):
             }
         )
 o = pd.DataFrame(rows)
-## complementary masking: a group with exactly 1 era cell below 20 would let the all-era total
-## reveal it, so the total is masked too
+## complementary masking: when any era cell is masked, the all-era total minus the shown era
+## cells is the pooled count of the masked ones; if that pooled count (or its complement) is
+## below 20, the total is masked too (R10b: the earlier rule caught only a single masked cell)
 for g in G:
-    era_k = o[(o.group == g) & (o.era != "all")].k
-    if (era_k == "<20").sum() == 1 or (era_k == "masked").sum() == 1:
-        o.loc[(o.group == g) & (o.era == "all"), ["k", "pct"]] = "masked"
+    k_all, n_all = raw[("all", g)]
+    eras = [e for e in W.era.unique()]
+    shown = [
+        e
+        for e in eras
+        if o[(o.era == e) & (o.group == g)].k.iloc[0] not in ("<20", "masked")
+    ]
+    if len(shown) < len(eras):
+        k_p = k_all - sum(raw[(e, g)][0] for e in shown)
+        n_p = n_all - sum(raw[(e, g)][1] for e in shown)
+        if k_p < 20 or n_p - k_p < 20:
+            o.loc[(o.group == g) & (o.era == "all"), ["k", "pct"]] = "masked"
 o.to_csv(f"/home/jupyter/jno_v26/z59_{ARM}.csv", index=False)
 print(
     "income < $25 000 reporters (person-index rows); Z59 codes dated before the index date"

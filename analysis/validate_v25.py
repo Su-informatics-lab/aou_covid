@@ -133,17 +133,9 @@ CLAIMS = OrderedDict(
         ("med_flu", ("(1.60 to 0.93)", "03h", "Medicaid, influenza")),
         ("edu", ("(1.30 to 1.01)", "03n", "education below GED, COVID-19")),
         (
-            "flu_period",
-            (
-                "1.72 in the 2 seasons before SARS-CoV-2 and 1.64 in the 2 seasons after",
-                "03f",
-                "income <$10k within-period refits, influenza",
-            ),
-        ),
-        (
             "flu_int_model",
             (
-                "(in a period-interaction model, 1.67 and 1.66; ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
+                "a period-interaction model gave 1.67 in the 2 seasons before SARS-CoV-2 and 1.66 in the 2 after influenza returned (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
                 "03o",
                 "income <$10k, period-interaction model, and its ROR, influenza",
             ),
@@ -231,7 +223,7 @@ CLAIMS = OrderedDict(
         (
             "c_khb",
             (
-                "more than 2 percentage points, and trend models",
+                "changed no attenuation by more than 2 points; trend models agreed",
                 "03oAB",
                 "max |KHB - log| 0.64 COVID, 1.5 influenza",
             ),
@@ -243,7 +235,7 @@ CLAIMS = OrderedDict(
         (
             "abs_black",
             (
-                "accounted for 16% of the Black–White log odds ratio in COVID-19 and 34% in influenza",
+                "accounted for 16% (COVID-19) and 34% (influenza) of the Black–White log odds ratio",
                 "03oAB",
                 "abstract",
             ),
@@ -402,14 +394,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "disc_ratio",
-            (
-                "in COVID-19, about 1 in 5 against 1 in 9",
-                "derived",
-                "20.8%-22.6% and 10.2%-12.4% by wave (03v)",
-            ),
-        ),
-        (
             "miss_inc",
             (
                 "hospitalized as often as the lowest band (21.4% in COVID-19)",
@@ -450,17 +434,9 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "exp_no",
-            (
-                "among the 595 cases from nonexpansion states (0.20; 95% CI, 0.08-0.51; era test, P = .08)",
-                "03w",
-                "expansion_No",
-            ),
-        ),
-        (
             "exp_yes",
             (
-                "Medicaid fell among residents of expansion states (0.60; 95% CI, 0.45-0.79)",
+                "Medicaid fell in both expansion and nonexpansion states, imprecisely in the latter",
                 "03w",
                 "expansion_Yes",
             ),
@@ -476,17 +452,9 @@ CLAIMS = OrderedDict(
         (
             "housing_stab",
             (
-                "(COVID-19 AOR alone, 1.00; jointly, 0.88; 95% CI, 0.79-0.97; influenza jointly, 0.97; 95% CI, 0.83-1.13)",
+                "(COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza, 0.97; 95% CI, 0.83-1.13)",
                 "03n",
                 "unstable housing alone 1.0021 (0.9080-1.1060), joint 0.8765 (0.7899-0.9727); influenza joint 0.97 (0.83-1.13), 03f",
-            ),
-        ),
-        (
-            "r10_abs_dxwin",
-            (
-                "requiring an infection or respiratory diagnosis, 0.79; 95% CI, 0.62-1.02",
-                "r10",
-                "sens_r10_covid.csv case_dxwin Medicaid 0.7912 (0.6163-1.0157)",
             ),
         ),
         (
@@ -508,9 +476,9 @@ CLAIMS = OrderedDict(
         (
             "r10_dxwin",
             (
-                "infection or respiratory diagnosis (0.79; 95% CI, 0.62-1.02)",
+                "infection or respiratory diagnosis was required (0.79; 95% CI, 0.61-1.01)",
                 "r10",
-                "case_dxwin Medicaid 0.7912 (0.6163-1.0157)",
+                "sens_r10c_covid.csv case_dxwin2 Medicaid 0.7895 (0.6149-1.0136)",
             ),
         ),
         (
@@ -522,40 +490,80 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "r10_dx_visit",
-            ("removed the decline (1.04)", "r10", "case_dx Medicaid 1.0449"),
-        ),
-        (
             "r10_link",
             (
-                "54.0% of employer-insured Omicron cases (Medicaid, 85.1%)",
+                "54.0% of employer-insured and 85.1% of Medicaid-insured Omicron cases, 12.5 points apart after standardizing to site mix",
                 "r10",
-                "describe_r10_covid.csv linked condition row: employer omicron 170/315, Medicaid 325/382",
+                "describe_r10_covid linked 170/315, 325/382; r10b_covid.txt site-standardized 76.1% vs 63.6%",
             ),
         ),
         (
             "r10_inc_range",
             (
-                "ranged from 1.01 to 1.65",
+                "ranged from 1.01 to 1.66",
                 "r10",
-                "income ROR over R10 specs: min case_ip 1.0070, max case_dx 1.6480",
+                "income ROR over eTable 24A alternatives: min case_ip 1.0070, max case_dx2 1.6629",
             ),
         ),
         (
             "r10_ard_med",
             (
-                "fell from 6.1 to 0.3 points",
+                "the Medicaid difference fell from 6.1 to 0.6",
                 "r10",
-                "ard_covid.csv Medicaid 6.0821 pre-Delta, 0.3355 Omicron",
+                "ard_covid_x.csv Medicaid 6.1307, 0.6440",
             ),
         ),
         (
             "r10_z59_income",
-            ("1.2% a code specific to income", "r10", "z59_covid.csv income 46/3817"),
+            (
+                "1.2% had a code specific to income",
+                "r10",
+                "z59_covid.csv income 46/3817",
+            ),
         ),
         (
             "r10_z59_disc",
             ("about 1 in 80 a code specific to income", "r10", "46/3817 = 1 in 83"),
+        ),
+        (
+            "r10_abs_range",
+            (
+                "across 9 alternative outcome definitions, 0.64 to 1.18",
+                "r10",
+                "eTable 24A Medicaid: min case_ip 0.6358, max case_severe 1.1764 (9 alternatives)",
+            ),
+        ),
+        (
+            "r10_lab",
+            (
+                "among laboratory-confirmed cases (0.65; 95% CI, 0.49-0.87)",
+                "r10",
+                "case_lab Medicaid 0.6509 (0.4854-0.8727)",
+            ),
+        ),
+        (
+            "r10_inf",
+            (
+                "an infection diagnosis (0.73; 95% CI, 0.56-0.95)",
+                "r10",
+                "case_infwin2 Medicaid 0.7273 (0.5586-0.9470)",
+            ),
+        ),
+        (
+            "r10_labdx",
+            (
+                "(0.95; 95% CI, 0.67-1.34)",
+                "r10",
+                "case_lab_dxwin2 Medicaid 0.9462 (0.6685-1.3394)",
+            ),
+        ),
+        (
+            "r10_ard_inc",
+            (
+                "grew from 0.9 to 3.4 percentage points (difference, 2.5; 95% CI, −0.8 to 6.2)",
+                "r10",
+                "ard_covid_x.csv income 0.8816, 3.3628; difference 2.48 (-0.80 to 6.24)",
+            ),
         ),
     ]
 )

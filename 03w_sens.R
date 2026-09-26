@@ -110,6 +110,8 @@ if (SPART == "R10") {
   ##   case_dxwin   as case_dx, but the diagnosis may sit on any visit or none (index - 3 to
   ##                index + 30 days; needs 03z_dxlink.py)
   ## R10SPECS=case_dxwin runs a subset.
+  ##   R10b: case_dx2, case_dxwin2, case_infwin2 (standard concepts only), case_lab
+  ##   (laboratory-indexed cases), case_lab_dxwin2, case_ed24b (needs 03z_r10b.py)
   ## A set is kept only if it still holds its case and >= 1 control.
   R10 <- read.csv(sprintf("/home/jupyter/jno_v26/W_r10_%s.csv", ARM), stringsAsFactors = FALSE)
   ri <- if (ARM == "covid") match(d$person_id, R10$person_id) else
@@ -136,6 +138,19 @@ if (SPART == "R10") {
     case_ed24 = keep_rows(none, function(dk) dk$r10_q_ip == 1 | dk$r10_q_ed24 == 1),
     case_severe = keep_rows(none, function(dk) dk$r10_severe == 1))
   if (!is.null(d$r10_dx_win)) specs$case_dxwin <- keep_rows(none, function(dk) dk$r10_dx_win == 1)
+  ## R10b (03z_r10b.py): diagnosis flags from standard concepts only, the infection alone,
+  ## laboratory-indexed cases, and the ED >= 24 h rule with unusable date-times set aside
+  fc <- sprintf("/home/jupyter/jno_v26/W_r10c_%s.csv", ARM)
+  if (file.exists(fc)) { R10c <- read.csv(fc, stringsAsFactors = FALSE)
+    ci <- match(paste(R10$person_id, as.Date(R10$d)), paste(R10c$person_id, as.Date(R10c$d)))
+    stopifnot(!any(is.na(ci)))
+    for (cc in c("q_dx2", "dx_win2", "inf_win2", "lab_idx", "ed24b")) d[[paste0("r10_", cc)]] <- R10c[[cc]][ci][ri]
+    specs$case_dx2 <- keep_rows(none, function(dk) dk$r10_q_dx2 == 1)
+    specs$case_dxwin2 <- keep_rows(none, function(dk) dk$r10_dx_win2 == 1)
+    specs$case_infwin2 <- keep_rows(none, function(dk) dk$r10_inf_win2 == 1)
+    specs$case_lab <- keep_rows(none, function(dk) dk$r10_lab_idx == 1)
+    specs$case_lab_dxwin2 <- keep_rows(none, function(dk) dk$r10_lab_idx == 1 & dk$r10_dx_win2 == 1)
+    specs$case_ed24b <- keep_rows(none, function(dk) dk$r10_q_ip == 1 | (!is.na(dk$r10_ed24b) & dk$r10_ed24b == 1)) }
   if (nzchar(Sys.getenv("R10SPECS"))) specs <- specs[strsplit(Sys.getenv("R10SPECS"), ",")[[1]]]
   cat("rows flagged: controls pre-admitted", M20(sum(d$Treatment == 0 & d$r10_pre_adm == 1)),
       "| cases with dx", M20(sum(d$Treatment == 1 & d$r10_q_dx == 1)),
@@ -150,7 +165,7 @@ if (SPART == "R10") {
         ror = exp(e[["est"]]), lo = exp(e[["lo"]]), hi = exp(e[["hi"]]), p = e[["p"]], D1_p = NA, note = NA, row.names = NULL) }
   }
   o <- do.call(rbind, rows)
-  write.csv(o, file.path(OUT, if (nzchar(Sys.getenv("R10SPECS"))) "sens_r10b.csv" else "sens_r10.csv"), row.names = FALSE)
+  write.csv(o, file.path(OUT, if (nzchar(Sys.getenv("R10SPECS"))) Sys.getenv("R10OUT", "sens_r10b.csv") else "sens_r10.csv"), row.names = FALSE)
   print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")
 }
 if (SPART == "SITEPRE") {

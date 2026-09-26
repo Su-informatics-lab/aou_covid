@@ -32,6 +32,7 @@ if (ARM == "covid") {
   mv <- read.csv(file.path(P, "aou_v7", "06_matching_variables.csv"))
   cat("matching-variable columns:", paste(names(mv), collapse = ", "), "\n")
   df <- merge(df, mv, by = "person_id", all.x = TRUE)
+  if (Sys.getenv("EXTRA") == "1") df <- merge(df, read.csv(file.path(P, "aou_v7", "05_vaccination.csv")), by = "person_id", all.x = TRUE)
   stopifnot(nrow(df) == 25160)
   df$hosp <- as.integer(df$severity == 1)
   dd <- as.Date(df$covid_index_date)
@@ -63,10 +64,21 @@ df$ins <- fac(df$insurance_type, "Employer")
 for (v in c("education", "employment", "housing", "housing_stability", "race", "sex_at_birth", "age_group"))
   df[[v]] <- fac(df[[v]], names(sort(table(df[[v]]), decreasing = TRUE))[1])
 for (v in CH) df[[v]][is.na(df[[v]])] <- 0
+## R10b (Adler-Milstein persona): the matched models also adjust for ethnicity and, in
+## COVID-19, vaccination; EXTRA=1 adds whichever such columns the arm's file carries
+## (categorical, <= 10 levels, missing kept as a level)
+XV <- character(0)
+if (Sys.getenv("EXTRA") == "1") {
+  XV <- grep("ethnic|vacc", names(df), value = TRUE, ignore.case = TRUE)
+  XV <- XV[sapply(XV, function(v) length(unique(df[[v]])) <= 10)]
+  for (v in XV) df[[v]] <- fac(df[[v]], names(sort(table(df[[v]], useNA = "no"), decreasing = TRUE))[1])
+  cat("extra covariates:", paste(XV, collapse = ", "), "\n")
+}
 df$era <- factor(df$era)
 f <- as.formula(paste("hosp ~ inc * era + ins * era + education + employment + housing + housing_stability +",
                       "age_group + sex_at_birth + race +", paste(CH, collapse = " + "),
-                      if (length(MVARS)) paste("+", paste0("q_", MVARS, collapse = " + ")) else ""))
+                      if (length(MVARS)) paste("+", paste0("q_", MVARS, collapse = " + ")) else "",
+                      if (length(XV)) paste("+", paste(XV, collapse = " + ")) else ""))
 
 ard <- function(dat) {
   fit <- suppressWarnings(glm(f, data = dat, family = binomial))
@@ -96,7 +108,7 @@ o <- data.frame(arm = ARM, term = sub("\\|.*", "", names(est)), era = sub(".*\\|
 ## so model-based insurance differences for those periods are withheld
 if (ARM == "flu") o <- o[!(o$term == "ins" & o$era %in% c("1_pre", "2_pandemic")), ]
 o$term <- ifelse(o$term == "inc", "income <$10 000 vs $35 000-99 999", "Medicaid vs employer")
-write.csv(o, sprintf("/home/jupyter/jno_v26/ard_%s.csv", ARM), row.names = FALSE)
+write.csv(o, sprintf("/home/jupyter/jno_v26/ard_%s%s.csv", ARM, if (length(XV)) "_x" else ""), row.names = FALSE)
 ## difference between the latest and earliest era, from the same bootstrap draws
 lab <- names(est); eras_ <- levels(df$era)
 for (tm in c("inc", "ins")) {
