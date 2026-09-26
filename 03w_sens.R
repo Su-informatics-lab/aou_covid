@@ -29,7 +29,10 @@ set.seed(20260925)
 W <- read.csv(sprintf("/home/jupyter/jno_v26/W_person_%s.csv", ARM), stringsAsFactors = FALSE)
 wi <- match(d$person_id, W$person_id); stopifnot(!any(is.na(wi)))
 mode_ref <- function(x) { x <- factor(x); relevel(x, names(sort(table(x), decreasing = TRUE))[1]) }
-d$region <- mode_ref(W$region[wi]); d$site <- mode_ref(W$site[wi]); d$expansion <- W$expansion[wi]
+## EHR site from visits before the index date (03w_sitepre.py adds site_pre); the
+## all-visit site in W$site included the index admission, so it was partly outcome (R7)
+stopifnot("site_pre" %in% names(W))
+d$region <- mode_ref(W$region[wi]); d$site <- mode_ref(W$site_pre[wi]); d$expansion <- W$expansion[wi]
 
 ## survey lag (days from Basics to index)
 if (ARM == "covid") {
@@ -93,9 +96,9 @@ run_pair <- function(analysis, extra = "", prep = function(dk, k) dk, rows_fun =
 }
 SPART <- Sys.getenv("SPART", "ALL")
 if (SPART == "SITEPRE") {
-  ## R7: EHR site from visits before the index date only (03w_sitepre.py)
-  d$site <- mode_ref(W$site_pre[wi])
-  run_pair("site_pre", "+ site")
+  ## refit only the site rows, which R7 changed; 03w_merge_sitepre.py puts them into
+  ## sens_r6.csv in place of the all-visit-site rows of the earlier full run
+  run_pair("site", "+ site")
   o <- do.call(rbind, rows)
   write.csv(o, file.path(OUT, "sens_r6_sitepre.csv"), row.names = FALSE)
   print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")

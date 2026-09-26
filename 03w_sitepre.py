@@ -53,7 +53,7 @@ v AS (SELECT vo.person_id, e.src_id, COUNT(*) AS n
       FROM `{CDR}`.visit_occurrence vo JOIN `{CDR}`.visit_occurrence_ext e USING (visit_occurrence_id)
       JOIN idx ON vo.person_id = idx.person_id
       WHERE vo.visit_start_date < idx.d GROUP BY 1, 2)
-SELECT person_id, ARRAY_AGG(src_id ORDER BY n DESC LIMIT 1)[OFFSET(0)] AS site_pre FROM v GROUP BY 1"""
+SELECT person_id, ARRAY_AGG(src_id ORDER BY n DESC, src_id LIMIT 1)[OFFSET(0)] AS site_pre FROM v GROUP BY 1"""
 print("query bytes:", len(sql))
 s = pd.read_gbq(sql, dialect="standard", progress_bar_type=None)
 P = P.drop(columns=[c for c in ["site_pre"] if c in P.columns]).merge(

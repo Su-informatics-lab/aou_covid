@@ -489,9 +489,9 @@ CLAIMS = OrderedDict(
         (
             "sens_inc_range",
             (
-                "the income ratio ranged from 0.98 to 1.44, the upper value after adjustment for EHR site (era test, P = .51)",
+                "the income ratio ranged from 0.98 to 1.45, the upper value after adjustment for EHR site (era test, P = .50)",
                 "03w",
-                "tip1 0.98; site_pre 1.436 (1.059-1.948), D1 .507",
+                "tip1 0.98; site_pre 1.447 (1.065-1.965), D1 .499 (03w SPART=SITEPRE, merged by 03w_merge_sitepre.py)",
             ),
         ),
         (
@@ -624,52 +624,71 @@ DISPLAY_MAP = {
 
 
 def displays(root):
-    """Table 2 and Figure 1 render the same estimates. They must agree."""
+    """eTable 20A and the figures render the same era-specific estimates. They
+    must agree. Figure 2A plots every eTable 20A cell (alone and jointly); Figure
+    1C plots the jointly adjusted ones. A withheld cell must be a dash in the
+    table and empty in both figure data files (v25; the v24 Table 2 against
+    Figure 1 check no longer applies because v25 Figure 1 shows no Table 2
+    estimate)."""
     import csv
     import os
+    import re
     from decimal import ROUND_HALF_UP, Decimal
 
-    f1 = {
-        (r["arm"], r["domain"], r["level"]): r
-        for r in csv.DictReader(
-            open(
-                os.path.join(root, "results/figures/v24/Figure1_data.csv"),
-                encoding="utf-8",
-            )
+    q = lambda v: str(Decimal(v).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+    fmt = lambda a, l, h: "%s (%s-%s)" % (q(a), q(l), q(h)) if a else "\u2014"
+    sup = open(
+        os.path.join(root, "working/v25/supplement_v25.md"), encoding="utf-8"
+    ).read()
+    blk = sup[sup.index("**A. The domain alone and jointly, by era.**") :]
+    blk = blk[: blk.index("**B.")]
+    tab = {}
+    for line in blk.splitlines():
+        m = re.match(
+            r"\| (Medicaid|Income <\$10 000) \| (Alone|Jointly) \|(.*)\|$", line
         )
-    }
-    t2 = list(
+        if m:
+            cells = [c.strip() for c in m.group(3).split("|")]
+            term = "medicaid" if m.group(1) == "Medicaid" else "income_lt10k"
+            tab[(term, "alone" if m.group(2) == "Alone" else "joint")] = cells
+    bad = 0
+    f2 = csv.DictReader(
+        open(
+            os.path.join(root, "results/figures/v25/Figure2_era_attenuation_data.csv"),
+            encoding="utf-8",
+        )
+    )
+    for r in f2:
+        col = int(r["era_order"]) - 1 + (3 if r["pathogen"] == "Influenza" else 0)
+        want = tab[(r["term"], r["model"])][col]
+        got = fmt(r["aor"], r["lo"], r["hi"])
+        if got != want:
+            print(
+                "  DISAGREE Figure 2A %-9s %-12s %-6s era %s: eTable20A=%s figure=%s"
+                % (r["pathogen"], r["term"], r["model"], r["era_order"], want, got)
+            )
+            bad += 1
+    f1 = list(
         csv.DictReader(
             open(
-                os.path.join(root, "working/v24/tables/Table2_data.csv"),
+                os.path.join(root, "results/figures/v25/Figure1_timeline_data.csv"),
                 encoding="utf-8",
             )
         )
     )
-    q = lambda v: str(Decimal(v).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
-    bad = 0
-    for r in t2:
-        dom, lev = DISPLAY_MAP[(r["section"], r["label"])]
-        for arm, col in (("COVID-19", "covid"), ("Influenza", "flu")):
-            want = r[col].strip()
-            hit = f1.get((arm, dom, lev))
-            if hit is None:
-                if want != "reference":
-                    print("  MISSING  Figure 1 row for %s %s/%s" % (arm, dom, lev))
+    for pth, off in (("COVID-19", 0), ("Influenza", 3)):
+        for term in ("medicaid", "income_lt10k"):
+            rows = [r for r in f1 if r["pathogen"] == pth and r["term"] == term]
+            for k, r in enumerate(sorted(rows, key=lambda r: r["start"])):
+                want = tab[(term, "joint")][off + k]
+                got = fmt(r["aor"], r["lo"], r["hi"])
+                if got != want:
+                    print(
+                        "  DISAGREE Figure 1C %-9s %-12s %s: eTable20A=%s figure=%s"
+                        % (pth, term, r["era"], want, got)
+                    )
                     bad += 1
-                continue
-            got = "%s (%s-%s)" % (
-                q(hit["joint_aor"]),
-                q(hit["joint_lo"]),
-                q(hit["joint_hi"]),
-            )
-            if got != want:
-                print(
-                    "  DISAGREE %-11s %-16s %-10s Table2=%-20s Figure1=%s"
-                    % (dom, lev, arm, want, got)
-                )
-                bad += 1
-    print("\nTable 2 against Figure 1: %d discrepancies." % bad)
+    print("\neTable 20A against Figures 1C and 2A: %d discrepancies." % bad)
     return 1 if bad else 0
 
 

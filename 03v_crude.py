@@ -13,7 +13,9 @@ observed survey responses (missing kept as its own level), no imputation.
             remaining weights renormalized
   rd_*      risk difference vs the reference band ($35 000-99 999; employer
             insurance), crude and standardized, Wald 95% CI on the crude
-Every exported cell has >= 20 hospitalized and >= 20 not hospitalized; when one
+Every exported cell has >= 20 hospitalized and >= 20 not hospitalized, counted both
+as rows and as distinct participants (influenza rows are person-seasons, and a
+participant can contribute more than one; Codex R8); when one
 level of a variable is suppressed within an era, the next smallest is suppressed
 too, so no suppressed count is recoverable from the era total; when the reference
 level is suppressed, no risk difference is exported for that era; and when a
@@ -100,6 +102,9 @@ for var, ref in [("income_band", "$35 000-99 999"), ("insurance", "Employer")]:
         block = []
         for lev, g in e.groupby(var):
             n, k = len(g), int(g.hosp.sum())
+            # influenza rows are person-seasons: the threshold applies to people
+            kp = g.loc[g.hosp == 1, "person_id"].nunique()
+            np_ = g.loc[g.hosp == 0, "person_id"].nunique()
             lo, hi = wilson(k, n)
             p = k / n
             se = np.sqrt(p * (1 - p) / n + pr * (1 - pr) / nr)
@@ -111,6 +116,8 @@ for var, ref in [("income_band", "$35 000-99 999"), ("insurance", "Employer")]:
                     level=lev,
                     n=n,
                     hosp=k,
+                    hosp_persons=kp,
+                    nonhosp_persons=np_,
                     pct=100 * p,
                     lo=lo,
                     hi=hi,
@@ -122,7 +129,12 @@ for var, ref in [("income_band", "$35 000-99 999"), ("insurance", "Employer")]:
                 )
             )
         b = pd.DataFrame(block)
-        bad = (b.hosp < MIN) | (b.n - b.hosp < MIN)
+        bad = (
+            (b.hosp < MIN)
+            | (b.n - b.hosp < MIN)
+            | (b.hosp_persons < MIN)
+            | (b.nonhosp_persons < MIN)
+        )
         if bad.sum() == 1:  # complementary suppression
             bad[b[~bad].n.idxmin()] = True
         b.loc[
