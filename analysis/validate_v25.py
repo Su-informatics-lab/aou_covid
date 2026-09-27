@@ -512,7 +512,7 @@ CLAIMS = OrderedDict(
         (
             "r10_ard_inc",
             (
-                "did not narrow (0.9 percentage points before Delta, 3.4 during Omicron)",
+                "did not narrow (0.9 to 3.4 percentage points)",
                 "r10",
                 "ard_covid_x.csv income 0.8816, 3.3628",
             ),
@@ -547,6 +547,14 @@ CLAIMS = OrderedDict(
                 "the ratio was 0.60 (95% CI, 0.44-0.81) among cases without a stay of 3 days or more, intensive care, or death",
                 "r10",
                 "sens_r10d_covid.csv case_short Medicaid 0.5985 (0.4428-0.8089)",
+            ),
+        ),
+        (
+            "cite_mullachery",
+            (
+                "which requires staggered state adoption and even then varies by cohort",
+                "cited",
+                "Mullachery et al 2026 Drug Alcohol Depend (PMC13449180, full text read 2026-09-27): cohort-specific staggered DiD; 2016 cohort OR 1.49, 2019 cohort 0.71, pooled ATT null",
             ),
         ),
     ]
