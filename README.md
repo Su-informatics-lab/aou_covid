@@ -39,14 +39,14 @@ project record and superseded code are local-only and untracked; see
 `.gitignore` for what and why.
 
 ```
-01-08*                  the pipeline, in run order
-analysis/               number checks: validate_numbers.py, ledger.py, gate.sh
-figures/                the code that draws every figure in the manuscript
-results/figures/        what each figure draws: one CSV per figure, and the
-                        figure itself.  Screened; see results/SCREENING.md
-results/                everything else in it is local only
-submission/             the manuscript package (local only)
-archive/                project record, drafts, superseded code (local only)
+01-08*, 03*             the pipeline, in run order (flu_arm/ for influenza)
+analysis/               validate_v25.py (asserts every printed number) and
+                        CLAIM_LEDGER_v25.md, generated from it
+figures/                the code that draws every current figure
+results/figures/v25/    what the main figures draw (local only until screened)
+working/v25/            manuscript sources and build (local only)
+submission_v25/         the current package: .docx, PDF, figures (local only)
+archive/                earlier versions, reviews, superseded code (local only)
 ```
 
 ## Pipeline
@@ -79,46 +79,27 @@ TABLES (04, 06-08)                    04 on-platform; the rest off-platform
 
 FIGURES                               off-platform, from aggregate values
   figures/style.py                    shared style, palette, export
-  figures/fig1_domain_vs_joint.py     Figure 1
-  figures/fig2_era.py                 Figure 2
-  figures/fig3_covid_vs_flu.py        Figure 3
-  figures/fig4_race_attenuation.py    Figure 4
+  figures/fig1_hero_v26.py            Figure 1
+  figures/fig2_v26.py                 Figure 2
+  figures/efig1_consort_render.py     eFigure 1, rendered from
+                                      efig1_consort_three_panel.drawio
   figures/efig2_balance.py            eFigure 2
-  figures/efig3_visits.py             eFigure 3
-  figures/efig5_clinical_check.py     eFigure 5
-  figures/export_source_data.py       writes results/figures/*_data.csv
-  eFigure 1 (participant flow) and eFigure 4 (phenotype decision tree) are
-  draw.io diagrams; their sources live with the submission package.
+  figures/efig3_v23.py                eFigure 3
+  figures/efig4_v23.py                eFigure 4
+  figures/efig5_phenotype_tree.py     eFigure 5
+  figures/efig6_v24.py                eFigure 6
+  figures/efig7_timeline_v25.py       eFigure 7
+  figures/efig8_split_flu_v26.py      eFigure 8
 
 CHECKS                                off-platform
-  analysis/validate_numbers.py        assert manuscript values against outputs
-  analysis/ledger.py                  generate the claim ledger from those asserts
-  analysis/gate.sh                    run the chain
+  analysis/validate_v25.py            check | displays | ledger
 ```
 
 ## Which figure comes from what
 
-Every figure is drawn from aggregate values, never from rows. Each script carries
-those values as literals with the frozen run they were read from, and
-`export_source_data.py` writes them out, so the CSV in `results/figures/` is by
-construction the numbers the figure draws.
-
-| Figure | Script | Values |
-|---|---|---|
-| Figure 1. Test 1. Domain-specific against jointly adjusted | `figures/fig1_domain_vs_joint.py` | `results/figures/Figure1_data.csv` |
-| Figure 2. Test 2. What changed across pandemic eras | `figures/fig2_era.py` | `results/figures/Figure2_data.csv` |
-| Figure 3. Test 3. COVID-19 against influenza | `figures/fig3_covid_vs_flu.py` | `results/figures/Figure3_data_panel_a.csv`, `results/figures/flu/` |
-| Figure 4. Test 4. What the five domains account for in the Black-race association | `figures/fig4_race_attenuation.py` | `results/figures/Figure4_data.csv` |
-| eFigure 2. Matching balance | `figures/efig2_balance.py` | `results/figures/eFigure2_data.csv` |
-| eFigure 3. Visit timing around the index date | `figures/efig3_visits.py` | `results/figures/eFigure3_data.csv` |
-| eFigure 5. The clinical model in both cohorts | `figures/efig5_clinical_check.py` | `results/figures/eFigure5_data.csv` |
-| eFigure 1, eFigure 4 | draw.io, sources with the submission package | — |
-
-```bash
-python figures/fig1_domain_vs_joint.py    # and the other six: each writes its
-                                          # own PDF and PNG into results/figures
-python figures/export_source_data.py      # regenerate every *_data.csv
-```
+Every figure is drawn from aggregate values, never from rows. The scripts above
+name the frozen run each value was read from. The figures of earlier versions
+(the JAMIA draft, v23, v24) and their scripts are in `archive/`.
 
 ## Reproduction
 
@@ -139,7 +120,8 @@ sbatch ms_resume_from_psm.sbatch               # ETL -> PSM -> models -> Table 1
 sbatch ms_variance_sensitivity.sbatch          # eTable 10b Panel B
 
 # -- Figures, tables, supplement (anywhere, from aggregate values) ---
-python  figures/export_source_data.py          # every figure and every *_data.csv
+# the manuscript itself: working/v25/build_all.sh (local only)
+python  figures/fig1_hero_v26.py                # and the other scripts under FIGURES
 python  05_figures.py                          # tables and CONSORT counts only
 python  06_supplement.py
 python  08_build_maintext_tables.py
@@ -156,8 +138,9 @@ if the input is not the corrected cohort.
 held 81 aggregate files in the public tree, with person-level files kept out by
 care rather than by rule — one `git add results/` away from a disclosure.
 
-Three things in it are published, named explicitly in `.gitignore` rather than
-force-added: `results/figures/`, `results/RUN.json` and `results/SCREENING.md`.
+Two things in it are published, named explicitly in `.gitignore` rather than
+force-added: `results/RUN.json` and `results/SCREENING.md`. The earlier
+screened figure files were withdrawn on 2026-09-28 when they were superseded.
 They were screened against the under-20 rule before they were first committed and
 the screen is `results/SCREENING.md`. Model fits, matched cohorts and balance
 tables are not published; they stay in the Workbench workspace bucket and on

@@ -1,5 +1,9 @@
 # Disclosure screen for everything in `results/`
 
+**2026-09-28.** The files screened below (the JAMIA-draft figures) were moved to
+`archive/results_figures_superseded/jamia_v19/` and are no longer published.
+`results/figures/v25/` is not published and has not been screened.
+
 All of Us forbids publishing any participant count below 20, or any set of
 counts from which such a count can be derived. `results/` was made local-only on
 2026-09-02 because it then held 81 aggregate files that had never been screened

@@ -18,9 +18,9 @@ Two passes, because they catch different failures.
            the manuscript and the table agreed with each other and both were
            wrong.
 
-The frozen values below are transcribed from the run results in working/v23/
+The frozen values below are transcribed from the run results in working/v25/inputs/ (copied from working/v23/)
 and, for every COVID-19 estimate the education merge touches and for the two
-restriction analyses, from working/v24/03n_RESULTS.md (source key "03n").
+restriction analyses, from working/v25/inputs/03n_RESULTS.md (source key "03n").
 Each carries the file it came from, so a reader can follow any single number
 back to the script that produced it without opening the platform.
 """
@@ -30,14 +30,14 @@ import sys
 from collections import OrderedDict
 
 SRC = {
-    "03n": "working/v24/03n_RESULTS.md",
+    "03n": "working/v25/inputs/03n_RESULTS.md",
     "03o": "working/v25/03o_RESULTS.md",
     "03oAB": "working/v25/03o_RESULTS.md, COVID-19 A/B (r4_covid/AB_attenuation.csv)",
-    "03h": "working/v23/03h_03i_RESULTS.md",
-    "03d": "working/v23/03d_03e_RESULTS.md",
-    "03f": "working/v23/03f_flu_mi40_RESULTS.md",
+    "03h": "working/v25/inputs/03h_03i_RESULTS.md",
+    "03d": "working/v25/inputs/03d_03e_RESULTS.md",
+    "03f": "working/v25/inputs/03f_flu_mi40_RESULTS.md",
     "03p": "working/v25/platform_03p/ (P_refit.csv, README.md)",
-    "t1": "working/v23/flu_table1_RESULTS.md",
+    "t1": "working/v25/inputs/flu_table1_RESULTS.md",
     "ms19": "the previous version, carried unchanged",
     "cited": "the cited paper (full text read 2026-09-23 where noted in LIT_NOVELTY.md)",
     "policy": "Treasury and DOL official pages, accessed 2026-09-23",

@@ -7,27 +7,27 @@ source column names the run result the value was transcribed from.
 |---|---|---|---|
 | `cohort_covid_cases` | 3,997 COVID-19 cases | the previous version, carried unchanged | matched cases |
 | `cohort_covid_ctrl` | 15,523 control observations | the previous version, carried unchanged | control observations |
-| `cohort_flu` | 1,672 influenza case person-seasons and 6,616 control observations | working/v23/flu_table1_RESULTS.md | influenza arm |
+| `cohort_flu` | 1,672 influenza case person-seasons and 6,616 control observations | working/v25/inputs/flu_table1_RESULTS.md | influenza arm |
 | `cohort_screened` | 25,160 | the previous version, carried unchanged | COVID-19 adults with record and survey data |
 | `cohort_hosp` | 4,064 (16.2%) | the previous version, carried unchanged | met the hospitalization phenotype |
 | `cohort_ctrl_people` | 9,784 individuals | the previous version, carried unchanged | individuals contributing control observations |
-| `cohort_flu_people` | 1,648 participants | working/v23/flu_table1_RESULTS.md | participants contributing influenza cases |
-| `cohort_flu_ctrl_people` | 3,764 participants | working/v23/flu_table1_RESULTS.md | participants contributing influenza controls |
-| `abs_female` | 60.3% female (mean [SD] age, 57.5 [16.2] years) | working/v23/flu_table1_RESULTS.md | COVID-19 case sex and age |
-| `abs_flu_female` | 65.2% female (56.3 [16.3] years) | working/v23/flu_table1_RESULTS.md | influenza case sex and age |
+| `cohort_flu_people` | 1,648 participants | working/v25/inputs/flu_table1_RESULTS.md | participants contributing influenza cases |
+| `cohort_flu_ctrl_people` | 3,764 participants | working/v25/inputs/flu_table1_RESULTS.md | participants contributing influenza controls |
+| `abs_female` | 60.3% female (mean [SD] age, 57.5 [16.2] years) | working/v25/inputs/flu_table1_RESULTS.md | COVID-19 case sex and age |
+| `abs_flu_female` | 65.2% female (56.3 [16.3] years) | working/v25/inputs/flu_table1_RESULTS.md | influenza case sex and age |
 | `survey_lag` | 692 days (IQR, 286-985 days) | the previous version, carried unchanged | survey-to-index lag |
 | `wave_split` | 96.1% | the previous version, carried unchanged | strata in which wave varies |
 | `version_n` | 2,153 of 13,781 matched persons | working/v25/platform_03p/ (P_refit.csv, README.md) | persons captured only by the original insurance item |
-| `inc_alone_joint` | 1.72 alone to 1.50 jointly | working/v24/03n_RESULTS.md | income <$10k, COVID-19 |
+| `inc_alone_joint` | 1.72 alone to 1.50 jointly | working/v25/inputs/03n_RESULTS.md | income <$10k, COVID-19 |
 | `inc_flu` | 22% (95% CI, 0% to 48%) in influenza (1.88 to 1.64) | working/v25/03o_RESULTS.md | income <$10k attenuation, influenza |
-| `med_alone_joint` | (1.54 to 1.11) | working/v24/03n_RESULTS.md | Medicaid, COVID-19 |
-| `med_flu` | (1.60 to 0.93) | working/v23/03h_03i_RESULTS.md | Medicaid, influenza |
-| `edu` | (1.30 to 1.01) | working/v24/03n_RESULTS.md | education below GED, COVID-19 |
+| `med_alone_joint` | (1.54 to 1.11) | working/v25/inputs/03n_RESULTS.md | Medicaid, COVID-19 |
+| `med_flu` | (1.60 to 0.93) | working/v25/inputs/03h_03i_RESULTS.md | Medicaid, influenza |
+| `edu` | (1.30 to 1.01) | working/v25/inputs/03n_RESULTS.md | education below GED, COVID-19 |
 | `flu_int_model` | a period-interaction model gave 1.67 in the 2 seasons before SARS-CoV-2 and 1.66 in the 2 after influenza returned (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49) | working/v25/03o_RESULTS.md | income <$10k, period-interaction model, and its ROR, influenza |
 | `flu_ror_inc` | 0.99; 95% CI, 0.66-1.49 | working/v25/03o_RESULTS.md | income ROR after/before, influenza |
-| `covid_waves_inc` | 1.44 before Delta, 1.57 during Delta, and 1.55 during Omicron | working/v24/03n_RESULTS.md | income <$10k by wave |
+| `covid_waves_inc` | 1.44 before Delta, 1.57 during Delta, and 1.55 during Omicron | working/v25/inputs/03n_RESULTS.md | income <$10k by wave |
 | `covid_ror_inc` | (ratio, Omicron to pre-Delta, 1.07; 95% CI, 0.83-1.38; Figure 2A) | working/v25/03o_RESULTS.md | income ROR Omicron/pre-Delta |
-| `int_inc` | (P = .59 and P = .91; eTables 15, 19, and 20) | working/v23/03d_03e_RESULTS.md | income x era, COVID-19 and influenza |
+| `int_inc` | (P = .59 and P = .91; eTables 15, 19, and 20) | working/v25/inputs/03d_03e_RESULTS.md | income x era, COVID-19 and influenza |
 | `med_pre` | 1.92 alone and 1.38 (95% CI, 1.16-1.65) jointly | working/v25/03o_RESULTS.md | Medicaid pre-Delta |
 | `med_later_alone` | (1.23 and 1.25) | working/v25/03o_RESULTS.md | Medicaid alone, Delta and Omicron |
 | `med_later_joint` | 0.89 [95% CI, 0.68-1.17] and 0.91 [95% CI, 0.75-1.11] | working/v25/03o_RESULTS.md | Medicaid joint, Delta and Omicron |
@@ -43,7 +43,7 @@ source column names the run result the value was transcribed from.
 | `abs_flu_med` | influenza, imprecisely (ratio, 0.74; 95% CI, 0.51-1.07) | working/v25/03o_RESULTS.md | abstract |
 | `unemp_rent_att` | against 43% and 39% for being out of work or unable to work (eTable 21) and 55% and 59% for renting | working/v25/03o_RESULTS.md, COVID-19 A/B (r4_covid/AB_attenuation.csv) | unemployment and renting attenuation |
 | `edu_att` | education below GED lost 95% in COVID-19 (1.30 to 1.01) | working/v25/03o_RESULTS.md, COVID-19 A/B (r4_covid/AB_attenuation.csv) | education attenuation, COVID-19 |
-| `abs_inc_joint` | (AOR, 1.50 in COVID-19 and 1.64 in influenza) | working/v24/03n_RESULTS.md | abstract, income <$10k joint |
+| `abs_inc_joint` | (AOR, 1.50 in COVID-19 and 1.64 in influenza) | working/v25/inputs/03n_RESULTS.md | abstract, income <$10k joint |
 | `crude_inc` | 21.9% of those with income below $10 000 and 11.5% of those with $35 000 to $99 999 | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | crude hospitalization, COVID-19, 675/3,082 and 793/6,925 |
 | `crude_waves` | 10.2, 10.3, and 10.6 percentage points | working/v25/platform_03u/ (covid_crude.csv, flu_crude.csv; 03v_crude.py) | crude risk difference by wave, COVID-19 |
 | `zcode` | 5.8% of those reporting being out of work or unable to work had a Z56 code | supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%) | 208 of 3,608 |
@@ -66,7 +66,7 @@ source column names the run result the value was transcribed from.
 | `sens_inc_range` | the income ratio ranged from 0.98 to 1.45, the upper value after adjustment for EHR site (era test, P = .50) | working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R) | tip1 0.98; site_pre 1.447 (1.065-1.965), D1 .499 (03w SPART=SITEPRE, merged by 03w_merge_sitepre.py) |
 | `exp_yes` | Medicaid fell in both expansion and nonexpansion states, imprecisely in the latter | working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R) | expansion_Yes |
 | `z59_disc` | fewer than 1 in 9 participants reporting low income carried a Z59 code | supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%) | 10.8% < 11.1% |
-| `housing_stab` | (COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza joint AOR, 0.97; 95% CI, 0.83-1.13) | working/v24/03n_RESULTS.md | unstable housing alone 1.0021 (0.9080-1.1060), joint 0.8765 (0.7899-0.9727); influenza joint 0.97 (0.83-1.13), 03f |
+| `housing_stab` | (COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza joint AOR, 0.97; 95% CI, 0.83-1.13) | working/v25/inputs/03n_RESULTS.md | unstable housing alone 1.0021 (0.9080-1.1060), joint 0.8765 (0.7899-0.9727); influenza joint 0.97 (0.83-1.13), 03f |
 | `r10_severe` | and 1.18 (95% CI, 0.79-1.75) among those with one | working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10) | case_severe Medicaid 1.1764 (0.7895-1.7530) |
 | `r10_link` | linked to the admission for 54.0% of employer-insured and 85.1% of Medicaid-insured Omicron cases | working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10) | describe_r10_covid linked condition row 170/315, 325/382 |
 | `r10_ard_med` | the Medicaid difference fell from 6.1 to 0.6 | working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10) | ard_covid_x.csv Medicaid 6.1307, 0.6440 |

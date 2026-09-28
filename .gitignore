@@ -81,3 +81,8 @@ Claude outputs/
 
 # The frozen JAMIA-targeted package. Local only, same rule as submission/.
 jamia_old/
+
+# 2026-09-28: the current package and the v25 figure values are local only,
+# like submission/ before them. results/figures/v25/ is not yet screened.
+submission_v*/
+results/figures/v25/
