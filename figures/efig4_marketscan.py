@@ -30,7 +30,7 @@ from style import DARK, INK, MM, PT_BODY, PT_SMALL, RULE, apply_style
 GREY = "#9A9A9A"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "..", "results", "figures", "v24", "eFigure6_data.csv")
+DATA = os.path.join(HERE, "..", "results", "figures", "v25", "eFigure4_data.csv")
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 
 LIM = (0.355, 2.90)
@@ -191,8 +191,8 @@ def main():
     )
 
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "eFigure6." + ext), dpi=400)
-    print("wrote eFigure6  |  %d of %d agree" % (n_agree, len(d)))
+        fig.savefig(os.path.join(OUT, "eFigure4." + ext), dpi=400)
+    print("wrote eFigure4  |  %d of %d agree" % (n_agree, len(d)))
 
 
 if __name__ == "__main__":

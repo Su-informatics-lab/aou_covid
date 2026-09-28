@@ -81,15 +81,14 @@ FIGURES                               off-platform, from aggregate values
   figures/style.py                    shared style, palette, export
   figures/fig1_hero_v26.py            Figure 1
   figures/fig2_v26.py                 Figure 2
-  figures/efig1_consort_render.py     eFigure 1, rendered from
-                                      efig1_consort_three_panel.drawio
-  figures/efig2_balance.py            eFigure 2
-  figures/efig3_v23.py                eFigure 3
-  figures/efig4_v23.py                eFigure 4
-  figures/efig5_phenotype_tree.py     eFigure 5
-  figures/efig6_v24.py                eFigure 6
-  figures/efig7_timeline_v25.py       eFigure 7
-  figures/efig8_split_flu_v26.py      eFigure 8
+  figures/efig1_flow.py               eFigure 1, from efig1_consort_three_panel.drawio
+  figures/efig2_phenotype_tree.py     eFigure 2
+  figures/efig3_missing_indicator.py  eFigure 3
+  figures/efig4_marketscan.py         eFigure 4
+  figures/efig5_balance.py            eFigure 5
+  figures/efig6_calendar.py           eFigure 6
+  figures/efig7_flu_split.py          eFigure 7
+  figures/efig8_income_shape.py       eFigure 8
 
 CHECKS                                off-platform
   analysis/validate_v25.py            check | displays | ledger

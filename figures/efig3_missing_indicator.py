@@ -47,7 +47,7 @@ from style import (
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "..", "results", "figures", "v23", "eFigure3_data.csv")
+DATA = os.path.join(HERE, "..", "results", "figures", "v25", "eFigure3_data.csv")
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 LIGHT = "#B5B5B5"
 

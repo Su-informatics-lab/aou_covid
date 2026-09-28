@@ -41,7 +41,7 @@ from style import (
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(
-    HERE, "..", "results", "figures", "v25", "eFigure4_data.csv"
+    HERE, "..", "results", "figures", "v25", "eFigure8_data.csv"
 )  # imputation series: 03n R2 (current primary)
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 SENS = "#8C8C8C"  # sensitivity specification: neutral grey, square marker
@@ -186,7 +186,7 @@ def main():
         color=INK,
     )
 
-    stem = os.path.join(OUT, "eFigure4")
+    stem = os.path.join(OUT, "eFigure8")
     fig.savefig(stem + ".pdf")
     fig.savefig(stem + ".png", dpi=400)
     plt.close(fig)

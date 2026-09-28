@@ -261,8 +261,8 @@ def main():
 
     axC.set_xlim(date(2020, 1, 1), date(2024, 1, 1))
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "eFigure7." + ext), dpi=400)
-    print("wrote eFigure7 to", OUT)
+        fig.savefig(os.path.join(OUT, "eFigure6." + ext), dpi=400)
+    print("wrote eFigure6 to", OUT)
 
 
 if __name__ == "__main__":

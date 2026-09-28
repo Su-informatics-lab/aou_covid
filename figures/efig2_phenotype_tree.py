@@ -10,7 +10,7 @@ case, a same-day emergency visit is a control, and no emergency visit is a
 control (outpatient). R10: the earlier label "case in 30-day sensitivity" named
 an analysis the manuscript does not report and was removed.
 Neutral colours: case and control are not a pathogen or a social variable.
-Writes submission_v25/04_figures/supplement/eFigure5.{pdf,png}.
+Writes submission_v25/04_figures/supplement/eFigure2.{pdf,png}.
 """
 
 import os
@@ -143,9 +143,9 @@ def main():
     arrow(ax, (87, Y3), (62, Y3), "No (same-day)", (74.5, Y3 + 2.8))
     arrow(ax, (121, Y3), (141, Y3), "Yes", (131, Y3 + 2.8))
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "eFigure5." + ext), dpi=400)
+        fig.savefig(os.path.join(OUT, "eFigure2." + ext), dpi=400)
     plt.close(fig)
-    print("wrote eFigure5 to", OUT)
+    print("wrote eFigure2 to", OUT)
 
 
 if __name__ == "__main__":

@@ -112,5 +112,5 @@ fig.legend(
     frameon=False,
 )
 for ext in ("pdf", "png"):
-    fig.savefig(os.path.join(OUT, "eFigure2." + ext), dpi=400)
-print("wrote eFigure2")
+    fig.savefig(os.path.join(OUT, "eFigure5." + ext), dpi=400)
+print("wrote eFigure5")

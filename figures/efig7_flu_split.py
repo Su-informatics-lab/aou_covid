@@ -8,7 +8,7 @@ figure because influenza does not show the COVID-19 pattern: the shared
 Medicaid part is 0.34 before the pandemic and 0.61 after (log scale). The
 pandemic-season Medicaid estimate is withheld (reference group below 20 cases).
 Reads results/figures/v25/Figure2_era_attenuation_data.csv.
-Writes submission_v25/04_figures/supplement/eFigure8.{pdf,png}.
+Writes submission_v25/04_figures/supplement/eFigure7.{pdf,png}.
 """
 
 import os
@@ -49,9 +49,9 @@ def main():
         va="top",
     )
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, "eFigure8." + ext), dpi=400)
+        fig.savefig(os.path.join(OUT, "eFigure7." + ext), dpi=400)
     plt.close(fig)
-    print("wrote eFigure8 to", OUT)
+    print("wrote eFigure7 to", OUT)
 
 
 if __name__ == "__main__":
