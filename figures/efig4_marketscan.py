@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
-"""eFigure 6 - the clinical base model in All of Us against MarketScan.
+"""eFigure 4 - the clinical base model in All of Us against MarketScan.
 
 The claim this figure carries is narrow and it is a claim about direction, not
 about magnitude, so the display is a scatter and not a forest plot. Each point
-is one term of the clinical base model, its All of Us adjusted odds ratio on
-the horizontal axis and its MarketScan adjusted odds ratio on the vertical,
-both on a log scale. A point in a shaded quadrant is a term the two cohorts put
-on the same side of 1.0.
+is one term of the clinical base model (no social items), its All of Us
+adjusted odds ratio on the horizontal axis and its MarketScan adjusted odds
+ratio on the vertical, both on a log scale and both from the fits after the
+pre-index matching correction. A point in a shaded quadrant is a term the two
+cohorts put on the same side of 1.0.
 
-Twenty of the 26 comparable terms agree. The six that do not are named on the
-figure, and three of those six have an All of Us interval that includes 1.0, so
-they are terms All of Us does not resolve rather than terms the two cohorts
-contradict each other on.
+Twenty-one of the 26 comparable terms agree. The five that do not are named on
+the figure; in all five the All of Us estimate is below 1 and the MarketScan
+estimate above it. Three of the five (peripheral vascular disease, peptic ulcer
+disease, AIDS) have an All of Us interval that includes 1.0, so they are terms
+All of Us does not resolve rather than terms the two cohorts contradict each
+other on. Omicron is also named although it agrees: its All of Us estimate is
+0.9998, below 1 only in the fourth decimal, so it sits on the vertical line.
 
 MarketScan intervals are drawn but are narrower than the marker at this scale;
 n = 637,679 matched observations there against 19,520 in All of Us. That is a
@@ -33,20 +37,22 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "results", "figures", "v25", "eFigure4_data.csv")
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 
-LIM = (0.355, 2.90)
-TICKS = [0.4, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5]
+LIM = (0.355, 3.90)
+TICKS = [0.4, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0]
 SHADE = "#EFEFEF"
 
-# Every term whose two cohorts disagree is named, with a leader line, because
-# four of the six sit inside one small patch and cannot be labelled in place.
+# Every term whose two cohorts disagree is named, with a leader line, and so is
+# Omicron, which agrees only in the fourth decimal and sits on the vertical
+# line. Four of the five disagreeing terms sit just above the horizontal
+# reference line left of 1.0, so their labels go into the empty quadrants.
 # Values are data coordinates for the text anchor and the horizontal alignment.
 LABELS = {
-    "Myocardial infarction": (0.90, 0.945, "right"),
-    "Malignancy": (1.42, 0.960, "left"),
-    "Cerebrovascular disease": (1.42, 0.868, "left"),
-    "Rheumatic disease": (1.42, 0.790, "left"),
-    "Omicron": (1.30, 0.474, "left"),
-    "AIDS": (0.60, 1.42, "right"),
+    "AIDS": (0.72, 2.35, "right"),
+    "Chronic pulmonary disease": (0.84, 1.30, "right"),
+    "Liver disease, mild": (0.76, 1.15, "right"),
+    "Peripheral vascular disease": (1.25, 0.90, "left"),
+    "Peptic ulcer disease": (1.25, 0.82, "left"),
+    "Omicron": (1.25, 0.70, "left"),
 }
 
 
