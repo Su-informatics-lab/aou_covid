@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
-"""eFigure 2. Propensity score matching balance for the encounter-density proxies.
+"""eFigure 5. Propensity score matching balance for the encounter-density proxies.
 
-Values transcribed from eTables 6, 7 and 8, which are the MatchIt summaries of
-the frozen runs. Standardized mean differences use the treated-group standard
-deviation, as MatchIt reports them; absolute values are plotted.
+Panels: A, All of Us COVID-19; B, All of Us influenza; C, MarketScan.
+COVID-19 values are transcribed from the MatchIt summaries of the frozen run
+(eTable 18, carried from the v19 supplement); MarketScan values from the
+corrected pre-index run (Quartz job 10186336, 07c_smd_pre_matching.csv, as
+recorded in commit 617f59a working/MS_SUPPLEMENT_UPDATES.md). Influenza values
+are read from working/v25/tables/eTable5_flu_balance.csv (eTable 18, influenza
+arm), rows "Matching variables". Standardized mean differences use the
+treated-group standard deviation, as MatchIt reports them; absolute values are
+plotted.
 """
 
+import csv
 import os
 import sys
 
@@ -27,6 +34,35 @@ AOU = [
     ("Number of diagnoses", 0.410, 0.003),
     ("Length of EHR history", 0.041, 0.012),
 ]
+FLU_CSV = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "..",
+    "working",
+    "v25",
+    "tables",
+    "eTable5_flu_balance.csv",
+)
+#  same row labels as panel A, in the csv's row order
+FLU_LABELS = {
+    "First survey date": "Survey date",
+    "Number of distinct diagnoses": "Number of diagnoses",
+    "Length of medical history": "Length of EHR history",
+}
+
+
+def flu_rows():
+    out = []
+    with open(FLU_CSV, newline="") as f:
+        for r in csv.DictReader(f):
+            if r["section"] != "Matching variables":
+                continue
+            lab = next(v for k, v in FLU_LABELS.items() if r["label"].startswith(k))
+            out.append((lab, abs(float(r["pre_smd"])), abs(float(r["post_smd"]))))
+    assert [r[0] for r in out] == list(FLU_LABELS.values()), out
+    return out
+
+
+FLU = flu_rows()
 MS = [
     ("Enrollment date", 0.241, 0.063),
     ("Number of diagnoses", 0.199, 0.012),
@@ -41,12 +77,12 @@ plt.rcParams.update(
         "axes.labelsize": PT_BODY,
     }
 )
-fig, (ax, bx) = plt.subplots(
-    2,
+fig, (ax, bx, cx) = plt.subplots(
+    3,
     1,
-    figsize=(172 * MM, 92 * MM),
+    figsize=(172 * MM, 128 * MM),
     sharex=True,
-    gridspec_kw=dict(hspace=0.62, left=0.22, right=0.97, top=0.88, bottom=0.22),
+    gridspec_kw=dict(hspace=0.62, left=0.22, right=0.97, top=0.92, bottom=0.155),
 )
 
 
@@ -67,9 +103,9 @@ def panel(a, rows, title_n):
     a.set_yticks(y)
     a.set_yticklabels([r[0] for r in rows])
     a.set_ylim(-0.7, len(rows) - 0.3)
-    a.set_xlim(-0.012, 0.45)
-    a.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
-    a.set_xticklabels(["0", "0.1", "0.2", "0.3", "0.4"])
+    a.set_xlim(-0.012, 0.52)
+    a.set_xticks([0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    a.set_xticklabels(["0", "0.1", "0.2", "0.3", "0.4", "0.5"])
     a.tick_params(axis="y", length=0)
     for s in ("top", "right", "left"):
         a.spines[s].set_visible(False)
@@ -86,8 +122,9 @@ def panel(a, rows, title_n):
 
 
 panel(ax, AOU, "A   All of Us, COVID-19")
-panel(bx, MS, "B   MarketScan")
-bx.set_xlabel("Absolute standardized mean difference")
+panel(bx, FLU, "B   All of Us, influenza")
+panel(cx, MS, "C   MarketScan")
+cx.set_xlabel("Absolute standardized mean difference")
 
 fig.legend(
     handles=[

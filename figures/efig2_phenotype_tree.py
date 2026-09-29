@@ -7,7 +7,9 @@ domains, a COVID-19-positive participant is a case if admitted as an inpatient
 or from the emergency department to inpatient care within 14 days; otherwise,
 an emergency visit within 14 days with a recorded stay of at least 1 day is a
 case, a same-day emergency visit is a control, and no emergency visit is a
-control (outpatient). R10: the earlier label "case in 30-day sensitivity" named
+control (outpatient). The same rules apply in both arms; the first diamond
+names both viruses (the influenza index date is the first influenza diagnosis or
+positive test in each season, flu_arm/00_flu_feasibility.py). R10: the earlier label "case in 30-day sensitivity" named
 an analysis the manuscript does not report and was removed.
 Neutral colours: case and control are not a pathogen or a social variable.
 Writes submission_v25/04_figures/supplement/eFigure2.{pdf,png}.
@@ -124,7 +126,9 @@ def main():
         "Data domains\nICD conditions\nVisit records\nLaboratory results",
         bold_first=True,
     )
-    diamond(ax, 57, Y1, 15, 10, "COVID-19\npositive?")
+    # the tree serves both arms: the influenza arm applies the same rules from its
+    # index date (first influenza diagnosis or positive test in each season)
+    diamond(ax, 57, Y1, 16.5, 12, "COVID-19\nor influenza\npositive?")
     box(ax, 57, 85, 28, 7, "Excluded")
     diamond(ax, 104, Y1, 24, 10, "Inpatient or\nED-to-inpatient ≤14 d?")
     box(ax, 159, Y1, 36, 8, "Case (hospitalized)", strong=True)
@@ -133,9 +137,9 @@ def main():
     diamond(ax, 104, Y3, 17, 9, "Recorded stay\n≥1 day?")
     box(ax, 40, Y3, 44, 10, "Control\n(same-day emergency visit)", strong=True)
     box(ax, 159, Y3, 36, 8, "Case (hospitalized)", strong=True)
-    arrow(ax, (37, Y1), (42, Y1))
-    arrow(ax, (57, Y1 + 10), (57, 81.5), "No", (60.5, 76.5))
-    arrow(ax, (72, Y1), (80, Y1), "Yes", (76, Y1 + 2.8))
+    arrow(ax, (37, Y1), (40.5, Y1))
+    arrow(ax, (57, Y1 + 12), (57, 81.5), "No", (60.5, 77.5))
+    arrow(ax, (73.5, Y1), (80, Y1), "Yes", (76.75, Y1 + 2.8))
     arrow(ax, (128, Y1), (141, Y1), "Yes", (134.5, Y1 + 2.8))
     arrow(ax, (104, Y1 - 10), (104, Y2 + 9), "No", (107.5, (Y1 - 10 + Y2 + 9) / 2))
     arrow(ax, (87, Y2), (60, Y2), "No", (73.5, Y2 + 2.8))
