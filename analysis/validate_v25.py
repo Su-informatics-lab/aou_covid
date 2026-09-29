@@ -149,7 +149,7 @@ CLAIMS = OrderedDict(
         (
             "flu_int_model",
             (
-                "a period-interaction model gave 1.67 in the 2 seasons before SARS-CoV-2 and 1.66 in the 2 after influenza returned (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
+                "a period-interaction model gave 1.67 in the 2 seasons before SARS-CoV-2 and 1.66 in the 2 from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
                 "03o",
                 "income <$10k, period-interaction model, and its ROR, influenza",
             ),
@@ -213,7 +213,7 @@ CLAIMS = OrderedDict(
         (
             "flu_med_ror",
             (
-                "(in a period-interaction model, 1.13 before the pandemic and 0.84 after influenza returned; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 7)",
+                "(in a period-interaction model, 1.13 before the pandemic and 0.84 from 2022-2023; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 7)",
                 "03o",
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
