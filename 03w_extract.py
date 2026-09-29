@@ -5,8 +5,13 @@ screened at 20 are printed.
 For every matched participant:
   state      Basics StreetAddress_PIIState (observation_source_concept_id 1585249)
   region     US Census region of that state; "Unknown" if absent
-  expansion  state had implemented the ACA Medicaid expansion by January 2021
-             (MO and OK implemented July 2021 and are coded non-expansion)
+  expansion  state had implemented the ACA Medicaid expansion by January 1, 2021
+             (KFF, Status of State Medicaid Expansion Decisions, implementation-date
+             table, checked 2026-09-29: EXPANDED below equals the 36 states + DC
+             implemented by that date; OK implemented July 1, 2021, and MO processed
+             applications from October 1, 2021 with coverage retroactive to July 1,
+             2021, so both are coded non-expansion, as are SD (July 1, 2023) and
+             NC (December 1, 2023); the classification is fixed at that date)
   site       the EHR site (visit_occurrence_ext.src_id) contributing most visits;
              sites with fewer than 50 matched persons pooled as "Other"
   old_ins    the original insurance item (1585389) recoded to the study hierarchy

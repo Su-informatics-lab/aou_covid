@@ -46,10 +46,27 @@ DATA = os.path.join(
 )
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 
-#  Federal measures. Coverage: FFCRA (Pub L 116-127); Consolidated Appropriations
-#  Act, 2023; federally purchased vaccine until commercialization. Income: Treasury
-#  (Economic Impact Payments; advance Child Tax Credit) and DOL (Federal Pandemic
-#  Unemployment Compensation) official pages, accessed September 2026.
+#  Federal measures (each date checked 2026-09-29 against the source cited in the
+#  eFigure 6 legend; eReferences e33-e43):
+#    Medicaid continuous enrollment: enrolled "as of or after March 18, 2020"
+#      (42 CFR 433.400(c)(2)); condition ended March 31, 2023 (CMS SHO# 23-002,
+#      CAA 2023 section 5131).
+#    Federally purchased vaccine: first EUA December 11, 2020 (Oliver et al, MMWR
+#      2020;69:1922-1924); bivalent mRNA vaccines no longer authorized as of
+#      September 11, 2023, with vaccines moving from federal procurement to the
+#      commercial market in fall 2023 (Regan et al, MMWR 2023;72:1140-1146).
+#    Emergency paid sick leave: operational April 1, 2020, expired December 31,
+#      2020 (DOL WHD temporary rule, 85 FR 19326).
+#    FPUC $600: first payable week the week ending April 4, 2020, so weeks of
+#      unemployment from March 29; not payable for any week ending after July 31,
+#      2020 (UIPL 15-20). FPUC $300: weeks beginning after December 26, 2020
+#      (Continued Assistance Act) and ending on or before September 6, 2021 (ARPA
+#      section 9013; UIPL 15-20 Change 4).
+#    Economic impact payments: IRS began issuing round 1 on April 10, 2020, and
+#      issued round 2 on December 29, 2020 (TIGTA 2021-46-034); round 3 began
+#      processing Friday, March 12, 2021 (Treasury press release JY0063).
+#    Advance child tax credit: payments July 15 to December 15, 2021 (IRS
+#      Publication 5537).
 POLICY = [
     (
         "Medicaid continuous enrollment",
