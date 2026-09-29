@@ -9,7 +9,7 @@
 ##                         "unable to work" separated from "unemployed", with the
 ##                         mixed responders assigned each way, on that script's inputs.
 ## Each cell is counted as case rows, control rows, distinct case participants and
-## distinct control participants. Counts below 20 are printed as "<20"; nothing
+## distinct control participants. Counts of 20 or fewer are printed as "<=20"; nothing
 ## smaller is written.
 ##   PART=etable12 ARM=covid Rscript 03y_cells_extra.R   (COVID-19 workspace)
 ##   PART=etable16 ARM=covid|flu Rscript 03y_cells_extra.R (the workspace holding
@@ -17,7 +17,7 @@
 
 ARM <- Sys.getenv("ARM", "covid")
 PART <- Sys.getenv("PART", "etable12")
-M <- function(x) ifelse(x < 20, "<20", as.character(x))
+M <- function(x) ifelse(x <= 20, "<=20", as.character(x))
 cnt <- function(x) c(case_rows = M(sum(x$Treatment == 1)), control_rows = M(sum(x$Treatment == 0)),
                      case_persons = M(length(unique(x$person_id[x$Treatment == 1]))),
                      control_persons = M(length(unique(x$person_id[x$Treatment == 0]))))
@@ -67,7 +67,7 @@ for (assign in c("Unable_to_work", "Unemployed")) {
 }
 o <- do.call(rbind, rows)
 cc <- c("case_rows", "control_rows", "case_persons", "control_persons")
-o$flag <- ifelse(apply(o[, cc] == "<20", 1, any), "BELOW_20", "ok")
+o$flag <- ifelse(apply(o[, cc] == "<=20", 1, any), "LE_20", "ok")
 write.csv(o, sprintf("/home/jupyter/jno_v26/cells_extra_%s_%s.csv", PART, ARM), row.names = FALSE)
 print(o, row.names = FALSE)
 cat("DONE\n")

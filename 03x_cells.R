@@ -19,7 +19,7 @@
 ##             03g_insurance_recency.R (eTable 12)
 ##   overall   COVID-19: race and employment levels over the whole cohort (eTables 14, 16)
 ##   season    influenza: 2022-23 / 2023-24 x income and insurance (eTable 20D)
-## Output: counts >= 20 printed as numbers, others as "<20"; nothing smaller is written.
+## Output: counts > 20 printed as numbers, others as "<=20" (All of Us bars counts of 1 to 20); nothing smaller is written.
 ##   OMP_NUM_THREADS=1 ARM=covid Rscript 03x_cells.R      (or ARM=flu)
 
 L <- readLines("/home/jupyter/03o_r4_attenuation.R")
@@ -96,9 +96,9 @@ out <- do.call(rbind, lapply(names(acc), function(key) {
              t(setNames(acc[[key]], paste0("min_", CC))), row.names = NULL)
 }))
 mc <- paste0("min_", CC)
-out$flag <- ifelse(apply(out[, mc] < 20, 1, any), "BELOW_20", "ok")
-for (cc in mc) out[[cc]] <- ifelse(out[[cc]] < 20, "<20", as.character(out[[cc]]))
+out$flag <- ifelse(apply(out[, mc] <= 20, 1, any), "LE_20", "ok")
+for (cc in mc) out[[cc]] <- ifelse(out[[cc]] <= 20, "<=20", as.character(out[[cc]]))
 write.csv(out, file.path(OUT, "cells_audit.csv"), row.names = FALSE)
-cat("cells audited:", nrow(out), "| below 20:", sum(out$flag == "BELOW_20"), "\n")
-print(out[out$flag == "BELOW_20", ], row.names = FALSE)
+cat("cells audited:", nrow(out), "| with a count of 20 or fewer:", sum(out$flag == "LE_20"), "\n")
+print(out[out$flag == "LE_20", ], row.names = FALSE)
 cat("DONE\n"); sink()
