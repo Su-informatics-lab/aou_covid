@@ -149,7 +149,7 @@ CLAIMS = OrderedDict(
         (
             "flu_int_model",
             (
-                "a period-interaction model gave 1.67 in 2018-2019 and 2019-2020 and 1.66 in the 2 from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
+                "a period-interaction model gave 1.67 in 2018-2019 and 2019-2020 and 1.66 in the 2 seasons from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
                 "03o",
                 "income <$10k, period-interaction model, and its ROR, influenza",
             ),
@@ -245,7 +245,7 @@ CLAIMS = OrderedDict(
         (
             "c_khb",
             (
-                "changed no attenuation by more than 2 points; trend models agreed",
+                "changed no attenuation by more than 2 points, and trend models agreed",
                 "03oAB",
                 "max |KHB - log| 0.63 COVID (inc25k), 1.5 influenza",
             ),
@@ -269,7 +269,7 @@ CLAIMS = OrderedDict(
         (
             "abs_flu_med",
             (
-                "influenza, imprecisely (ratio, 0.74; 95% CI, 0.51-1.07)",
+                "Influenza moved the same way, imprecisely (ratio, 0.74; 95% CI, 0.51-1.07)",
                 "03o",
                 "abstract",
             ),
@@ -277,7 +277,7 @@ CLAIMS = OrderedDict(
         (
             "unemp_rent_att",
             (
-                "against 43% and 39% for being out of work or unable to work (eTable 21) and 55% and 59% for renting",
+                "Attenuation was 43% and 39% for being out of work or unable to work (eTable 21) and 55% and 59% for renting",
                 "03oAB",
                 "unemployment and renting attenuation",
             ),
@@ -293,7 +293,7 @@ CLAIMS = OrderedDict(
         (
             "abs_inc_joint",
             (
-                "(AOR, 1.49 in COVID-19 and 1.64 in influenza)",
+                "(jointly adjusted AOR, 1.49 in COVID-19 and 1.64 in influenza;",
                 "03n",
                 "abstract, income <$10k joint",
             ),
@@ -333,7 +333,7 @@ CLAIMS = OrderedDict(
         (
             "attenuated_med",
             (
-                "(0.33, 0.32, and 0.31 on the log scale)",
+                "from the Medicaid log odds ratio (0.33, 0.32, and 0.31)",
                 "fig2",
                 "Medicaid attenuated part (log OR alone - log OR joint) by wave, COVID-19: 0.327, 0.320, 0.309",
             ),
@@ -357,7 +357,7 @@ CLAIMS = OrderedDict(
         (
             "asym",
             (
-                "2.27 (95% CI, 1.38-3.74; joint test across Delta and Omicron, P = .001)",
+                "2.27 times the Medicaid ratio (95% CI, 1.38-3.74; joint test across Delta and Omicron, P = .001)",
                 "03u",
                 "ratio of RORs 2.268 (1.376-3.738); D1 F = 6.80 on 2 df, P = .0011",
             ),
@@ -406,7 +406,7 @@ CLAIMS = OrderedDict(
         (
             "attenuated_inc",
             (
-                "as did income's (0.14, 0.15, and 0.13)",
+                "and from income's (0.14, 0.15, and 0.13",
                 "fig2",
                 "log(1.659/1.445)=0.138, log(1.797/1.541)=0.153, log(1.785/1.562)=0.134",
             ),
@@ -462,7 +462,7 @@ CLAIMS = OrderedDict(
         (
             "exp_yes",
             (
-                "Medicaid fell in both expansion and nonexpansion states, imprecisely in the latter",
+                "The Medicaid decline appeared in both expansion and nonexpansion states, imprecisely in the latter",
                 "03w",
                 "expansion_Yes 0.60 (0.45-0.79); expansion_No 0.21 (0.08-0.53)",
             ),
@@ -554,7 +554,7 @@ CLAIMS = OrderedDict(
         (
             "r10_ard_inc",
             (
-                "(adjusted income difference, 0.9 to 3.5 percentage points)",
+                "the adjusted income difference showed no detected narrowing (0.9 to 3.5 percentage points, pre-Delta to Omicron)",
                 "r10",
                 "ard_covid_x.csv income 0.9443, 3.4648",
             ),
@@ -570,7 +570,7 @@ CLAIMS = OrderedDict(
         (
             "r10_scr_ehr",
             (
-                "(2.1% and 9.8% of participants)",
+                "(2.1% of COVID-19 and 9.8% of influenza participants)",
                 "r10",
                 "r10b_*.txt EHR-site screening 290/13,781; 527/5,364",
             ),
@@ -602,7 +602,7 @@ CLAIMS = OrderedDict(
         (
             "std_range",
             (
-                "directly age-sex-standardized differences ranged from 9.2 to 14.6 points",
+                "directly age-sex–standardized differences ranged from 9.2 to 14.6 points",
                 "e21",
                 "rd_std, income <$10k vs $35-99k: COVID-19 11.49, 14.58, 11.43; influenza 14.4, 9.2, 13.7",
             ),
@@ -610,7 +610,7 @@ CLAIMS = OrderedDict(
         (
             "cite_callaway",
             (
-                "which would need a design such as staggered state adoption, allowing cohort-specific effects",
+                "which would need a design such as staggered state adoption with cohort-specific effects",
                 "cited",
                 "Callaway & Sant'Anna 2021 J Econom 225:200-230 (Crossref-checked 2026-09-29): DiD with variation in treatment timing and group-time effects; replaces Mullachery 2026 (applied example), R12f/R12i",
             ),
