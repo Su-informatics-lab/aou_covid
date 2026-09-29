@@ -47,7 +47,7 @@ DATA = os.path.join(
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 
 #  Federal measures (each date checked 2026-09-29 against the source cited in the
-#  eFigure 6 legend; eReferences e33-e43):
+#  eFigure 6 legend; eReferences e38-e48):
 #    Medicaid continuous enrollment: enrolled "as of or after March 18, 2020"
 #      (42 CFR 433.400(c)(2)); condition ended March 31, 2023 (CMS SHO# 23-002,
 #      CAA 2023 section 5131).
