@@ -215,6 +215,53 @@ if (SPART == "SITEPRE") {
   write.csv(o, file.path(OUT, "sens_r6_sitepre.csv"), row.names = FALSE)
   print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")
 }
+if (SPART == "EXPTV") {
+  ## 2026-09-29: Medicaid-expansion status at each observation's own index date, instead of a
+  ## fixed status as of January 1, 2021. Implementation dates from KFF, Status of State
+  ## Medicaid Expansion Decisions (implementation-date table, Datawrapper ZJUAA, downloaded
+  ## 2026-09-29). Primary ("impl"): the date expansion took effect as KFF states it (Maine
+  ## 1/10/2019; Missouri 10/1/2021, when applications were first processed; Idaho and
+  ## Virginia, coverage start). Variant ("retro"): the retroactive coverage dates KFF gives
+  ## for Maine (7/2/2018) and Missouri (7/1/2021). States not listed never expanded by the
+  ## end of the data (AL FL GA KS MS SC TN TX WI WY). Matched sets kept if the case and >= 1
+  ## control are in the stratum, as for the fixed classification.
+  IMPL <- c(AK = "2015-09-01", AZ = "2014-01-01", AR = "2014-01-01", CA = "2014-01-01", CO = "2014-01-01",
+            CT = "2014-01-01", DE = "2014-01-01", DC = "2014-01-01", HI = "2014-01-01", ID = "2020-01-01",
+            IL = "2014-01-01", IN = "2015-02-01", IA = "2014-01-01", KY = "2014-01-01", LA = "2016-07-01",
+            ME = "2019-01-10", MD = "2014-01-01", MA = "2014-01-01", MI = "2014-04-01", MN = "2014-01-01",
+            MO = "2021-10-01", MT = "2016-01-01", NE = "2020-10-01", NV = "2014-01-01", NH = "2014-08-15",
+            NJ = "2014-01-01", NM = "2014-01-01", NY = "2014-01-01", NC = "2023-12-01", ND = "2014-01-01",
+            OH = "2014-01-01", OK = "2021-07-01", OR = "2014-01-01", PA = "2015-01-01", RI = "2014-01-01",
+            SD = "2023-07-01", UT = "2020-01-01", VT = "2014-01-01", VA = "2019-01-01", WA = "2014-01-01",
+            WV = "2014-01-01")
+  st <- W$state[wi]; known <- W$region[wi] != "Unknown"
+  if (ARM == "covid") {
+    cc <- read.csv("/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh/aou_v7/01_covid_cohort.csv",
+                   stringsAsFactors = FALSE)
+    idxd <- as.Date(cc$covid_index_date[match(d$person_id, cc$person_id)])
+  } else idxd <- as.Date(d$flu_index_date)
+  stopifnot(!any(is.na(idxd)))  # not 'idx': 03o uses idx to map persons to imputations
+  for (vr in c("impl", "retro")) {
+    im <- IMPL; if (vr == "retro") { im["MO"] <- "2021-07-01"; im["ME"] <- "2018-07-02" }
+    dt <- as.Date(im[st])
+    d$expansion <- ifelse(!known, "Unknown", ifelse(!is.na(dt) & idxd >= dt, "Yes", "No"))
+    moved <- sum(d$expansion != W$expansion[wi])
+    cat(sprintf("\n== %s: observations whose status differs from the fixed classification: %s ==\n", vr,
+                if (moved > 20) moved else "<=20"))
+    for (g in c("Yes", "No")) {
+      keep_sets <- function(dk) {
+        inn <- dk$expansion == g
+        ok <- tapply(inn & dk$Treatment == 1, dk$.s, any) & tapply(inn & dk$Treatment == 0, dk$.s, any)
+        inn & dk$.s %in% names(ok)[ok]
+      }
+      ncase <- sum(keep_sets(d) & d$Treatment == 1)
+      run_pair(paste0("exptv_", vr, "_", g), rows_fun = keep_sets, note = if (ncase > 20) paste("cases", ncase) else "cases <=20")
+    }
+  }
+  o <- do.call(rbind, rows)
+  write.csv(o, file.path(OUT, "sens_exptv.csv"), row.names = FALSE)
+  print(o, row.names = FALSE, digits = 3); cat("DONE\n"); sink(); quit(save = "no")
+}
 t0 <- Sys.time()
 run_pair("primary")
 run_pair("region", "+ region")
