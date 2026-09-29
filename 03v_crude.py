@@ -13,7 +13,7 @@ observed survey responses (missing kept as its own level), no imputation.
             remaining weights renormalized
   rd_*      risk difference vs the reference band ($35 000-99 999; employer
             insurance), crude and standardized, Wald 95% CI on the crude
-Every exported cell has >= 20 hospitalized and >= 20 not hospitalized, counted both
+Every exported cell has more than 20 hospitalized and more than 20 not hospitalized, counted both
 as rows and as distinct participants (influenza rows are person-seasons, and a
 participant can contribute more than one; Codex R8); when one
 level of a variable is suppressed within an era, the next smallest is suppressed
@@ -31,7 +31,7 @@ import numpy as np
 import pandas as pd
 
 ARM = os.environ.get("ARM", "covid")
-MIN = 20
+MIN = 21  # All of Us bars counts of 1 to 20: a cell needs more than 20 (smallest displayed cell is 27)
 if ARM == "covid":
     B = "/home/jupyter/workspace/rw-migration-aou-rw-46c7ae9e/data/covid_sdoh"
     c = pd.read_csv(f"{B}/aou_v7/01_covid_cohort.csv")
