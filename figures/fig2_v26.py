@@ -338,7 +338,7 @@ def main():
         axA,
         "A",
         "What changed, beyond the other social items",
-        "Medicaid fell in COVID-19; income did not narrow",
+        "Medicaid fell in COVID-19; no narrowing of income was detected",
         dx=0.13,
     )
     panel_title(
