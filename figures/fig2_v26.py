@@ -6,16 +6,18 @@ A  Ratio of odds ratios, later era vs earlier era, from the same separate
    interaction models as the era-specific estimates (eTable 20B): income below
    $10 000 (navy) and Medicaid (purple). 1 = no change. Open marker: 95% CI
    includes 1.
-B  COVID-19 only. Each wave's jointly adjusted log odds ratio split into the
-   part shared with the other 5 social items (grey; log OR alone minus log OR
-   jointly) and the part not shared (the term's colour; log OR jointly), with
-   the joint 95% CI beneath. Axis in odds-ratio units on a log scale. Influenza
-   is not drawn here because its shared Medicaid part is not constant
-   (eFigure 8).
+B  COVID-19 only. Each wave's log odds ratio fitted alone split into the part
+   attenuated by the other 5 social items (grey; log OR alone minus log OR
+   jointly; change-in-coefficient method) and the part remaining after
+   adjustment (the term's colour; log OR jointly), with the joint 95% CI
+   beneath. Axis in odds-ratio units on a log scale. Influenza is not drawn
+   here because its attenuated Medicaid part is not constant (eFigure 7).
 C  Among COVID-19 matched participants who reported a social risk on the
    survey, the percentage with the corresponding Z code (dark) and with any
    Z55-Z65 code (light) dated before the index date, on a 0-100% scale
-   (eTable 13). The education-specific count is below 20 and is not shown.
+   (eTable 10). Income is shown below $10 000, with $35 000-99 999 for
+   comparison (R11; 03z_zband.py, working/v25/platform_r11/zband_covid.csv).
+   The education-specific count is 20 or fewer and is not shown.
 
 Drawn at the final print width (180 mm); nothing sits outside the axes grid.
 Reads results/figures/v25/{Figure2_ror_data.csv, Figure2_era_attenuation_data.csv}.
@@ -49,9 +51,11 @@ COL = {"income_lt10k": INCOME, "medicaid": MEDICAID}
 LAB = {"income_lt10k": "Income <\\$10 000", "medicaid": "Medicaid"}
 DARK = "#4D4D4D"
 REF_TXT = "#666666"
-# eTable 13 (01d_zcode_capture.py output, screened at 20)
+# eTable 10. Income rows: 03z_zband.py (platform_r11/zband_covid.csv); other rows:
+# 01d_zcode_capture.py. Counts of 20 or fewer are withheld.
 ZROWS = [
-    ("Income below \\$25 000", 3817, 10.8, "Z59", 18.7),
+    ("Income below \\$10 000", 1896, 14.3, "Z59", 21.7),
+    ("Comparison: \\$35 000-99 999", 3548, 1.8, "Z59", 8.9),
     ("Out of work or unable to work", 3608, 5.8, "Z56", 20.4),
     ("Unstable housing", 2309, 15.7, "Z59", 24.0),
     ("Education below GED", 1487, None, "Z55", 15.6),
@@ -193,7 +197,7 @@ def split(
             yt.append(y)
             yl.append(era)
             if pd.isna(a.aor) or pd.isna(j.aor):
-                # withheld: reference group below 20 cases (03x); one mark used in every figure
+                # withheld: reference group 20 or fewer cases (03x); one mark used in every figure
                 ax.add_patch(
                     plt.Rectangle(
                         (np.log(0.9), y - 0.3),
@@ -209,7 +213,7 @@ def split(
                 ax.text(
                     np.log(1.06),
                     y,
-                    "withheld (<20)",
+                    "withheld (\u226420)",
                     ha="center",
                     va="center",
                     fontsize=6.5,
@@ -245,7 +249,7 @@ def split(
     ax.text(
         kx + kw + 0.02,
         1.9,
-        "shared with the other 5 items",
+        "attenuated by the other 5 items",
         va="center",
         fontsize=PT_SMALL,
         color=REF_TXT,
@@ -254,7 +258,7 @@ def split(
     ax.text(
         kx + kw + 0.02,
         1.35,
-        "not shared (adjusted OR)",
+        "remaining after adjustment",
         va="center",
         fontsize=PT_SMALL,
         color=REF_TXT,
@@ -280,7 +284,7 @@ def zcodes(ax):
             ax.text(
                 pany + 1.5,
                 y,
-                "any Z55-Z65 %.1f%%;  %s: fewer than 20" % (pany, code),
+                "any Z55-Z65 %.1f%%;  %s: 20 or fewer" % (pany, code),
                 ha="left",
                 va="center",
                 fontsize=PT_SMALL,
@@ -304,6 +308,7 @@ def zcodes(ax):
             ha="right",
             va="center",
             fontsize=PT_SMALL,
+            color=REF_TXT if lab.startswith("Comparison") else INK,
         )
     ax.set_xlim(0, 100)
     ax.set_ylim(-len(ZROWS) + 0.4, 0.6)
@@ -324,7 +329,7 @@ def main():
     fig = plt.figure(figsize=(180 * MM, 140 * MM))
     axA = fig.add_axes([0.15, 0.46, 0.25, 0.40])
     axB = fig.add_axes([0.64, 0.46, 0.31, 0.40])
-    axC = fig.add_axes([0.30, 0.08, 0.62, 0.19])
+    axC = fig.add_axes([0.33, 0.07, 0.59, 0.235])
     forest(axA, ror)
     split(axB, att)
     zcodes(axC)
@@ -340,7 +345,7 @@ def main():
         fig,
         axB,
         "B",
-        "COVID-19: the part shared with the other items",
+        "COVID-19: attenuation by the other items",
         "Medicaid's jointly adjusted OR approached 1; income's did not",
         dx=0.10,
     )
@@ -349,7 +354,7 @@ def main():
         axC,
         "C",
         "The record rarely codes the circumstances patients report",
-        dx=0.28,
+        dx=0.31,
     )
     for ext in ("pdf", "png"):
         fig.savefig(os.path.join(OUT, "Figure2." + ext), dpi=400)

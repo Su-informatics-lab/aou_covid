@@ -48,9 +48,11 @@ SRC = {
     "t2": "working/v25/tables/Table2_data.csv",
     "fig2": "results/figures/v25/Figure2_era_attenuation_data.csv, log(alone) - log(joint): 0.329, 0.317, 0.313",
     "derived": "arithmetic on asserted values (see gloss)",
-    "e13": "supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv: 414/3817 = 10.85%, 10.8%)",
+    "e13": "supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv; employment row 208/3,608)",
     "03w": "working/v25/platform_03w/ (covid_sens_r6.csv, flu_sens_r6.csv, lag_by_era.txt; 03w_sens.R)",
     "e21": "supplement eTable 9 (working/v25/platform_03u/covid_crude.csv, flu_crude.csv; 03v_crude.py)",
+    "r11": "working/v25/platform_r11/ (zband_covid.csv, zband_flu.csv, flow_top_flu.txt; 03z_zband.py, flu_arm/05_flow_top.py)",
+    "bls": "BLS CPI-U, US city average, all items, series CUUR0000SA0 (SOURCES_R11 section 4): annual average 2018 251.107, 2022 292.655; ratio 1.1655",
     "r10": "working/v25/platform_r10/ (sens_r10_*.csv, describe_r10_*.csv, ard_*.csv, z59_*.csv; 03z_extract.py, 03z_dxlink.py, 03z_describe.R, 03z_ard.R, 03z_z59.py, 03w_sens.R SPART=R10)",
 }
 
@@ -275,7 +277,7 @@ CLAIMS = OrderedDict(
         (
             "crude_inc",
             (
-                "21.9% of those with income below $10 000 and 11.5% of those with $35 000 to $99 999",
+                "21.9% of those with income below $10 000 and 11.5% at $35 000 to $99 999",
                 "03v",
                 "crude hospitalization, COVID-19, 675/3,082 and 793/6,925",
             ),
@@ -305,11 +307,11 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "shared",
+            "attenuated_med",
             (
                 "(0.33, 0.32, and 0.31 on the log scale)",
                 "fig2",
-                "Medicaid shared part by wave, COVID-19",
+                "Medicaid attenuated part (log OR alone - log OR joint) by wave, COVID-19",
             ),
         ),
         (
@@ -378,7 +380,7 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "inc_shared",
+            "attenuated_inc",
             (
                 "as did income's (0.14 in each wave)",
                 "fig2",
@@ -404,9 +406,17 @@ CLAIMS = OrderedDict(
         (
             "z59",
             (
-                "10.8% of those reporting income below $25 000 a Z59 code",
-                "e13",
-                "414/3,817",
+                "14.3% of those reporting income below $10 000 a Z59 code",
+                "r11",
+                "zband_covid.csv below_10k z59 272/1,896",
+            ),
+        ),
+        (
+            "z59_mid",
+            (
+                "against 1.8% at $35 000 to $99 999 (Figure 2C)",
+                "r11",
+                "zband_covid.csv 35k_to_99k z59 64/3,548",
             ),
         ),
         (
@@ -436,9 +446,9 @@ CLAIMS = OrderedDict(
         (
             "z59_disc",
             (
-                "fewer than 1 in 9 participants reporting low income carried a Z59 code",
-                "e13",
-                "10.8% < 11.1%",
+                "fewer than 1 in 6 participants reporting income below $10 000 carried a Z59 code",
+                "r11",
+                "14.3% < 16.7%",
             ),
         ),
         (
@@ -474,16 +484,24 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "r10_z59_income",
+            "r11_z59_income",
             (
-                "1.2% had a code specific to income",
-                "r10",
-                "z59_covid.csv income 46/3817",
+                "1.7% had a code specific to income",
+                "r11",
+                "zband_covid.csv below_10k income 32/1,896",
             ),
         ),
         (
-            "r10_z59_disc",
-            ("about 1 in 80 a code specific to income", "r10", "46/3817 = 1 in 83"),
+            "r11_z59_disc",
+            ("about 1 in 60 a code specific to income", "r11", "32/1,896 = 1 in 59"),
+        ),
+        (
+            "cpi",
+            (
+                "consumer prices rose 16.5% from 2018 to 2022",
+                "bls",
+                "292.655/251.107 = 1.1655",
+            ),
         ),
         (
             "r10_lab",

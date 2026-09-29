@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-"""eFigure 8 (v26, R9): the Figure 2B split drawn for influenza.
+"""eFigure 7 (v26, R9; R11 labels): the Figure 2B split drawn for influenza.
 
-Each period's jointly adjusted log odds ratio split into the part shared with
-the other 5 social items (grey) and the part not shared (the term's colour),
-with the joint 95% CI beneath, as in Figure 2B. It is kept out of the main
-figure because influenza does not show the COVID-19 pattern: the shared
-Medicaid part is 0.34 before the pandemic and 0.61 after (log scale). The
-pandemic-season Medicaid estimate is withheld (reference group below 20 cases).
+Each period's log odds ratio fitted alone split into the part attenuated by
+the other 5 social items (grey) and the part remaining after adjustment (the
+term's colour), with the joint 95% CI beneath, as in Figure 2B. It is kept out
+of the main figure because influenza does not show the COVID-19 pattern: the
+attenuated Medicaid part is 0.34 before the pandemic and 0.61 after (log
+scale). The pandemic-season Medicaid estimate is withheld (reference group of
+20 or fewer cases).
 Reads results/figures/v25/Figure2_era_attenuation_data.csv.
 Writes submission_v25/04_figures/supplement/eFigure7.{pdf,png}.
 """
@@ -43,7 +44,7 @@ def main():
     fig.text(
         0.03,
         0.95,
-        "Influenza: the part shared with the other items",
+        "Influenza: attenuation by the other items",
         fontsize=PT_HEAD,
         fontweight="bold",
         va="top",

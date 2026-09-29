@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Claude">
   <diagram name="CONSORT (three panels)" id="consort-flow">
-    <mxGraphModel dx="2357" dy="1317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="2357" dy="1317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -143,123 +143,123 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="c_lab" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;C&lt;/font&gt;&lt;/b&gt;" vertex="1">
-          <mxGeometry height="25" width="30" x="20" y="1000.0" as="geometry" />
+          <mxGeometry height="25" width="30" x="20" y="1076.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;MarketScan Commercial Claims, 2020&amp;#8211;2023&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="640" y="1001.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="640" y="1077.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,423,200&lt;/b&gt; COVID-19 positive&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="640" y="1051.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="640" y="1127.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_r2_r3" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1029.0" as="sourcePoint" />
-            <mxPoint x="780" y="1051.0" as="targetPoint" />
+            <mxPoint x="780" y="1105.0" as="sourcePoint" />
+            <mxPoint x="780" y="1127.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_e_split_larm" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1102.0" as="sourcePoint" />
-            <mxPoint x="470" y="1124.0" as="targetPoint" />
+            <mxPoint x="780" y="1178.0" as="sourcePoint" />
+            <mxPoint x="470" y="1200.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_e_split_rarm" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1102.0" as="sourcePoint" />
-            <mxPoint x="1090" y="1124.0" as="targetPoint" />
+            <mxPoint x="780" y="1178.0" as="sourcePoint" />
+            <mxPoint x="1090" y="1200.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_r4L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;4,283,711&lt;/b&gt; Outpatient only&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="330" y="1124.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="330" y="1200.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r4R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;139,489&lt;/b&gt; Hospitalized &amp;#8804;14 days&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="950" y="1124.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="950" y="1200.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r5L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;3,881,727&lt;/b&gt; Eligible controls&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="330" y="1180.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="330" y="1256.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r5R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;127,901&lt;/b&gt; Eligible cases&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="950" y="1180.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="950" y="1256.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_larm45" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="470" y="1152.0" as="sourcePoint" />
-            <mxPoint x="470" y="1180.0" as="targetPoint" />
+            <mxPoint x="470" y="1228.0" as="sourcePoint" />
+            <mxPoint x="470" y="1256.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_e_rarm45" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1090" y="1152.0" as="sourcePoint" />
-            <mxPoint x="1090" y="1180.0" as="targetPoint" />
+            <mxPoint x="1090" y="1228.0" as="sourcePoint" />
+            <mxPoint x="1090" y="1256.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_ex_larm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;401,984&lt;/b&gt; Controls excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" vertex="1">
-          <mxGeometry height="62" width="240" x="50" y="1135.0" as="geometry" />
+          <mxGeometry height="62" width="240" x="50" y="1211.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_exlarm" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="470" y="1166.0" as="sourcePoint" />
-            <mxPoint x="290" y="1166.0" as="targetPoint" />
+            <mxPoint x="470" y="1242.0" as="sourcePoint" />
+            <mxPoint x="290" y="1242.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_ex_rarm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;11,588&lt;/b&gt; Cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; Incomplete pre-index&lt;br&gt;&amp;nbsp; &amp;nbsp; matching variables&lt;/font&gt;" vertex="1">
-          <mxGeometry height="62" width="240" x="1270" y="1135.0" as="geometry" />
+          <mxGeometry height="62" width="240" x="1270" y="1211.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_exrarm" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1090" y="1166.0" as="sourcePoint" />
-            <mxPoint x="1270" y="1166.0" as="targetPoint" />
+            <mxPoint x="1090" y="1242.0" as="sourcePoint" />
+            <mxPoint x="1270" y="1242.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_psm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;Propensity score matching: 1:4 nearest neighbor, with replacement, 0.2 SD caliper&lt;br&gt;Enrollment date · Number of diagnoses · Length of insurance coverage&lt;/font&gt;" vertex="1">
-          <mxGeometry height="46" width="900" x="330" y="1232.0" as="geometry" />
+          <mxGeometry height="46" width="900" x="330" y="1308.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_larmpsm" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="470" y="1208.0" as="sourcePoint" />
-            <mxPoint x="470" y="1232.0" as="targetPoint" />
+            <mxPoint x="470" y="1284.0" as="sourcePoint" />
+            <mxPoint x="470" y="1308.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_e_rarmpsm" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1090" y="1208.0" as="sourcePoint" />
-            <mxPoint x="1090" y="1232.0" as="targetPoint" />
+            <mxPoint x="1090" y="1284.0" as="sourcePoint" />
+            <mxPoint x="1090" y="1308.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;637,679&lt;/b&gt; Observations in &lt;b&gt;127,696&lt;/b&gt; strata&lt;/font&gt;" vertex="1">
-          <mxGeometry height="28" width="280" x="640" y="1304.0" as="geometry" />
+          <mxGeometry height="28" width="280" x="640" y="1380.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_psm7" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1278.0" as="sourcePoint" />
-            <mxPoint x="780" y="1304.0" as="targetPoint" />
+            <mxPoint x="780" y="1354.0" as="sourcePoint" />
+            <mxPoint x="780" y="1380.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_ex_trim" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;205&lt;/b&gt; Cases excluded&lt;br&gt;No match in caliper or near data cutoff&lt;br&gt;&lt;b&gt;1,598&lt;/b&gt; Control observations excluded&lt;br&gt;Near data cutoff&lt;/font&gt;" vertex="1">
-          <mxGeometry height="62" width="240" x="1270" y="1266.0" as="geometry" />
+          <mxGeometry height="62" width="240" x="1270" y="1342.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_extrim" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1291.0" as="sourcePoint" />
-            <mxPoint x="1270" y="1291.0" as="targetPoint" />
+            <mxPoint x="780" y="1367.0" as="sourcePoint" />
+            <mxPoint x="1270" y="1367.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_r8L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;509,983&lt;/b&gt; Control observations&lt;br&gt;443,061 individuals, with replacement&lt;/font&gt;" vertex="1">
-          <mxGeometry height="44" width="280" x="330" y="1376.0" as="geometry" />
+          <mxGeometry height="44" width="280" x="330" y="1452.0" as="geometry" />
         </mxCell>
         <mxCell id="c_r8R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;127,696&lt;/b&gt; Cases&lt;/font&gt;" vertex="1">
-          <mxGeometry height="44" width="280" x="950" y="1376.0" as="geometry" />
+          <mxGeometry height="44" width="280" x="950" y="1452.0" as="geometry" />
         </mxCell>
         <mxCell id="c_e_78larm" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1354.0" as="sourcePoint" />
-            <mxPoint x="470" y="1376.0" as="targetPoint" />
+            <mxPoint x="780" y="1430.0" as="sourcePoint" />
+            <mxPoint x="470" y="1452.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c_e_78rarm" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="780" y="1354.0" as="sourcePoint" />
-            <mxPoint x="1090" y="1376.0" as="targetPoint" />
+            <mxPoint x="780" y="1430.0" as="sourcePoint" />
+            <mxPoint x="1090" y="1452.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="VfOpbJOKMx6fHx5G2q5G-1" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
@@ -270,14 +270,14 @@
         </mxCell>
         <mxCell id="VfOpbJOKMx6fHx5G2q5G-3" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="779.86" y="1079.0" as="sourcePoint" />
-            <mxPoint x="779.86" y="1101.0" as="targetPoint" />
+            <mxPoint x="779.86" y="1155.0" as="sourcePoint" />
+            <mxPoint x="779.86" y="1177.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="VfOpbJOKMx6fHx5G2q5G-4" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="779.8" y="1332.0" as="sourcePoint" />
-            <mxPoint x="779.8" y="1354.0" as="targetPoint" />
+            <mxPoint x="779.8" y="1408.0" as="sourcePoint" />
+            <mxPoint x="779.8" y="1430.0" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="VfOpbJOKMx6fHx5G2q5G-5" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;">
@@ -286,7 +286,7 @@
             <mxPoint x="780" y="406" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-      <mxCell id="b_lab" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;B&lt;/font&gt;&lt;/b&gt;" vertex="1"><mxGeometry x="20" y="502" width="30" height="25" as="geometry" /></mxCell><mxCell id="b_r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;15,043&lt;/b&gt; Influenza person-seasons&lt;br&gt;2018-19 to 2023-24 (v9)&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="504" width="280" height="36" as="geometry" /></mxCell><mxCell id="b_ex_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;5,768&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No Basics Survey before index&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="504" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_ex1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="920" y="522" as="sourcePoint" /><mxPoint x="1270" y="522" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;9,275&lt;/b&gt; With survey and EHR data&lt;br&gt;8,770 participants&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="566" width="280" height="36" as="geometry" /></mxCell><mxCell id="b_e_r1r2" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="540" as="sourcePoint" /><mxPoint x="780" y="566" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_ex_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;106&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No pre-index diagnosis record&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="572" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_ex2" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="920" y="590" as="sourcePoint" /><mxPoint x="1270" y="590" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;9,169&lt;/b&gt; Entered matching&lt;br&gt;8,668 participants&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="628" width="280" height="36" as="geometry" /></mxCell><mxCell id="b_e_r2r3" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="602" as="sourcePoint" /><mxPoint x="780" y="628" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_split_l" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="664" as="sourcePoint" /><mxPoint x="470" y="700" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_split_r" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="664" as="sourcePoint" /><mxPoint x="1090" y="700" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r4L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;7,468&lt;/b&gt; Influenza-positive, not hospitalized&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="700" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_r4R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;1,701&lt;/b&gt; Hospitalized ≤14 days&lt;/font&gt;" vertex="1"><mxGeometry x="950" y="700" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_ex_r" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;29&lt;/b&gt; Cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No match within caliper&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="711" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_exr" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="735" as="sourcePoint" /><mxPoint x="1270" y="735" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_lpsm" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="728" as="sourcePoint" /><mxPoint x="470" y="758" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_rpsm" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="728" as="sourcePoint" /><mxPoint x="1090" y="758" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_psm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;Propensity score matching: 1:4 nearest neighbor, with replacement, 0.2 SD caliper, exact on season&lt;br&gt;Survey date · Number of diagnoses · Length of medical history&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="758" width="900" height="46" as="geometry" /></mxCell><mxCell id="b_r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;8,288&lt;/b&gt; Observations in 1,672 strata&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="836" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_e_psm7" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="804" as="sourcePoint" /><mxPoint x="780" y="836" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_78l" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="864" as="sourcePoint" /><mxPoint x="470" y="896" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_78r" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="864" as="sourcePoint" /><mxPoint x="1090" y="896" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r8L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;6,616&lt;/b&gt; Control observations&lt;br&gt;3,764 individuals, with replacement&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="896" width="280" height="44" as="geometry" /></mxCell><mxCell id="b_r8R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;1,672&lt;/b&gt; Cases&lt;br&gt;1,648 individuals; 24 in &amp;gt;1 season&lt;/font&gt;" vertex="1"><mxGeometry x="950" y="896" width="280" height="44" as="geometry" /></mxCell></root>
+      <mxCell id="b_lab" parent="1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;b&gt;&lt;font style=&quot;font-size:16px;font-family:Arial;&quot;&gt;B&lt;/font&gt;&lt;/b&gt;" vertex="1"><mxGeometry x="20" y="502" width="30" height="25" as="geometry" /></mxCell><mxCell id="b_r0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;747,029&lt;/b&gt; All of Us participants (v9)&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="504" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_ex_0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;733,017&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No influenza diagnosis or positive test, 2018-19 to 2023-24 seasons&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="504" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_ex0" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;"><mxGeometry relative="1" as="geometry"><mxPoint x="920" y="518" as="sourcePoint" /><mxPoint x="1270" y="518" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_r0r1" edge="1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="532" as="sourcePoint" /><mxPoint x="780" y="566" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;15,043&lt;/b&gt; Influenza person-seasons&lt;br&gt;2018-19 to 2023-24 (v9)&lt;br&gt;from 14,012 participants&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="566" width="280" height="50" as="geometry" /></mxCell><mxCell id="b_ex_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;5,768&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No Basics Survey before index&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="566" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_ex1" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="920" y="584" as="sourcePoint" /><mxPoint x="1270" y="584" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;9,275&lt;/b&gt; With survey and EHR data&lt;br&gt;8,770 participants&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="642" width="280" height="36" as="geometry" /></mxCell><mxCell id="b_e_r1r2" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="616" as="sourcePoint" /><mxPoint x="780" y="642" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_ex_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;106&lt;/b&gt; Excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No pre-index diagnosis record&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="648" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_ex2" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="920" y="666" as="sourcePoint" /><mxPoint x="1270" y="666" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;9,169&lt;/b&gt; Entered matching&lt;br&gt;8,668 participants&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="704" width="280" height="36" as="geometry" /></mxCell><mxCell id="b_e_r2r3" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="678" as="sourcePoint" /><mxPoint x="780" y="704" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_split_l" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="740" as="sourcePoint" /><mxPoint x="470" y="776" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_split_r" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="740" as="sourcePoint" /><mxPoint x="1090" y="776" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r4L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;7,468&lt;/b&gt; Influenza-positive, not hospitalized&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="776" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_r4R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;1,701&lt;/b&gt; Hospitalized ≤14 days&lt;/font&gt;" vertex="1"><mxGeometry x="950" y="776" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_ex_r" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=8;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;29&lt;/b&gt; Cases excluded&lt;br&gt;&amp;nbsp; &amp;nbsp; No match within caliper&lt;/font&gt;" vertex="1"><mxGeometry x="1270" y="787" width="240" height="48" as="geometry" /></mxCell><mxCell id="b_e_exr" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="811" as="sourcePoint" /><mxPoint x="1270" y="811" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_lpsm" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="804" as="sourcePoint" /><mxPoint x="470" y="834" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_rpsm" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1090" y="804" as="sourcePoint" /><mxPoint x="1090" y="834" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_psm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;Propensity score matching: 1:4 nearest neighbor, with replacement, 0.2 SD caliper, exact on season&lt;br&gt;Survey date · Number of diagnoses · Length of medical history&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="834" width="900" height="46" as="geometry" /></mxCell><mxCell id="b_r7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;8,288&lt;/b&gt; Observations in 1,672 strata&lt;/font&gt;" vertex="1"><mxGeometry x="640" y="912" width="280" height="28" as="geometry" /></mxCell><mxCell id="b_e_psm7" parent="1" style="strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="880" as="sourcePoint" /><mxPoint x="780" y="912" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_78l" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="940" as="sourcePoint" /><mxPoint x="470" y="972" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_e_78r" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;rounded=0;curved=0;" edge="1"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="940" as="sourcePoint" /><mxPoint x="1090" y="972" as="targetPoint" /></mxGeometry></mxCell><mxCell id="b_r8L" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;6,616&lt;/b&gt; Control observations&lt;br&gt;3,764 individuals, with replacement&lt;/font&gt;" vertex="1"><mxGeometry x="330" y="972" width="280" height="44" as="geometry" /></mxCell><mxCell id="b_r8R" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" value="&lt;font style=&quot;font-size:12px;font-family:Arial;&quot;&gt;&lt;b&gt;1,672&lt;/b&gt; Cases&lt;br&gt;1,648 individuals; 24 in &amp;gt;1 season&lt;/font&gt;" vertex="1"><mxGeometry x="950" y="972" width="280" height="44" as="geometry" /></mxCell></root>
     </mxGraphModel>
   </diagram>
 </mxfile>

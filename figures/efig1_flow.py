@@ -186,16 +186,22 @@ def panel_a(f, y):
 
 
 def panel_b(f, y):
-    rows = [("b_r1", "b_ex_1"), ("b_r2", "b_ex_2"), ("b_r3", None)]
-    prev = None
+    rows = [("b_r0", "b_ex_0"), ("b_r1", "b_ex_1"), ("b_r2", "b_ex_2"), ("b_r3", None)]
+    prev, exb = None, y - 1.5  # exb: bottom of the last exclusion box drawn
     for key, ex in rows:
+        if ex:
+            # a tall exclusion box, centred on its trunk box, must clear the one above
+            hb = f.size(key, TRUNK)[1]
+            he = f.size(ex, EXR)[1]
+            y = max(y, exb + 1.5 + (he - hb) / 2)
         if prev is not None:
             f.arrow((90, prev), (90, y))
         yb = f.box(key, TRUNK, y)
         if ex:
             mid = (y + yb) / 2
             f.arrow((TRUNK[0] + TRUNK[1] / 2, mid), (f.exbox(ex, EXR, mid), mid))
-        prev, y = yb, yb + GAP + (2.2 if ex else 0)  # room for the tall exclusion boxes
+            exb = mid + he / 2
+        prev, y = yb, yb + GAP
     y3 = prev
     y = y3 + SPLIT
     f.split(y3, y, LEFT[0], RIGHT[0])

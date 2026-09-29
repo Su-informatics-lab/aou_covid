@@ -10,6 +10,7 @@ These scripts were copied from the influenza workspace VM on 2026-09-25. Paths r
 | `02_psm.R` | Matching: `flu_prematch.csv` to `07_matched_cohort.csv` (1:4 nearest neighbor with replacement on the logit propensity score for survey date, number of distinct diagnoses, and length of EHR history; caliper 0.2 SD; exact on season). |
 | `03_models.R` | Base, alone, and joint conditional logistic models. |
 | `04_interaction.R` | Period interaction models. |
+| `05_flow_top.py` | Top of eFigure 1B (R11, 2026-09-28): counts the CDR v9 participants (747,029) and the participants and person-seasons in the extraction's index file (`flu_index_v9.pkl`: 15,043 person-seasons from 14,012 participants), so the panel starts from the whole repository. It also documents why a SQL re-derivation with the feasibility script's name match gives 15,301 person-seasons: that match admits parainfluenza assays (and *Haemophilus influenzae* and antibody tests), and the 258 extra person-seasons are all laboratory-only, mostly parainfluenza PCR. The index file remains the source of record. Output: `working/v25/platform_r11/flow_top_flu.txt`. |
 
 The attenuation, era-contrast, sensitivity, and R10 analyses for this arm run from the
 top-level scripts with `ARM=flu` (`03o_r4_attenuation.R`, `03w_sens.R`, `03x_cells.R`,

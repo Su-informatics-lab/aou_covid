@@ -123,7 +123,7 @@ def panel(ax, d, term, letter, title_ax=None):
             else timedelta(0)
         )
         if pd.isna(r.aor):
-            # withheld: reference group below 20 cases (03x); one mark used in every figure
+            # withheld: reference group 20 or fewer cases (03x); one mark used in every figure
             xm = mid(a, b) - timedelta(days=PAND_OFFSET)
             ax.add_patch(
                 plt.Rectangle(
@@ -140,7 +140,7 @@ def panel(ax, d, term, letter, title_ax=None):
             ax.text(
                 xm,
                 1.0,
-                "withheld\n(<20)",
+                "withheld\n(\u226420)",
                 ha="center",
                 va="center",
                 fontsize=6.5,
