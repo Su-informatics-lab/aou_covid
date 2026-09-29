@@ -29,6 +29,9 @@ if (!requireNamespace("lmtest", quietly = TRUE))   install.packages("lmtest")
 library(sandwich)
 library(lmtest)
 
+# 2026-09-29: the joint model has the 6 survey items of the v25 primary (five domains);
+# disability, part of an earlier seven-domain specification, is no longer in it. This
+# is the specification that produced the published base, domain, joint and S1-S5 fits.
 # ── Parse argument ───────────────────────────────────────────────────
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 1 || !args[1] %in% c("aou_v7", "aou_v8", "ms")) {
@@ -337,7 +340,7 @@ if (IS_AOU && has_sdoh) {
       ifelse(is.na(df_j$disability_any), "Missing", df_j$disability_any),
       levels = c("No","Yes","Missing"))
 
-    joint_sdoh <- "f.income + f.insurance + f.education + f.employment + f.housing + f.housing_stability + f.disability_any"
+    joint_sdoh <- "f.income + f.insurance + f.education + f.employment + f.housing + f.housing_stability"
     joint_rhs <- paste(base_rhs, "+", joint_sdoh)
 
     tryCatch({

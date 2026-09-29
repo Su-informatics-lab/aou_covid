@@ -34,6 +34,9 @@ if (!requireNamespace("lmtest", quietly = TRUE))   install.packages("lmtest")
 library(sandwich)
 library(lmtest)
 
+# 2026-09-29: the joint model has the 6 survey items of the v25 primary (five domains);
+# disability, part of an earlier seven-domain specification, is no longer in it. This
+# is the specification that produced the published base, domain, joint and S1-S5 fits.
 # ── Parse argument ───────────────────────────────────────────────────
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 1 || !grepl("^aou_", args[1])) {
@@ -223,7 +226,7 @@ reg_sdoh$f.disability_any <- factor(
   ifelse(is.na(reg_sdoh$disability_any), "Missing", reg_sdoh$disability_any),
   levels = c("No","Yes","Missing"))
 
-joint_sdoh <- "f.income + f.insurance + f.education + f.employment + f.housing + f.housing_stability + f.disability_any"
+joint_sdoh <- "f.income + f.insurance + f.education + f.employment + f.housing + f.housing_stability"
 joint_rhs  <- paste(base_rhs, "+", joint_sdoh)
 
 
@@ -393,7 +396,7 @@ df_s5$f.income_3cat <- factor(df_s5$income_3cat,
   levels = c("35k_100k", "lt_35k", "gt_100k", "Missing"))
 
 # Replace f.income with f.income_3cat in joint model
-joint_sdoh_s5 <- "f.income_3cat + f.insurance + f.education + f.employment + f.housing + f.housing_stability + f.disability_any"
+joint_sdoh_s5 <- "f.income_3cat + f.insurance + f.education + f.employment + f.housing + f.housing_stability"
 rhs_s5 <- paste(base_rhs, "+", joint_sdoh_s5)
 frm_s5 <- as.formula(paste("Treatment ~", rhs_s5, "+ strata(stratum)"))
 
