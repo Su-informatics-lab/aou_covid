@@ -1311,6 +1311,11 @@ print("\n" + "=" * 70)
 print("STEP 5: Vaccination")
 print("=" * 70)
 
+# Checked 2026-09-29 against the concept table: 37003446 (tasimelteon suspension) and
+# 702834 (a SARS-CoV-2 immune-response lab test) are not vaccines, and COVID-19 vaccine
+# concepts 702677, 37003432, 37003517 and 739902 are missing. Each changed the
+# classification of 20 or fewer matched participants; the results were kept and the
+# supplement (eTable 4) lists the 7 vaccine concepts and discloses this.
 vacc = query(
     f"""
 SELECT person_id, MIN(drug_exposure_start_date) AS first_vacc_date
