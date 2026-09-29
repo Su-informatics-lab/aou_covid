@@ -6,12 +6,12 @@ A  Ratio of odds ratios, later era vs earlier era, from the same separate
    interaction models as the era-specific estimates (eTable 20B): income below
    $10 000 (navy) and Medicaid (purple). 1 = no change. Open marker: 95% CI
    includes 1.
-B  COVID-19 only. Each wave's log odds ratio fitted alone split into the part
-   attenuated by the other 5 social items (grey; log OR alone minus log OR
-   jointly; change-in-coefficient method) and the part remaining after
-   adjustment (the term's colour; log OR jointly), with the joint 95% CI
-   beneath. Axis in odds-ratio units on a log scale. Influenza is not drawn
-   here because its attenuated Medicaid part is not constant (eFigure 7).
+B  COVID-19 only, in the classic attenuation layout (Lassale et al 2020, Fig. 1): for
+   each wave, the odds ratio of the item fitted alone (base model + the item; tint) and
+   with the other 5 social items (full colour), each with its 95% CI; filled markers
+   exclude 1. Right: percent attenuation, 100 x (log OR alone - log OR joint) / log OR
+   alone (Stringhini et al 2010), above 100% where the joint OR is below 1. Influenza
+   is in eFigure 7.
 C  Among COVID-19 matched participants who reported a social risk on the
    survey, the percentage with the corresponding Z code (dark) and with any
    Z55-Z65 code (light) dated before the index date, on a 0-100% scale
@@ -31,8 +31,10 @@ import numpy as np
 import pandas as pd
 from style import (
     INCOME,
+    INCOME_TINT,
     INK,
     MEDICAID,
+    MEDICAID_TINT,
     MM,
     PT_BODY,
     PT_HEAD,
@@ -48,6 +50,7 @@ from style import (
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "results", "figures", "v25")
 COL = {"income_lt10k": INCOME, "medicaid": MEDICAID}
+TINT = {"income_lt10k": INCOME_TINT, "medicaid": MEDICAID_TINT}
 LAB = {"income_lt10k": "Income <\\$10 000", "medicaid": "Medicaid"}
 DARK = "#4D4D4D"
 REF_TXT = "#666666"
@@ -275,6 +278,119 @@ def split(
     ax.set_ylim(y + 0.6, 2.25)
 
 
+def sequential(
+    ax,
+    d,
+    pathogen="COVID-19",
+    eras=COVID_ERAS,
+    xlim=(0.62, 2.6),
+    ticks=(0.75, 1, 1.5, 2),
+):
+    """Classic attenuation display (as in Lassale et al 2020, Fig. 1): the odds ratio
+    fitted with the item alone and with the other 5 items added, each with its 95% CI,
+    and the percent attenuation 100 x (log OR alone - log OR joint) / log OR alone."""
+    y, yt, yl = 0.0, [], []
+    for term in ("income_lt10k", "medicaid"):
+        ax.text(
+            0.0,
+            y,
+            LAB[term],
+            transform=ax.get_yaxis_transform(),
+            ha="left",
+            va="center",
+            fontsize=PT_SMALL,
+            fontweight="bold",
+            color=COL[term],
+        )
+        y -= 0.9
+        for o, era in eras:
+            s = d[(d.pathogen == pathogen) & (d.term == term) & (d.era_order == o)]
+            a = s[s.model == "alone"].iloc[0]
+            j = s[s.model == "joint"].iloc[0]
+            yt.append(y - 0.2)
+            yl.append(era)
+            if pd.isna(a.aor) or pd.isna(j.aor):
+                # withheld: reference group 20 or fewer cases (03x); same mark as every figure
+                ax.text(
+                    1.0,
+                    y - 0.2,
+                    "withheld (\u226420)",
+                    ha="center",
+                    va="center",
+                    fontsize=6.5,
+                    color=REF_TXT,
+                    zorder=3,
+                    bbox=dict(fc="white", ec=REFG, ls=(0, (2, 2)), lw=0.8, pad=2),
+                )
+                y -= 1.15
+                continue
+            for r, yy, c in ((a, y, TINT[term]), (j, y - 0.4, COL[term])):
+                ax.plot([r.lo, r.hi], [yy, yy], color=c, lw=1.1, zorder=2)
+                f = sig(r.lo, r.hi)
+                ax.plot(
+                    r.aor,
+                    yy,
+                    "o",
+                    ms=4.2,
+                    mfc=c if f else "white",
+                    mec=c,
+                    mew=1.1,
+                    zorder=3,
+                )
+            pct = 100 * (np.log(a.aor) - np.log(j.aor)) / np.log(a.aor)
+            ax.text(
+                1.03,
+                y - 0.2,
+                "%.0f%%" % pct,
+                transform=ax.get_yaxis_transform(),
+                ha="left",
+                va="center",
+                fontsize=PT_SMALL,
+                color=INK,
+            )
+            y -= 1.15
+        y -= 0.25
+    ax.axvline(1, color=RULE, lw=0.9, ls=(0, (4, 3)), zorder=1)
+    ax.set_xscale("log")
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(["%g" % t for t in ticks])
+    ax.minorticks_off()
+    ax.set_xlim(*xlim)
+    ax.set_yticks(yt)
+    ax.set_yticklabels(yl, fontsize=PT_SMALL)
+    ax.tick_params(axis="y", length=0)
+    ax.spines["left"].set_visible(False)
+    ax.set_xlabel("Odds ratio (95% CI, log scale)", fontsize=PT_BODY)
+    ax.text(
+        1.03,
+        0.0,
+        "Attenuated",
+        transform=ax.get_yaxis_transform(),
+        ha="left",
+        va="center",
+        fontsize=PT_SMALL,
+        color=REF_TXT,
+    )
+    # key, above the first group
+    for yy, c, lab in (
+        (1.75, REFG, "fitted alone (base model + the item)"),
+        (1.15, DARK, "with the other 5 social items"),
+    ):
+        ax.plot([0.66, 0.74], [yy, yy], color=c if c == DARK else SHARED, lw=1.1)
+        ax.plot(0.70, yy, "o", ms=4.2, color=c if c == DARK else SHARED)
+        ax.text(
+            0.78,
+            yy,
+            lab,
+            va="center",
+            fontsize=PT_SMALL,
+            color=REF_TXT,
+            bbox=dict(fc="white", ec="none", pad=0.3),
+            zorder=4,
+        )
+    ax.set_ylim(y + 0.6, 2.2)
+
+
 def zcodes(ax):
     for i, (lab, n, pz, code, pany) in enumerate(ZROWS):
         y = -i
@@ -328,10 +444,10 @@ def main():
     att = pd.read_csv(os.path.join(OUT, "Figure2_era_attenuation_data.csv"))
     fig = plt.figure(figsize=(180 * MM, 140 * MM))
     axA = fig.add_axes([0.15, 0.46, 0.25, 0.40])
-    axB = fig.add_axes([0.64, 0.46, 0.31, 0.40])
+    axB = fig.add_axes([0.62, 0.46, 0.29, 0.40])
     axC = fig.add_axes([0.33, 0.07, 0.59, 0.235])
     forest(axA, ror)
-    split(axB, att)
+    sequential(axB, att)
     zcodes(axC)
     panel_title(
         fig,
@@ -345,8 +461,8 @@ def main():
         fig,
         axB,
         "B",
-        "COVID-19: attenuation by the other items",
-        "Medicaid's jointly adjusted OR approached 1; income's did not",
+        "COVID-19: each item alone and with the other 5",
+        "Medicaid's OR fell to about 1 after Delta; income's stayed near 1.5",
         dx=0.10,
     )
     panel_title(
