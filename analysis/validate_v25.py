@@ -149,7 +149,7 @@ CLAIMS = OrderedDict(
         (
             "flu_int_model",
             (
-                "a period-interaction model gave 1.67 in the 2 seasons before SARS-CoV-2 and 1.66 in the 2 from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
+                "a period-interaction model gave 1.67 in 2018-2019 and 2019-2020 and 1.66 in the 2 from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
                 "03o",
                 "income <$10k, period-interaction model, and its ROR, influenza",
             ),
@@ -608,11 +608,11 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "cite_mullachery",
+            "cite_callaway",
             (
-                "which requires staggered state adoption and even then varies by cohort",
+                "which would need a design such as staggered state adoption, allowing cohort-specific effects",
                 "cited",
-                "Mullachery et al 2026 Drug Alcohol Depend (PMC13449180, full text read 2026-09-27): cohort-specific staggered DiD; 2016 cohort OR 1.49, 2019 cohort 0.71, pooled ATT null",
+                "Callaway & Sant'Anna 2021 J Econom 225:200-230 (Crossref-checked 2026-09-29): DiD with variation in treatment timing and group-time effects; replaces Mullachery 2026 (applied example), R12f/R12i",
             ),
         ),
     ]
