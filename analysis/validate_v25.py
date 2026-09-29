@@ -303,7 +303,7 @@ CLAIMS = OrderedDict(
             (
                 "21.9% of those with income below $10 000 and 11.5% at $35 000 to $99 999",
                 "03v",
-                "crude hospitalization, COVID-19, 675/3,082 and 793/6,925",
+                "crude hospitalization, COVID-19, below $10 000 and $35 000-99 999 (eTable 9 shows percentages only)",
             ),
         ),
         (
@@ -446,7 +446,7 @@ CLAIMS = OrderedDict(
         (
             "sens_med_range",
             (
-                "Medicaid ratio of odds ratios ranged from 0.58 to 0.73, with every insurance-by-era test at P ≤ .013",
+                "Medicaid ratio of odds ratios ranged from 0.58 to 0.73, with every insurance-by-era test at P < .02",
                 "03w",
                 "lag 0.581 ... site 0.734; D1 max .0134 (harmB; region .0117)",
             ),
@@ -554,7 +554,7 @@ CLAIMS = OrderedDict(
         (
             "r10_ard_inc",
             (
-                "did not narrow (0.9 to 3.5 percentage points)",
+                "(adjusted income difference, 0.9 to 3.5 percentage points)",
                 "r10",
                 "ard_covid_x.csv income 0.9443, 3.4648",
             ),

@@ -14,8 +14,9 @@ before the index date of:
 
 Codes are read from the source concept in condition_occurrence and observation, as in
 01d_zcode_capture.py and 03z_z59.py. Influenza rows are person-seasons. Counts of 20 or fewer
-print as "<=20", a count whose complement is 20 or fewer as "masked"; a count must also rest
-on more than 20 distinct participants.
+print as "<=20", a count whose complement is 20 or fewer as "masked", and a Z59 subgroup whose
+difference from the Z59 count is 20 or fewer as "masked"; a count must also rest on more than 20
+distinct participants.
   ARM=covid python3 03z_zband.py      (or ARM=flu)
 """
 
@@ -96,6 +97,14 @@ for b, lv in BANDS.items():
             }
         )
 o = pd.DataFrame(rows)
+# A subgroup of Z59 (income, housing) is also masked when its difference from the Z59
+# count is 20 or fewer, so that no count of 1 to 20 can be recovered by subtraction.
+for b in BANDS:
+    z = o[(o.band == b) & (o.group == "z59")].k.iloc[0]
+    for g in ("income", "housing"):
+        i = o.index[(o.band == b) & (o.group == g)][0]
+        if z.isdigit() and o.at[i, "k"].isdigit() and int(z) - int(o.at[i, "k"]) <= 20:
+            o.loc[i, ["k", "pct"]] = "masked"
 os.makedirs("/home/jupyter/jno_v26", exist_ok=True)
 o.to_csv(f"/home/jupyter/jno_v26/zband_{ARM}.csv", index=False)
 print(
