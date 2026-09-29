@@ -867,6 +867,19 @@ print("\n" + "=" * 70)
 print("STEP 4: Vaccination (NDC)")
 print("=" * 70)
 
+# COVID-19 vaccine products (NDC labeler-product, 9 digits), from AMA CPT Appendix Q
+# (codes 91300-91317) and the NC Medicaid 2023-2024 COVID-19 vaccine guidelines
+# (91304, 91318-91322). Until 2026-09-29 this matched whole labeler prefixes (59267,
+# 80777, 59676), which also caught non-vaccine Janssen products (160 of 71,631 flagged
+# matched persons) and missed Comirnaty under labeler 00069 (29); Quartz job 10755547
+# recoded the covariate and refitted the base model (ms_vacc_product.sbatch).
+VACC_PRODUCTS = (
+    "592671000,592671025,592670304,592671404,592671055,592670565,592670078,592670609,"
+    "000692025,807770273,807770100,807770282,807770279,807770283,807770275,596760580,"
+    "806310100,806311000,592674315,592674331,000692362,000692377,807770287,807770102,"
+    "806310105"
+)
+VACC_IN = ",".join(f"'{p}'" for p in VACC_PRODUCTS.split(","))
 vacc_unions = []
 for y in ["2021", "2022", "2023"]:
     f = f"{MS_DIR}/mscan_{y}_d.parquet"
@@ -874,9 +887,7 @@ for y in ["2021", "2022", "2023"]:
         vacc_unions.append(f"""
         SELECT ENROLID AS person_id, SVCDATE AS vacc_date
         FROM read_parquet('{f}')
-        WHERE CAST(NDCNUM AS VARCHAR) LIKE '59267%'
-           OR CAST(NDCNUM AS VARCHAR) LIKE '80777%'
-           OR CAST(NDCNUM AS VARCHAR) LIKE '59676%'
+        WHERE SUBSTR(LPAD(CAST(NDCNUM AS VARCHAR), 11, '0'), 1, 9) IN ({VACC_IN})
         """)
 
 if vacc_unions:
