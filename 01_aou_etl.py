@@ -208,11 +208,15 @@ print(
 
 # pandemic wave ────────────────────────────────────────────────
 covid_cohort["covid_index_date"] = pd.to_datetime(covid_cohort["covid_index_date"])
+# Waves follow the CDC COVID-NET variant-predominance periods (Taylor et al,
+# MMWR 2022;71:466-473): Delta July 1 to December 18, 2021; Omicron from
+# December 19, 2021. Before 2026-09-28 the boundaries were June 15 and
+# December 15, 2021, which had no documented source.
 covid_cohort["pandemic_wave"] = "pre_delta"
-covid_cohort.loc[covid_cohort.covid_index_date >= "2021-06-15", "pandemic_wave"] = (
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-07-01", "pandemic_wave"] = (
     "delta"
 )
-covid_cohort.loc[covid_cohort.covid_index_date >= "2021-12-15", "pandemic_wave"] = (
+covid_cohort.loc[covid_cohort.covid_index_date >= "2021-12-19", "pandemic_wave"] = (
     "omicron"
 )
 print(f"  Wave: {covid_cohort.pandemic_wave.value_counts().to_dict()}")

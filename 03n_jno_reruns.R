@@ -321,8 +321,8 @@ write.csv(a, file.path(OUT, "R3_lab_share_by_wave_insurance.csv"), row.names = F
 print(a, row.names = FALSE)
 
 ## (b) the unmatched cohort: hospitalized share by wave, and lab share by wave
-wv <- function(dt) cut(as.Date(dt), c(as.Date("1900-01-01"), as.Date("2021-06-15"),
-                                      as.Date("2021-12-15"), as.Date("2100-01-01")),
+wv <- function(dt) cut(as.Date(dt), c(as.Date("1900-01-01"), as.Date("2021-07-01"),
+                                      as.Date("2021-12-19"), as.Date("2100-01-01")),
                        labels = c("pre_delta", "delta", "omicron"), right = FALSE)
 co$wave <- wv(co$covid_index_date)
 co$lab  <- as.integer(co$covid_source %in% c("positive_lab", "both")); co$n <- 1L

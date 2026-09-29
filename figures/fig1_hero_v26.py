@@ -13,7 +13,8 @@ B (hero)   For each era, a floating bar from the crude percentage hospitalized a
 
 Drawn at the final print width (180 mm). Nothing sits outside the axes grid,
 and the canvas is saved as set, so the size cannot drift.
-Reads working/v25/platform_03u/{covid,flu}_crude.csv.
+Reads working/v25/platform_r12/jno_v26/crude_covid.csv (R12: COVID-19 rerun on the CDC
+COVID-NET wave boundaries, 03v_crude.py) and working/v25/platform_03u/flu_crude.csv.
 Writes results/figures/v25/Figure1.{pdf,png}.
 """
 
@@ -37,6 +38,10 @@ from style import (
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CRUDE = os.path.join(HERE, "..", "working", "v25", "platform_03u")
+#  R12 (2026-09-29): COVID-19 waves follow the CDC COVID-NET variant-predominance periods
+CRUDE_COVID = os.path.join(
+    HERE, "..", "working", "v25", "platform_r12", "jno_v26", "crude_covid.csv"
+)
 OUT = os.path.join(HERE, "..", "results", "figures", "v25")
 REF_TXT = "#666666"
 LOW, REF = "<$10 000", "$35 000-99 999"
@@ -216,8 +221,8 @@ def main():
     apply_style()
     plt.rcParams.update({"xtick.labelsize": PT_SMALL, "ytick.labelsize": PT_SMALL})
     crude = {
-        a: pd.read_csv(os.path.join(CRUDE, "%s_crude.csv" % a))
-        for a in ("covid", "flu")
+        "covid": pd.read_csv(CRUDE_COVID),
+        "flu": pd.read_csv(os.path.join(CRUDE, "flu_crude.csv")),
     }
     fig = plt.figure(figsize=(180 * MM, 96 * MM))
     gs = fig.add_gridspec(

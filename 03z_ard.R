@@ -36,7 +36,7 @@ if (ARM == "covid") {
   stopifnot(nrow(df) == 25160)
   df$hosp <- as.integer(df$severity == 1)
   dd <- as.Date(df$covid_index_date)
-  df$era <- ifelse(dd < as.Date("2021-06-15"), "1_pre_delta", ifelse(dd < as.Date("2021-12-15"), "2_delta", "3_omicron"))
+  df$era <- ifelse(dd < as.Date("2021-07-01"), "1_pre_delta", ifelse(dd < as.Date("2021-12-19"), "2_delta", "3_omicron"))
   CH <- setdiff(names(ch), "person_id")
 } else {
   df <- read.csv("/home/jupyter/flu/flu_prematch.csv", stringsAsFactors = FALSE)

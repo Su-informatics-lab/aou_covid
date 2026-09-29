@@ -39,8 +39,8 @@ if ARM == "covid":
         W.d,
         [
             pd.Timestamp("2000-01-01"),
-            pd.Timestamp("2021-06-14"),
-            pd.Timestamp("2021-12-14"),
+            pd.Timestamp("2021-06-30"),
+            pd.Timestamp("2021-12-18"),
             pd.Timestamp("2030-01-01"),
         ],
         labels=["1_pre_delta", "2_delta", "3_omicron"],

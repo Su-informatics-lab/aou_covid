@@ -43,6 +43,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(
     HERE, "..", "results", "figures", "v25", "eFigure8_data.csv"
 )  # imputation series: 03n R2 (current primary)
+#  R12 (2026-09-29): data regenerated from the rerun on the COVID-NET wave boundaries
+#  (MI column: platform_r12/jno_v24/R2_joint_merged.csv; indicator column:
+#  platform_r12/m02_aou_v7/joint_sdoh_coefficients.csv). The bracket's P value is a
+#  literal: high-income block D1, platform_r12/jno_v24/R2_income_shape.csv, P = .147.
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
 SENS = "#8C8C8C"  # sensitivity specification: neutral grey, square marker
 
@@ -125,7 +129,7 @@ def main():
     ax.text(
         bx * 1.03,
         5.0,
-        "3 highest bands,\njoint test under\nimputation:\nP = .16",
+        "3 highest bands,\njoint test under\nimputation:\nP = .15",
         ha="left",
         va="center",
         fontsize=PT_SMALL,

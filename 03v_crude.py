@@ -44,9 +44,9 @@ if ARM == "covid":
     df["hosp"] = (df.severity == 1).astype(int)
     d = pd.to_datetime(df.covid_index_date)
     df["era"] = np.where(
-        d < "2021-06-15",
+        d < "2021-07-01",
         "1_pre_delta",
-        np.where(d < "2021-12-15", "2_delta", "3_omicron"),
+        np.where(d < "2021-12-19", "2_delta", "3_omicron"),
     )
     OUT = "/home/jupyter/jno_v26"
 else:

@@ -52,7 +52,6 @@ LABELS = {
     "Liver disease, mild": (0.76, 1.15, "right"),
     "Peripheral vascular disease": (1.25, 0.90, "left"),
     "Peptic ulcer disease": (1.25, 0.82, "left"),
-    "Omicron": (1.25, 0.70, "left"),
 }
 
 

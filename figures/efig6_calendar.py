@@ -15,10 +15,17 @@ says so.
 2026-09-28: panel C now shares the calendar axis of A and B (same limits, same
 horizontal extent, ticks aligned), so each estimate's era reads straight down to
 the measures in force. A strip above A names the COVID-19 waves (definitions as
-in Methods: pre-Delta to June 14, 2021; Delta June 15 to December 14, 2021;
-Omicron December 15, 2021 to the July 1, 2022 cutoff), and thin dashed lines at
+in Methods: pre-Delta to June 30, 2021; Delta July 1 to December 18, 2021;
+Omicron December 19, 2021 to the July 1, 2022 cutoff), and thin dashed lines at
 the 2 wave boundaries and the cutoff run through A-C. The COVID-19 shading ends
 at the cutoff. Influenza periods are unchanged.
+
+2026-09-29 (R12): the wave boundaries follow the CDC COVID-NET variant-predominance
+periods (Taylor et al, MMWR 2022;71:466-473): Delta from July 1, 2021 and Omicron
+from December 19, 2021 (previously June 15 and December 15, 2021, without a source).
+The 2 era-test P values printed in A and B are literals, updated from the rerun
+(platform_r12/jno_v24/R2_wave_tests.csv: income x wave P = .74, insurance x wave
+P = .003; influenza unchanged).
 
 Reads results/figures/v25/Figure1_timeline_data.csv (every value traces to a
 frozen run; see the source column). Writes
@@ -76,21 +83,21 @@ CUTOFF = date(2022, 7, 1)  # COVID-19 arm data cutoff (CDR v7)
 COVID_SPAN = (date(2020, 3, 1), CUTOFF)
 #  COVID-19 waves, as defined in Methods (the data file's era spans agree)
 WAVES = [
-    ("COVID-19, pre-Delta", date(2020, 3, 1), date(2021, 6, 14)),
-    ("Delta", date(2021, 6, 15), date(2021, 12, 14)),
-    ("Omicron", date(2021, 12, 15), CUTOFF),
+    ("COVID-19, pre-Delta", date(2020, 3, 1), date(2021, 6, 30)),
+    ("Delta", date(2021, 7, 1), date(2021, 12, 18)),
+    ("Omicron", date(2021, 12, 19), CUTOFF),
 ]
 #  dashed lines: start of Delta, start of Omicron, and the data cutoff
 BOUNDS = [
-    (date(2021, 6, 15), "Jun 15\n2021"),
-    (date(2021, 12, 15), "Dec 15\n2021"),
+    (date(2021, 7, 1), "Jul 1\n2021"),
+    (date(2021, 12, 19), "Dec 19\n2021"),
     (CUTOFF, "Jul 1, 2022\n(cutoff)"),
 ]
 FLU_LAB = [(date(2019, 7, 16), "influenza"), (date(2023, 7, 16), "influenza")]
 SHADE = "#F4E4E1"
 #  the pandemic-season influenza marker (and the withheld box) sits left of its
 #  period's midpoint so it clears the COVID-19 markers; 130 days also keeps the
-#  box and the marker clear of the June 15, 2021 wave line
+#  box and the marker clear of the July 1, 2021 wave line
 PAND_OFFSET = 130
 WAVE_LINE = dict(color=COVID, lw=0.6, ls=(0, (2.5, 2)), alpha=0.7, zorder=0.5)
 PANEL = {
@@ -99,8 +106,8 @@ PANEL = {
 }
 PTEST = {
     #  2 lines, top right: on the shared axis 1 line would cross the cutoff line
-    "income_lt10k": ("Income × era:\nCOVID-19 P = .59;  influenza P = .91"),
-    "medicaid": ("Insurance × era:\nCOVID-19 P = .002;  influenza P = .01*"),
+    "income_lt10k": ("Income × era:\nCOVID-19 P = .74;  influenza P = .91"),
+    "medicaid": ("Insurance × era:\nCOVID-19 P = .003;  influenza P = .01*"),
 }
 
 
