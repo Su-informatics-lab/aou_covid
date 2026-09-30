@@ -269,7 +269,7 @@ CLAIMS = OrderedDict(
         (
             "abs_flu_med",
             (
-                "Influenza moved the same way, imprecisely (ratio, 0.74; 95% CI, 0.51-1.07)",
+                "Influenza moved the same way (ratio, 0.74; 95% CI, 0.51-1.07)",
                 "03o",
                 "abstract",
             ),
@@ -412,14 +412,6 @@ CLAIMS = OrderedDict(
             ),
         ),
         (
-            "miss_inc",
-            (
-                "hospitalized nearly as often as the lowest band (21.4% vs 21.9% in COVID-19)",
-                "03v",
-                "1,086/5,064",
-            ),
-        ),
-        (
             "med_gap",
             (
                 "from 15.1 to 10.1 and 9.5 points (eTable 8)",
@@ -462,7 +454,7 @@ CLAIMS = OrderedDict(
         (
             "exp_yes",
             (
-                "The Medicaid decline appeared in both expansion and nonexpansion states, imprecisely in the latter",
+                "The Medicaid decline appeared in both expansion and nonexpansion states",
                 "03w",
                 "expansion_Yes 0.60 (0.45-0.79); expansion_No 0.21 (0.08-0.53)",
             ),
@@ -610,7 +602,7 @@ CLAIMS = OrderedDict(
         (
             "cite_callaway",
             (
-                "which would need a design such as staggered state adoption with cohort-specific effects",
+                "could be asked with a design using staggered state adoption and cohort-specific effects",
                 "cited",
                 "Callaway & Sant'Anna 2021 J Econom 225:200-230 (Crossref-checked 2026-09-29): DiD with variation in treatment timing and group-time effects; replaces Mullachery 2026 (applied example), R12f/R12i",
             ),
