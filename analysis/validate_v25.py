@@ -52,9 +52,9 @@ SRC = {
     "t2": "working/v25/tables/Table2_data.csv",
     "fig2": "results/figures/v25/Figure2_era_attenuation_data.csv (from working/v25/platform_r12/r4_covid/C_era_attenuation.csv), log(alone) - log(joint)",
     "derived": "arithmetic on asserted values (see gloss)",
-    "e13": "supplement eTable 10 (zcode/aou_v7/10_zcode_capture_vs_survey.csv; employment row 208/3,608)",
+    "e13": "supplement eTable 9 (zcode/aou_v7/10_zcode_capture_vs_survey.csv; employment row 208/3,608)",
     "03w": "working/v25/platform_r12/r4_covid/ (sens_r6.csv, lag_by_era.txt; COVID-NET waves); working/v25/platform_03w/flu_sens_r6.csv (influenza; 03w_sens.R)",
-    "e21": "supplement eTable 9 (working/v25/platform_r12/jno_v26/crude_covid.csv; working/v25/platform_03u/flu_crude.csv; 03v_crude.py)",
+    "e21": "supplement eTable 8 (working/v25/platform_r12/jno_v26/crude_covid.csv; working/v25/platform_03u/flu_crude.csv; 03v_crude.py)",
     "r11": "working/v25/platform_r11/ (zband_covid.csv, zband_flu.csv, flow_top_flu.txt; 03z_zband.py, flu_arm/05_flow_top.py)",
     "bls": "BLS CPI-U, US city average, all items, series CUUR0000SA0 (SOURCES_R11 section 4): annual average 2018 251.107, 2022 292.655; ratio 1.1655",
     "taylor": "Taylor CA, et al. MMWR Morb Mortal Wkly Rep. 2022;71(12):466-473 (COVID-NET variant-predominance periods; full text read 2026-09-28)",
@@ -177,7 +177,7 @@ CLAIMS = OrderedDict(
         (
             "int_inc",
             (
-                "(P = .74 and P = .91; eTables 15, 19, and 20)",
+                "(P = .74 and P = .91; eTables 14, 18, and 19)",
                 "03d",
                 "income x era, COVID-19 and influenza",
             ),
@@ -277,7 +277,7 @@ CLAIMS = OrderedDict(
         (
             "unemp_rent_att",
             (
-                "Attenuation was 43% and 39% for being out of work or unable to work (eTable 21) and 55% and 59% for renting",
+                "Attenuation was 43% and 39% for being out of work or unable to work (eTable 20) and 55% and 59% for renting",
                 "03oAB",
                 "unemployment and renting attenuation",
             ),
@@ -303,7 +303,7 @@ CLAIMS = OrderedDict(
             (
                 "21.9% of those with income below $10 000 and 11.5% at $35 000 to $99 999",
                 "03v",
-                "crude hospitalization, COVID-19, below $10 000 and $35 000-99 999 (eTable 9 shows percentages only)",
+                "crude hospitalization, COVID-19, below $10 000 and $35 000-99 999 (eTable 8 shows percentages only)",
             ),
         ),
         (
@@ -349,7 +349,7 @@ CLAIMS = OrderedDict(
         (
             "medicare_flu",
             (
-                "but not in influenza (1.03; 95% CI, 0.66-1.61; eTable 12)",
+                "but not in influenza (1.03; 95% CI, 0.66-1.61; eTable 11)",
                 "03u",
                 "Medicare ROR after/before, influenza, combined model",
             ),
@@ -376,7 +376,7 @@ CLAIMS = OrderedDict(
             (
                 "hospitalized about 10 percentage points more often (crude) than those with $35 000 to $99 999 in every era",
                 "e21",
-                "Key Points; crude gaps 10.1-12.0 points (eTable 9)",
+                "Key Points; crude gaps 10.1-12.0 points (eTable 8)",
             ),
         ),
         (
@@ -422,7 +422,7 @@ CLAIMS = OrderedDict(
         (
             "med_gap",
             (
-                "from 15.1 to 10.1 and 9.5 points (eTable 9)",
+                "from 15.1 to 10.1 and 9.5 points (eTable 8)",
                 "03v",
                 "Medicaid-employer crude RD by wave",
             ),
@@ -580,7 +580,7 @@ CLAIMS = OrderedDict(
             (
                 "the ratio ranged from 0.73 to 1.02",
                 "r10",
-                "eTable 23A: case_infwin2 0.7326 ... case_dx2 1.0208 (superseded case_dx 1.0235)",
+                "eTable 22A: case_infwin2 0.7326 ... case_dx2 1.0208 (superseded case_dx 1.0235)",
             ),
         ),
         (
@@ -713,8 +713,8 @@ DISPLAY_MAP = {
 
 
 def displays(root):
-    """eTables 15A-B and the figures render the same era-specific estimates. They
-    must agree. Figure 2A plots every eTable 15A cell (alone and jointly); Figure
+    """eTables 14A-B and the figures render the same era-specific estimates. They
+    must agree. Figure 2A plots every eTable 14A cell (alone and jointly); Figure
     1C plots the jointly adjusted ones. A withheld cell must be a dash in the
     table and empty in both figure data files (v25; the v24 Table 2 against
     Figure 1 check no longer applies because v25 Figure 1 shows no Table 2
@@ -753,7 +753,7 @@ def displays(root):
         got = fmt(r["aor"], r["lo"], r["hi"])
         if got != want:
             print(
-                "  DISAGREE Figure 2B/eFigure 7 %-9s %-12s %-6s era %s: eTable15A=%s figure=%s"
+                "  DISAGREE Figure 2B/eFigure 7 %-9s %-12s %-6s era %s: eTable14A=%s figure=%s"
                 % (r["pathogen"], r["term"], r["model"], r["era_order"], want, got)
             )
             bad += 1
@@ -773,11 +773,11 @@ def displays(root):
                 got = fmt(r["aor"], r["lo"], r["hi"])
                 if got != want:
                     print(
-                        "  DISAGREE eFigure 6 %-9s %-12s %s: eTable15A=%s figure=%s"
+                        "  DISAGREE eFigure 6 %-9s %-12s %s: eTable14A=%s figure=%s"
                         % (pth, term, r["era"], want, got)
                     )
                     bad += 1
-    # eTable 15B against the Figure 2A forest (v26)
+    # eTable 14B against the Figure 2A forest (v26)
     blkb = sup[sup.index("**B. Ratios of odds ratios") :]
     blkb = blkb[: blkb.index("\n\n", blkb.index("| Medicaid"))]
     rowsb = {}
@@ -803,7 +803,7 @@ def displays(root):
             )
             bad += 1
     print(
-        "\neTable 15A/15B against Figure 2 and eFigure 6 data: %d discrepancies." % bad
+        "\neTable 14A/14B against Figure 2 and eFigure 6 data: %d discrepancies." % bad
     )
     return 1 if bad else 0
 
