@@ -282,7 +282,7 @@ def main():
     axB.text(
         0.005,
         0.97,
-        "At or below 1: no excess beyond\nthe other social items (not protection)",
+        "At or below 1: no independent\nexcess (not protection)",
         transform=axB.transAxes,
         ha="left",
         va="top",

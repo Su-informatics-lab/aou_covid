@@ -30,9 +30,9 @@ OUT = os.path.join(
 )
 
 AOU = [
-    ("Survey date", 0.095, 0.015),
+    ("First survey date", 0.095, 0.015),
     ("Number of diagnoses", 0.410, 0.003),
-    ("Length of EHR history", 0.041, 0.012),
+    ("Length of medical history", 0.041, 0.012),
 ]
 FLU_CSV = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -44,9 +44,9 @@ FLU_CSV = os.path.join(
 )
 #  same row labels as panel A, in the csv's row order
 FLU_LABELS = {
-    "First survey date": "Survey date",
+    "First survey date": "First survey date",
     "Number of distinct diagnoses": "Number of diagnoses",
-    "Length of medical history": "Length of EHR history",
+    "Length of medical history": "Length of medical history",
 }
 
 
