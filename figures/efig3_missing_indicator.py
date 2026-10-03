@@ -214,7 +214,7 @@ def main():
     key.text(
         0.398,
         0.72,
-        "light: fitted alone  \u2192  full: with the other 5 items"
+        "light: alone  \u2192  full color: jointly adjusted"
         "  (navy, income; pink, Medicaid)",
         ha="left",
         va="center",

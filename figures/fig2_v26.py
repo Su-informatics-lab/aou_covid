@@ -93,17 +93,17 @@ def panel_title(fig, ax, letter, title, sub=None, dx=0.05):
 
 
 def forest(ax, d):
-    groups = [
-        ("COVID-19", "Delta vs pre-Delta"),
-        ("COVID-19", "Omicron vs pre-Delta"),
-        ("Influenza", "after vs before"),
+    groups = [  # (pathogen, contrast key in the data, label)
+        ("COVID-19", "Delta vs pre-Delta", "Delta vs pre-Delta"),
+        ("COVID-19", "Omicron vs pre-Delta", "Omicron vs pre-Delta"),
+        ("Influenza", "after vs before", "post- vs pre-pandemic"),
     ]
     y, yt, yl = 0, [], []
-    for pth, con in groups:
+    for pth, con, lab in groups:
         ax.text(
             0.0,
             y,
-            "%s, %s" % (pth, con),
+            "%s, %s" % (pth, lab),
             transform=ax.get_yaxis_transform(),
             ha="left",
             va="center",
@@ -158,7 +158,7 @@ def forest(ax, d):
     ax.tick_params(axis="y", length=0)
     ax.spines["left"].set_visible(False)
     ax.set_xlabel(
-        "Ratio of odds ratios, later / earlier era (log scale)", fontsize=PT_BODY
+        "Ratio of odds ratios, later / earlier period (log scale)", fontsize=PT_BODY
     )
     ax.text(
         1, 0.62, "no change", ha="center", va="bottom", fontsize=PT_SMALL, color=REF_TXT
@@ -373,8 +373,8 @@ def sequential(
     )
     # key, above the first group
     for yy, c, lab in (
-        (1.75, REFG, "fitted alone (base model + the item)"),
-        (1.15, DARK, "with the other 5 social items"),
+        (1.75, REFG, "alone (single-item model)"),
+        (1.15, DARK, "jointly adjusted (joint model)"),
     ):
         ax.plot([0.66, 0.74], [yy, yy], color=c if c == DARK else SHARED, lw=1.1)
         ax.plot(0.70, yy, "o", ms=4.2, color=c if c == DARK else SHARED)
@@ -453,7 +453,7 @@ def main():
         fig,
         axA,
         "A",
-        "What changed, beyond the other social items",
+        "What changed in the joint model",
         "Medicaid fell in COVID-19; no narrowing of income was detected",
         dx=0.13,
     )
@@ -461,8 +461,8 @@ def main():
         fig,
         axB,
         "B",
-        "COVID-19: each item alone and with the other 5",
-        "Medicaid's OR fell to about 1 after Delta; income's stayed near 1.5",
+        "COVID-19: each item alone and jointly adjusted",
+        "Medicaid's jointly adjusted OR fell to about 1; income's did not",
         dx=0.10,
     )
     panel_title(

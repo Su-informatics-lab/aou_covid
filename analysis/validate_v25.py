@@ -105,14 +105,18 @@ CLAIMS = OrderedDict(
         (
             "abs_female",
             (
-                "60.3% female (mean [SD] age, 57.5 [16.2] years)",
+                "a mean (SD) age of 57.5 (16.2) years, and 60.3% were female",
                 "t1",
                 "COVID-19 case sex and age",
             ),
         ),
         (
             "abs_flu_female",
-            ("65.2% female (56.3 [16.3] years)", "t1", "influenza case sex and age"),
+            (
+                "influenza cases, 56.3 (16.3) years and 65.2%",
+                "t1",
+                "influenza case sex and age",
+            ),
         ),
         ("survey_lag", ("692 days (IQR, 286-985 days)", "ms19", "survey-to-index lag")),
         ("wave_split", ("96.1%", "ms19", "strata in which wave varies")),
@@ -149,7 +153,7 @@ CLAIMS = OrderedDict(
         (
             "flu_int_model",
             (
-                "a period-interaction model gave 1.67 in 2018-2019 and 2019-2020 and 1.66 in the 2 seasons from 2022-2023 (ratio of odds ratios, 0.99; 95% CI, 0.66-1.49)",
+                "a period-interaction model gave 1.67 in the pre-pandemic and 1.66 in the post-pandemic period (ROR, 0.99; 95% CI, 0.66-1.49)",
                 "03o",
                 "income <$10k, period-interaction model, and its ROR, influenza",
             ),
@@ -161,7 +165,7 @@ CLAIMS = OrderedDict(
         (
             "covid_waves_inc",
             (
-                "1.45 before Delta, 1.54 during Delta, and 1.56 during Omicron",
+                "1.45 in the pre-Delta, 1.54 in the Delta, and 1.56 in the Omicron period",
                 "03n",
                 "income <$10k by wave",
             ),
@@ -169,7 +173,7 @@ CLAIMS = OrderedDict(
         (
             "covid_ror_inc",
             (
-                "(ratio, Omicron to pre-Delta, 1.08; 95% CI, 0.84-1.40; Figure 2A)",
+                "(ROR, Omicron vs pre-Delta, 1.08; 95% CI, 0.84-1.40; Figure 2A)",
                 "03o",
                 "income ROR Omicron/pre-Delta",
             ),
@@ -213,7 +217,7 @@ CLAIMS = OrderedDict(
         (
             "flu_med_ror",
             (
-                "(in a period-interaction model, 1.13 before the pandemic and 0.84 from 2022-2023; ratio, 0.74; 95% CI, 0.51-1.07; eFigure 7)",
+                "(in a period-interaction model, 1.13 in the pre-pandemic and 0.84 in the post-pandemic period; ROR, 0.74; 95% CI, 0.51-1.07; eFigure 7)",
                 "03o",
                 "Medicaid, period-interaction model, and ROR, influenza",
             ),
@@ -269,7 +273,7 @@ CLAIMS = OrderedDict(
         (
             "abs_flu_med",
             (
-                "Influenza moved the same way (ratio, 0.74; 95% CI, 0.51-1.07)",
+                "Influenza moved the same way (ROR, 0.74; 95% CI, 0.51-1.07)",
                 "03o",
                 "abstract",
             ),
@@ -325,7 +329,7 @@ CLAIMS = OrderedDict(
         (
             "asym_med",
             (
-                "the Medicaid ratio 0.58 (95% CI, 0.43-0.77)",
+                "the Medicaid ROR 0.58 (95% CI, 0.43-0.77)",
                 "03u",
                 "Medicaid ROR, combined model",
             ),
@@ -333,7 +337,7 @@ CLAIMS = OrderedDict(
         (
             "attenuated_med",
             (
-                "from the Medicaid log odds ratio (0.33, 0.32, and 0.31)",
+                "the attenuated part of the Medicaid log odds ratio was nearly constant (0.33, 0.32, and 0.31)",
                 "fig2",
                 "Medicaid attenuated part (log OR alone - log OR joint) by wave, COVID-19: 0.327, 0.320, 0.309",
             ),
@@ -341,7 +345,7 @@ CLAIMS = OrderedDict(
         (
             "medicare_cv",
             (
-                "ratio in the model with both interactions, 0.67; 95% CI, 0.53-0.87",
+                "ROR in the model with both interactions, 0.67; 95% CI, 0.53-0.87",
                 "03u",
                 "Medicare ROR Omicron/pre-Delta, COVID-19, combined model 0.674 (0.526-0.865)",
             ),
@@ -357,7 +361,7 @@ CLAIMS = OrderedDict(
         (
             "asym",
             (
-                "2.27 times the Medicaid ratio (95% CI, 1.38-3.74; joint test across Delta and Omicron, P = .001)",
+                "2.27 times the Medicaid ROR (95% CI, 1.38-3.74; joint test across Delta and Omicron, P = .001)",
                 "03u",
                 "ratio of RORs 2.268 (1.376-3.738); D1 F = 6.80 on 2 df, P = .0011",
             ),
@@ -365,7 +369,7 @@ CLAIMS = OrderedDict(
         (
             "asym_inc",
             (
-                "the income ratio was 1.31 (95% CI, 0.97-1.76)",
+                "the income ROR was 1.31 (95% CI, 0.97-1.76)",
                 "03u",
                 "income ROR, combined model",
             ),
@@ -374,7 +378,7 @@ CLAIMS = OrderedDict(
         (
             "kp_gap",
             (
-                "hospitalized about 10 percentage points more often (crude) than those with $35 000 to $99 999 in every era",
+                "hospitalized about 10 percentage points more often (crude) than those with $35 000 to $99 999 in every period",
                 "e21",
                 "Key Points; crude gaps 10.1-12.0 points (eTable 8)",
             ),
@@ -382,7 +386,7 @@ CLAIMS = OrderedDict(
         (
             "abs_gap",
             (
-                "10 to 12 percentage points higher with income below $10 000 than with $35 000 to $99 999 in every era of both viruses (COVID-19 overall, 21.9% vs 11.5%)",
+                "10 to 12 percentage points higher with income below $10 000 than with $35 000 to $99 999 in every period of both viruses (COVID-19 overall, 21.9% vs 11.5%)",
                 "03v",
                 "abstract; era gaps 10.1, 10.8, 10.4 and 12.0, 10.3, 11.0",
             ),
@@ -406,7 +410,7 @@ CLAIMS = OrderedDict(
         (
             "attenuated_inc",
             (
-                "and from income's (0.14, 0.15, and 0.13",
+                "as was income's (0.14, 0.15, and 0.13",
                 "fig2",
                 "log(1.659/1.445)=0.138, log(1.797/1.541)=0.153, log(1.785/1.562)=0.134",
             ),
@@ -438,7 +442,7 @@ CLAIMS = OrderedDict(
         (
             "sens_med_range",
             (
-                "Medicaid ratio of odds ratios ranged from 0.58 to 0.73, with every insurance-by-era test at P < .02",
+                "Medicaid ROR ranged from 0.58 to 0.73, with every insurance-by-period test at P < .02",
                 "03w",
                 "lag 0.581 ... site 0.734; D1 max .0134 (harmB; region .0117)",
             ),
@@ -446,7 +450,7 @@ CLAIMS = OrderedDict(
         (
             "sens_inc_range",
             (
-                "the income ratio ranged from 0.99 to 1.46, the upper value after adjustment for EHR site (era test, P = .48)",
+                "the income ROR ranged from 0.99 to 1.46, the upper value after adjustment for EHR site (period test, P = .48)",
                 "03w",
                 "tip1 0.986; site_pre 1.464 (1.07-2.00), D1 .477 (03w SPART=ALL already uses site_pre)",
             ),
@@ -470,7 +474,7 @@ CLAIMS = OrderedDict(
         (
             "housing_stab",
             (
-                "(COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza joint AOR, 0.97; 95% CI, 0.83-1.13)",
+                "(COVID-19 AOR, 1.00) and fell slightly below 1 jointly (0.88; 95% CI, 0.79-0.97; influenza jointly adjusted AOR, 0.97; 95% CI, 0.83-1.13)",
                 "03n",
                 "unstable housing alone 1.0024 (0.9083-1.1063), joint 0.8773 (0.7905-0.9736) (R12); influenza joint 0.97 (0.83-1.13), 03f",
             ),
@@ -522,7 +526,7 @@ CLAIMS = OrderedDict(
         (
             "r10_lab",
             (
-                "among laboratory-confirmed cases (ratio, 0.66; 95% CI, 0.49-0.89)",
+                "among laboratory-confirmed cases (ROR, 0.66; 95% CI, 0.49-0.89)",
                 "r10",
                 "sens_r10c.csv case_lab Medicaid 0.6623 (0.4932-0.8892)",
             ),
@@ -570,7 +574,7 @@ CLAIMS = OrderedDict(
         (
             "r10_dx_range",
             (
-                "the ratio ranged from 0.73 to 1.02",
+                "the ROR ranged from 0.73 to 1.02",
                 "r10",
                 "eTable 22A: case_infwin2 0.7326 ... case_dx2 1.0208 (superseded case_dx 1.0235)",
             ),
@@ -578,7 +582,7 @@ CLAIMS = OrderedDict(
         (
             "r10_short",
             (
-                "the ratio was 0.61 (95% CI, 0.45-0.82) among cases without a stay of 3 days or more, intensive care, or death",
+                "the ROR was 0.61 (95% CI, 0.45-0.82) among cases without a stay of 3 days or more, intensive care, or death",
                 "r10",
                 "sens_r10d.csv case_short Medicaid 0.6086 (0.4495-0.8239)",
             ),
@@ -586,7 +590,7 @@ CLAIMS = OrderedDict(
         (
             "wave_dates",
             (
-                "pre-Delta, before July 1, 2021; Delta, to December 18, 2021; Omicron, thereafter",
+                "pre-Delta (before July 1, 2021), Delta (July 1 to December 18, 2021), and Omicron (December 19, 2021, to the cutoff)",
                 "taylor",
                 "COVID-19 wave boundaries recoded in 01_aou_etl.py and every downstream script (R12)",
             ),
@@ -721,7 +725,7 @@ def displays(root):
     sup = open(
         os.path.join(root, "working/v25/supplement_v25.md"), encoding="utf-8"
     ).read()
-    blk = sup[sup.index("**A. The domain alone and jointly, by era.**") :]
+    blk = sup[sup.index("**A. Each item alone and jointly adjusted, by period.**") :]
     blk = blk[: blk.index("**B.")]
     tab = {}
     for line in blk.splitlines():

@@ -118,13 +118,13 @@ SHADE = "#F4E4E1"
 PAND_OFFSET = 130
 WAVE_LINE = dict(color=COVID, lw=0.6, ls=(0, (2.5, 2)), alpha=0.7, zorder=0.5)
 PANEL = {
-    "income_lt10k": "Household income below $10 000, adjusted for the other 5 social items",
-    "medicaid": "Medicaid coverage beyond income and the other 4 social items",
+    "income_lt10k": "Household income below $10 000, jointly adjusted",
+    "medicaid": "Medicaid coverage, jointly adjusted",
 }
 PTEST = {
     #  2 lines, top right: on the shared axis 1 line would cross the cutoff line
-    "income_lt10k": ("Income × era:\nCOVID-19 P = .74;  influenza P = .91"),
-    "medicaid": ("Insurance × era:\nCOVID-19 P = .003;  influenza P = .01*"),
+    "income_lt10k": ("Income × period:\nCOVID-19 P = .74;  influenza P = .91"),
+    "medicaid": ("Insurance × period:\nCOVID-19 P = .003;  influenza P = .01*"),
 }
 
 

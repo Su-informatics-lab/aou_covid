@@ -168,7 +168,7 @@ def main():
         y -= 0.8
         if q == "<$10k, employer":
             yt.append(y)
-            yl.append("every wave")
+            yl.append("every variant period")
             axB.text(
                 1.0,
                 y,
@@ -258,7 +258,7 @@ def main():
     fig.text(
         0.56,
         0.96,
-        "COVID-19: joint categories, by wave",
+        "COVID-19: joint categories, by variant period",
         fontsize=PT_HEAD,
         fontweight="bold",
         va="top",

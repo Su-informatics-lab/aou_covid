@@ -22,7 +22,7 @@ DATA = os.path.join(
     HERE, "..", "results", "figures", "v25", "Figure2_era_attenuation_data.csv"
 )
 OUT = os.path.join(HERE, "..", "submission_v25", "04_figures", "supplement")
-ERAS = ((1, "2 seasons before"), (2, "2 pandemic seasons"), (3, "2 seasons after"))
+ERAS = ((1, "Pre-pandemic"), (2, "Pandemic"), (3, "Post-pandemic"))
 
 
 def main():
@@ -43,7 +43,7 @@ def main():
     fig.text(
         0.03,
         0.95,
-        "Influenza: each item alone and with the other 5",
+        "Influenza: each item alone and jointly adjusted",
         fontsize=PT_HEAD,
         fontweight="bold",
         va="top",

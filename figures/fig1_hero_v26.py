@@ -49,9 +49,9 @@ BANDS = ["<$10 000", "$10 000-24 999", "$25 000-34 999", "$35 000-99 999", ">=$1
 BAND_LAB = ["<10", "10-25", "25-35", "35-100", "≥100"]
 ERAS = {
     "flu": [
-        ("1_pre", "2 seasons\nbefore"),
-        ("2_pandemic", "2 pandemic\nseasons"),
-        ("3_post", "2 seasons\nafter"),
+        ("1_pre", "Pre-\npandemic"),
+        ("2_pandemic", "Pandemic"),
+        ("3_post", "Post-\npandemic"),
     ],
     "covid": [
         ("1_pre_delta", "Pre-Delta"),
@@ -203,7 +203,7 @@ def hero_facet(ax, d, eras, title, tcol):
             ax.text(
                 x,
                 floor - 2.4,
-                "few data: %d and\n%d person-seasons" % (hi.n, lo.n),
+                "%d and %d\nperson-seasons" % (hi.n, lo.n),
                 ha="center",
                 va="top",
                 color=REF_TXT,
@@ -298,7 +298,7 @@ def main():
     fig.text(
         pf.x0,
         0.965,
-        "The crude gap stayed 10 to 12 points in every era",
+        "The crude gap stayed 10 to 12 points in every period",
         fontsize=PT_HEAD,
         fontweight="bold",
         va="top",
@@ -306,7 +306,7 @@ def main():
     fig.text(
         pf.x0,
         0.905,
-        "while the middle-income level ranged from 7.2% to 16.2%",
+        "while the $35 000-99 999 level ranged from 7.2% to 16.2%",
         fontsize=PT_BODY,
         color=REF_TXT,
         va="top",
